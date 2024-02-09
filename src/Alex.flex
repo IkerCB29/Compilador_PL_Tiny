@@ -29,9 +29,9 @@ import builder.UnidadLexicaUnivaluadaBuilder;
 letra = ([A-Z]|[a-z])
 digitoPositivo = [1-9]
 digito = {digitoPositivo}|0
-parteEntera = [\+,\-]?(({digitoPositivo}{digito}*)|0)
+parteEntera = (\+|\-)?(({digitoPositivo}{digito}*)|0)
 parteDecimal = \.(({digito}*{digitoPositivo})|0)
-parteExponencial = (e|E)[\+,\-]?{parteEntera}
+parteExponencial = (e|E)(\+|\-)?{parteEntera}
 comboPartes = {parteDecimal}{parteExponencial}
 
 entero = (i|I)(n|N)(t|T)
@@ -142,6 +142,6 @@ comentario = ##[^\n]*
 {referencia}			{return uniULBuilder.construirUL(ClaseLexica.REFERENCIA);}
 {separador}         	{}
 {comentario}        	{}
-[^]                 	{ops.error();}  
+[^]                 	{throw new IllegalStateException("Caracter invalido");}  
 
 

@@ -766,7 +766,6 @@ public class AnalizadorLexico {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { throw new IllegalStateException("Caracter invalido");
             }
             // fall through
           case 54: break;
