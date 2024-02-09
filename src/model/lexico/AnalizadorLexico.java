@@ -377,7 +377,7 @@ public class AnalizadorLexico {
    */
   public AnalizadorLexico(java.io.Reader in) {
     uniULBuilder = new UnidadLexicaUnivaluadaBuilder(this);
-  multiULBuilder = new UnidadLexicaMultivaluadaBuilder(this);
+    multiULBuilder = new UnidadLexicaMultivaluadaBuilder(this);
     this.zzReader = in;
   }
 
