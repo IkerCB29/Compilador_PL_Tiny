@@ -1,0 +1,10 @@
+{
+ rEaL peso;
+ bOOL pesado;
+ 	int sUmA
+ &&
+ 
+ @ peso = 15.0901e-12 / 3e+4 - 56.005;
+ 	@ pesado = (  TrUe and (	peso >= 15.0	 )) or not ( peso == 0.0	);
+ @	sUmA = ( 28 + 34 ) * 13
+}
