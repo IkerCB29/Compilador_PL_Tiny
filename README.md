@@ -2,4 +2,4 @@
 
 ## Domjudge
 
-Para el test de léxico de Tiny 0, subir zip con Domjudge.java y la carpeta model
+Para el test de léxico de Tiny, subir zip con Domjudge.java y ruta_jflex, junto con las carpetas model y builder
