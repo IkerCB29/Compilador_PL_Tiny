@@ -6,6 +6,7 @@ import builder.UnidadLexicaUnivaluadaBuilder;
 %line
 %column
 %class AnalizadorLexico
+%public
 %type UnidadLexica
 %unicode
 
@@ -26,13 +27,13 @@ import builder.UnidadLexicaUnivaluadaBuilder;
   multiULBuilder = new UnidadLexicaMultivaluadaBuilder(this);
 %init}
 
-letra = ([A-Z]|[a-z])
+letra = ([A-Z]|[a-z]|_)
 digitoPositivo = [1-9]
 digito = {digitoPositivo}|0
-parteEntera = (\+|\-)?(({digitoPositivo}{digito}*)|0)
-parteDecimal = \.(({digito}*{digitoPositivo})|0)
-parteExponencial = (e|E)(\+|\-)?{parteEntera}
-comboPartes = {parteDecimal}{parteExponencial}
+parteEntera = ({digitoPositivo}{digito}*|0)
+parteDecimal = \.({digito}*{digitoPositivo}|0)
+exponencial = (e|E)[\+,\-]?{parteEntera}
+comboPartes = {parteDecimal}{exponencial}
 
 entero = (i|I)(n|N)(t|T)
 real = (r|R)(e|E)(a|A)(l|L)
@@ -42,23 +43,23 @@ true = (t|T)(r|R)(u|U)(e|E)
 false = (f|F)(a|A)(l|L)(s|S)(e|E)
 null = (n|N)(u|U)(l|L)(l|L)
 proc = (p|P)(r|R)(o|O)(c|C)
-if = (i|I) (f|F)
+if = (i|I)(f|F)
 else = (e|E)(l|L)(s|S)(e|E)
 while = (w|W)(h|H)(i|I)(l|L)(e|E)
 struct = (s|S)(t|T)(r|R)(u|U)(c|C)(t|T)
-new = (n|N)(e|E )(w|W)
+new = (n|N)(e|E)(w|W)
 delete = (d|D)(e|E)(l|L)(e|E)(t|T)(e|E)
 read = (r|R)(e|E)(a|A)(d|D)
 write = (w|W)(r|R)(i|I)(t|T)(e|E)
-nl = (n|N )(l|L)
+nl = (n|N)(l|L)
 type = (t|T)(y|Y)(p|P)(e|E)
 call = (c|C)(a|A)(l|L)(l|L)
 and = (a|A)(n|N)(d|D)
 or = (o|O)(r|R)
 not = (n|N)(o|O)(t|T)
-identificador = ({letra}|_)({letra}|{digito}|_)*
-numeroEntero = {parteEntera}
-numeroReal = {parteEntera}({parteDecimal}|{parteExponencial}|{comboPartes})
+identificador = ({letra})({letra}|{digito})*
+numeroEntero = [\+,\-]?{parteEntera}
+numeroReal = {numeroEntero}({parteDecimal}|{exponencial}|{comboPartes})
 literalString = \"[^\"]*\"
 suma = \+
 resta = \-
@@ -86,7 +87,7 @@ evalua = \@
 puntero = \^
 referencia = \&
 separador = [ \t\r\b\n]
-comentario = ##[^\n]*
+comentario = \#\#[^\n]*
 
 %%
 {entero}				{return uniULBuilder.construirUL(ClaseLexica.ENTERO);}
@@ -117,8 +118,8 @@ comentario = ##[^\n]*
 {literalString}			{return multiULBuilder.construirUL(ClaseLexica.LITERAL_STRING);}
 {suma}					{return uniULBuilder.construirUL(ClaseLexica.SUMA);}
 {resta}					{return uniULBuilder.construirUL(ClaseLexica.RESTA);}
-{mul}					{return uniULBuilder.construirUL(ClaseLexica.MULTIPLICACION);}
-{div}					{return uniULBuilder.construirUL(ClaseLexica.DIVISION);}
+{mul}					{return uniULBuilder.construirUL(ClaseLexica.POR);}
+{div}					{return uniULBuilder.construirUL(ClaseLexica.DIV);}
 {modulo}				{return uniULBuilder.construirUL(ClaseLexica.MODULO);}
 {menorQue}				{return uniULBuilder.construirUL(ClaseLexica.MENOR);}
 {mayorQue}				{return uniULBuilder.construirUL(ClaseLexica.MAYOR);}
@@ -128,8 +129,8 @@ comentario = ##[^\n]*
 {diferente} 			{return uniULBuilder.construirUL(ClaseLexica.DIFERENTE);}
 {asignacion}			{return uniULBuilder.construirUL(ClaseLexica.ASIGNACION);}
 {pyc}					{return uniULBuilder.construirUL(ClaseLexica.PYC);}
-{parApertura}			{return uniULBuilder.construirUL(ClaseLexica.PAR_APERTURA);}
-{parCierre}				{return uniULBuilder.construirUL(ClaseLexica.PAR_CIERRE);}
+{parApertura}			{return uniULBuilder.construirUL(ClaseLexica.PAP);}
+{parCierre}				{return uniULBuilder.construirUL(ClaseLexica.PCIERRE);}
 {corcheteApertura}		{return uniULBuilder.construirUL(ClaseLexica.COR_APERTURA);}
 {corcheteCierre}		{return uniULBuilder.construirUL(ClaseLexica.COR_CIERRE);}
 {llaveApertura}			{return uniULBuilder.construirUL(ClaseLexica.LLAVE_APERTURA);}

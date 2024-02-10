@@ -1,10 +1,70 @@
 package model.lexico;
 
 public enum ClaseLexica {
-    ENTERO, REAL, BOOLEAN, STRING, IDENTIFICADOR, LITERAL_ENTERO, LITERAL_REAL, LITERAL_TRUE, 
-    LITERAL_FALSE, LITERAL_STRING, SUMA, RESTA, MULTIPLICACION, DIVISION, MODULO, AND, OR, NOT, MENOR, 
-    MAYOR, MENOR_IGUAL, MAYOR_IGUAL, IGUAL, DIFERENTE, ASIGNACION, PYC, PAR_APERTURA, PAR_CIERRE, 
-    COR_APERTURA, COR_CIERRE, LLAVE_APERTURA, LLAVE_CIERRE, COMA, ACCESO, EVALUA, EOF, CAMBIO_SEC, 
-    ERROR, NULL, PROC, IF, ELSE, WHILE, STRUCT, NEW, DELETE, READ, WRITE, NL, TYPE, CALL, REFERENCIA,
-    PUNTERO
+    ENTERO("<int>"), 
+    REAL("<real>"), 
+    BOOLEAN("<bool>"), 
+    STRING("<string>"), 
+    IDENTIFICADOR, 
+    LITERAL_ENTERO, 
+    LITERAL_REAL, 
+    LITERAL_TRUE("<true>"), 
+    LITERAL_FALSE("<false>"), 
+    LITERAL_STRING, 
+    SUMA("+"), 
+    RESTA("-"), 
+    POR("+"), 
+    DIV("/"), 
+    MODULO("%"),
+    AND("<and>"), 
+    OR("<or>"), 
+    NOT("<not>"), 
+    MENOR("<"), 
+    MAYOR(">"), 
+    MENOR_IGUAL("<="), 
+    MAYOR_IGUAL(">="), 
+    IGUAL("=="),
+    DIFERENTE("!="), 
+    ASIGNACION("="), 
+    PYC(";"), 
+    PAP("("), 
+    PCIERRE(")"), 
+    LLAVE_APERTURA("{"), 
+    LLAVE_CIERRE("}"),
+    COR_APERTURA("["), 
+    COR_CIERRE("]"), 
+    COMA(","), 
+    ACCESO("."), 
+    EVALUA("@"), 
+    EOF("EOF"), 
+    CAMBIO_SEC("&&"), 
+    ERROR("ERROR"), 
+    NULL("<null>"), 
+    PROC("<proc>"),  
+    IF("<if>"),  
+    ELSE("<else>"), 
+    WHILE("<while>"),  
+    STRUCT("<struct>"),  
+    NEW("<new>"), 
+    DELETE("<delete>"),  
+    READ("<read>"), 
+    WRITE("<write>"), 
+    NL("<nl>"), 
+    TYPE("<type>"),  
+    CALL("<call>"),  
+    REFERENCIA("&"), 
+    PUNTERO("^"), ;
+	
+    private String image;
+    
+    public String getImage() {
+         return image;
+     }
+    
+     private ClaseLexica() {
+         image = toString();
+     }
+     private ClaseLexica(String image) {
+        this.image = image;  
+     }
 }
