@@ -13,7 +13,7 @@ public enum ClaseLexica {
     LITERAL_STRING, 
     SUMA("+"), 
     RESTA("-"), 
-    POR("+"), 
+    POR("*"), 
     DIV("/"), 
     MODULO("%"),
     AND("<and>"), 
