@@ -9,5 +9,10 @@ $ {
  {
  	bool pe_sa_do_
  	&
- 	@ pe_sa_do = FALSE aND ( 15.0000 <= 0.000003	)
+ 	@ pe_sa_do = (FALSE aND ( 15.0000 <= 0.000003	)) or (nOT	FaLSE)
+ }
+ {
+ 	INT entero
+ 	&&
+ 	@ enter = 96.0 - 50;
  }

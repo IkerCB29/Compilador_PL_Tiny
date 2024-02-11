@@ -9,7 +9,8 @@ public class Main {
 	private final static String[] FILES = {
 		"files/codigo1.tiny",
 		"files/codigo2.tiny",
-		"files/codigo3.tiny"
+		"files/codigo3.tiny",
+		"files/codigo4.tiny"
 	};
 	
 	public static void main(String[] args) {
