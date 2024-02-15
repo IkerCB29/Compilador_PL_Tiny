@@ -1,10 +1,8 @@
 package controller;
 
 import java.io.Reader;
-import java.io.InputStreamReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,9 +25,8 @@ public class Controller {
         writer.close();
     }
 
-    public List<UnidadLexica> analisisLexico(String fileName) throws Exception {
-    	List<UnidadLexica> lexico = new ArrayList<UnidadLexica>(); 
-        Reader input = new InputStreamReader(new FileInputStream(fileName));
+    public List<UnidadLexica> analisisLexico(Reader input) throws Exception {
+    	List<UnidadLexica> lexico = new ArrayList<UnidadLexica>();
         AnalizadorLexico AL = new AnalizadorLexico(input);
         UnidadLexica unidad;
         do {

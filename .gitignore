@@ -28,3 +28,9 @@ replay_pid*
 /bin/
 .settings
 .classpath
+
+#Intellij
+.idea
+Compilador_PL_Tiny.iml
+/out/
+

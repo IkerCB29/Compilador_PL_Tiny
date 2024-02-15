@@ -3,10 +3,8 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
+import controller.Controller;
 import model.lexico.UnidadLexica;
-import model.lexico.UnidadLexicaErronea;
-import model.lexico.AnalizadorLexico;
-import model.lexico.ClaseLexica;;
 
 public class DomJudge {
 	private static void imprime(UnidadLexica unidad) {
@@ -21,20 +19,9 @@ public class DomJudge {
 	   Reader input  = new InputStreamReader(System.in);
 	   //Este es para probar nosotros
 	   //Reader input = new BufferedReader(new FileReader("files/codigo4.tiny"));
-	   AnalizadorLexico al = new AnalizadorLexico(input);
-	   UnidadLexica unidad;
-       do {
-       	try { unidad = al.yylex(); } 
-       	catch(IllegalStateException e) {
-       		unidad = new UnidadLexicaErronea(
-       			al.getFila(),
-       			al.getColumna(),
-       			ClaseLexica.ERROR,
-       			e.getMessage()
-       		);
-       	}
-       	imprime(unidad);
-       }
-       while (unidad.clase() != ClaseLexica.EOF);   
+	   Controller c = new Controller();
+	   for(UnidadLexica UL : c.analisisLexico(input)) {
+		   imprime(UL);
+	   }
    }
 } 

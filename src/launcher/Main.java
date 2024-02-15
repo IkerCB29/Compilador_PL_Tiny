@@ -1,5 +1,8 @@
 package launcher;
 
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 import controller.Controller;
@@ -15,10 +18,10 @@ public class Main {
 	
 	public static void main(String[] args) {
         Controller c = new Controller();
-        
         for(String file : FILES) {
     		try {
-                List<UnidadLexica> lexico = c.analisisLexico(file);
+				Reader input = new InputStreamReader(new FileInputStream(file));
+                List<UnidadLexica> lexico = c.analisisLexico(input);
                 if(lexico != null)
                 	c.guardarSalida(lexico, file + "output");
     	    } 
