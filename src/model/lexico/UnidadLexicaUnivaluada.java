@@ -10,6 +10,6 @@ public class UnidadLexicaUnivaluada extends UnidadLexica {
 
     @Override
     public String toString() {
-        return "[clase:"+clase()+",fila:"+fila()+",col:"+columna()+"]";
+        return "[clase: "+clase()+", fila: "+fila()+", col: "+columna()+"]";
     }
 }

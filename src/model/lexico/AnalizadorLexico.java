@@ -5,6 +5,7 @@
 package model.lexico;
 import builder.UnidadLexicaMultivaluadaBuilder;
 import builder.UnidadLexicaUnivaluadaBuilder;
+import exceptions.LexicoException;
 
 
 // See https://github.com/jflex-de/jflex/issues/222
@@ -623,7 +624,7 @@ public class AnalizadorLexico {
    * @return the next token.
    * @exception java.io.IOException if any I/O-Error occurs.
    */
-  public UnidadLexica yylex() throws java.io.IOException {
+  public UnidadLexica yylex() throws Exception {
     int zzInput;
     int zzAction;
 
@@ -765,7 +766,7 @@ public class AnalizadorLexico {
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1:
-            { throw new IllegalStateException("Caracter invalido");
+            { throw new LexicoException(getFila(), getColumna(), getLexema());
             }
             // fall through
           case 54: break;

@@ -1,48 +1,28 @@
 package controller;
 
-import java.io.Reader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
 
+import exceptions.LexicoException;
 import model.lexico.AnalizadorLexico;
 import model.lexico.ClaseLexica;
 import model.lexico.UnidadLexica;
-import model.lexico.UnidadLexicaErronea;
+import view.Printer;
 
 public class Controller {
-    public Controller(){}
-    
-    public void guardarSalida(List<UnidadLexica> lexico, String fileName) throws IOException{
-        File output = new File(fileName);
-        BufferedWriter writer = new BufferedWriter(new FileWriter(output));
-        for(UnidadLexica UL : lexico) {
-            writer.write(UL.toString() + "\n");
-        }
-        writer.close();
-    }
-
-    public List<UnidadLexica> analisisLexico(Reader input) throws Exception {
-    	List<UnidadLexica> lexico = new ArrayList<UnidadLexica>();
+    public void analisisLexico(Reader input, Printer output) throws Exception {
         AnalizadorLexico AL = new AnalizadorLexico(input);
-        UnidadLexica unidad;
+        UnidadLexica unidad = null;
         do {
-        	try { unidad = AL.yylex(); } 
-        	catch(IllegalStateException e) {
-        		unidad = new UnidadLexicaErronea(
-        			AL.getFila(),
-        			AL.getColumna(),
-        			ClaseLexica.ERROR,
-        			e.getMessage()
-        		);
-        	}
-        	lexico.add(unidad);
+            try {
+                unidad = AL.yylex();
+                output.write(unidad);
+            }
+            catch(LexicoException e) {
+                output.writeException(e.getMessage());
+            }
         }
-        while (unidad.clase() != ClaseLexica.EOF);        
-    	return lexico;
+        while (unidad == null || unidad.clase() != ClaseLexica.EOF);
+        output.close();
     }
 }
 

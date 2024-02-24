@@ -1,6 +1,7 @@
 package model.lexico;
 import builder.UnidadLexicaMultivaluadaBuilder;
 import builder.UnidadLexicaUnivaluadaBuilder;
+import exceptions.LexicoException;
 
 %%
 %line
@@ -26,6 +27,10 @@ import builder.UnidadLexicaUnivaluadaBuilder;
   uniULBuilder = new UnidadLexicaUnivaluadaBuilder(this);
   multiULBuilder = new UnidadLexicaMultivaluadaBuilder(this);
 %init}
+
+%yylexthrow{
+  LexicoException
+%yylexthrow}
 
 letra = ([A-Z]|[a-z]|_)
 digitoPositivo = [1-9]
@@ -143,6 +148,6 @@ comentario = \#\#[^\n]*
 {referencia}			{return uniULBuilder.construirUL(ClaseLexica.REFERENCIA);}
 {separador}         	{}
 {comentario}        	{}
-[^]                 	{throw new IllegalStateException("Caracter invalido");}  
+[^]                 	{throw new LexicoException(getFila(), getColumna(), getLexema());}
 
 

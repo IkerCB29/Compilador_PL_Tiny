@@ -13,6 +13,6 @@ public class UnidadLexicaMultivaluada extends UnidadLexica {
 
     @Override
     public String toString() {
-        return "[clase:"+clase()+",fila:"+fila()+",col:"+columna()+",lexema:"+lexema()+"]";
+        return "[clase: "+clase()+", fila: "+fila()+", col: "+columna()+", lexema: "+lexema()+"]";
     }
 }
