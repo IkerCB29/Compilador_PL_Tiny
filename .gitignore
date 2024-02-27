@@ -12,6 +12,8 @@
 
 # Package Files #
 *.jar
+!libraries/java-cup-11b-runtime.jar
+!libraries/java-cup-11b.jar
 *.war
 *.nar
 *.ear
