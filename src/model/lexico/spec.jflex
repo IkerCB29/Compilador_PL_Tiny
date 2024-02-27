@@ -2,6 +2,7 @@ package model.lexico;
 import builder.UnidadLexicaMultivaluadaBuilder;
 import builder.UnidadLexicaUnivaluadaBuilder;
 import exceptions.LexicoException;
+import java_cup.runtime.Scanner;
 
 %%
 %line
@@ -10,6 +11,7 @@ import exceptions.LexicoException;
 %public
 %type UnidadLexica
 %unicode
+%cup
 
 %{
   private UnidadLexicaUnivaluadaBuilder uniULBuilder;

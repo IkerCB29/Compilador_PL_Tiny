@@ -14,7 +14,7 @@ public class Controller {
         UnidadLexica unidad = null;
         do {
             try {
-                unidad = AL.yylex();
+                unidad = AL.next_token();
                 output.write(unidad);
             }
             catch(LexicoException e) {

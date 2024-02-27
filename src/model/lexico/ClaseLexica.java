@@ -37,8 +37,7 @@ public enum ClaseLexica {
     ACCESO("."), 
     EVALUA("@"), 
     EOF("EOF"), 
-    CAMBIO_SEC("&&"), 
-    ERROR("ERROR"), 
+    CAMBIO_SEC("&&"),
     NULL("<null>"), 
     PROC("<proc>"),  
     IF("<if>"),  
@@ -55,16 +54,17 @@ public enum ClaseLexica {
     REFERENCIA("&"), 
     PUNTERO("^"), ;
 	
-    private String image;
+    private final String image;
     
     public String getImage() {
          return image;
      }
     
-     private ClaseLexica() {
+    ClaseLexica() {
          image = toString();
      }
-     private ClaseLexica(String image) {
+
+    ClaseLexica(String image) {
         this.image = image;  
      }
 }

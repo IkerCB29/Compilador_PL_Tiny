@@ -6,11 +6,12 @@ package model.lexico;
 import builder.UnidadLexicaMultivaluadaBuilder;
 import builder.UnidadLexicaUnivaluadaBuilder;
 import exceptions.LexicoException;
+import java_cup.runtime.Scanner;
 
 
 // See https://github.com/jflex-de/jflex/issues/222
 @SuppressWarnings("FallThrough")
-public class AnalizadorLexico {
+public class AnalizadorLexico implements Scanner {
 
   /** This character denotes the end of file. */
   public static final int YYEOF = -1;
@@ -359,7 +360,6 @@ public class AnalizadorLexico {
   private boolean zzAtBOL = true;
 
   /** Whether the user-EOF-code has already been executed. */
-  @SuppressWarnings("unused")
   private boolean zzEOFDone;
 
   /* user code: */
@@ -615,6 +615,18 @@ public class AnalizadorLexico {
   }
 
 
+  /**
+   * Contains user EOF-code, which will be executed exactly once,
+   * when the end of file is reached
+   */
+  private void zzDoEOF() throws java.io.IOException {
+    if (!zzEOFDone) {
+      zzEOFDone = true;
+    
+  yyclose();    }
+  }
+
+
 
 
   /**
@@ -624,7 +636,8 @@ public class AnalizadorLexico {
    * @return the next token.
    * @exception java.io.IOException if any I/O-Error occurs.
    */
-  public UnidadLexica yylex() throws Exception {
+  @Override  public UnidadLexica next_token() throws java.io.IOException,   LexicoException
+ {
     int zzInput;
     int zzAction;
 
@@ -760,6 +773,7 @@ public class AnalizadorLexico {
 
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
+            zzDoEOF();
           {   return uniULBuilder.construirUL(ClaseLexica.EOF);
  }
       }
