@@ -1,0 +1,1 @@
+-parser AnalizadorSintacticoCUP -symbols ClaseLexica -package model.sintaxis

@@ -1,0 +1,66 @@
+package model.sintaxis;
+
+import java_cup.runtime.*;
+import model.lexico.AnalizadorLexico;
+import model.lexico.UnidadLexica;
+
+scan with {:
+  return getScanner().next_token();
+:};
+
+parser code {:
+:};
+
+init with {:
+   AnalizadorLexico alex = (AnalizadorLexico)getScanner();
+:};
+
+
+terminal      LLAVE_APERTURA, LLAVE_CIERRE, CAMBIO_SEC, PYC, TYPE, ENTERO, REAL, IDENTIFICADOR,
+              COR_APERTURA, LITERAL_ENTERO, COR_CIERRE, PUNTERO, STRUCT, COMA, PROC, PAP, PCIERRE;
+
+non terminal  programa, bloque, declaraciones_opt, declaraciones, tipo0, tipo1, tipo2, registro, campos, campo,
+              def_proc, lista_parametros_opt, lista_parametros, parametro, instrucciones_opt;
+
+/*Reglas*/
+
+programa ::= bloque ;
+
+bloque ::= LLAVE_APERTURA declaraciones_opt instrucciones_opt LLAVE_CIERRE ;
+
+declaraciones_opt ::= declaraciones CAMBIO_SEC ;
+declaraciones_opt ::= ;
+declaraciones ::= declaraciones PYC declaracion ;
+declaraciones ::= declaracion ;
+declaracion ::= dec_tipo ;
+declaracion ::= dec_variable ;
+declaracion ::= dec_procedimiento ;
+
+dec_tipo ::= TYPE tipo0 IDENTIFICADOR ;
+
+dec_variable ::= tipo0 IDENTIFICADOR ;
+tipo0 ::= tipo1 ;
+tipo1 ::= tipo1 COR_APERTURA LITERAL_ENTERO COR_CIERRE ;
+tipo1 ::= tipo2 ;
+tipo1 ::= PUNTERO tipo1 ;
+tipo2 ::= ENTERO ;
+tipo2 ::= REAL ;
+tipo2 ::= BOOLEAN ;
+tipo2 ::= STRING ;
+tipo2 ::= IDENTIFICADOR ;
+tipo2 ::= registro ;
+registro ::= STRUCT LLAVE_APERTURA campos LLAVE_CIERRE ;
+campos ::= campos COMA campo ;
+campos ::= campo ;
+campo ::= dec_variable ;
+
+dec_procedimiento ::= PROC def_proc bloque ;
+def_proc ::= IDENTIFICADOR PAP lista_parametros_opt PCIERRE ;
+lista_parametros_opt ::= lista_parametros ;
+lista_parametros_opt ::= ;
+lista_parametros ::= lista_parametros COMA parametro ;
+lista_parametros ::= parametro ;
+parametro ::= tipo0 IDENTIFICADOR ;
+parametro ::= tipo0 REFERENCIA IDENTIFICADOR ;
+
+instrucciones_opt ::= REAL ;
