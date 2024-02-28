@@ -12,9 +12,8 @@ public class DomJudge {
 		//Este es para el DOMJUDGE
 		Reader input  = new InputStreamReader(System.in);
 		//Este es para probar nosotros
-		//Reader input = new BufferedReader(new FileReader("files/codigo4.tiny"));
-		Printer output = new DomJudgePrinter();
+		//Reader input = new BufferedReader(new FileReader("files/codigo5.tiny"));
 		Controller c = new Controller();
-		c.analisisLexico(input, output);
+		c.analisisSintacticoDebug(input);
 	}
 } 

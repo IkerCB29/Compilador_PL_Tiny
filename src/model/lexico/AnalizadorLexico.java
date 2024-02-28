@@ -3,9 +3,11 @@
 // source: spec.jflex
 
 package model.lexico;
-import builder.UnidadLexicaMultivaluadaBuilder;
-import builder.UnidadLexicaUnivaluadaBuilder;
+
+import builder.UnidadLexicaBuilder;
+
 import exceptions.LexicoException;
+import model.sintaxis.ClaseLexica;
 import java_cup.runtime.Scanner;
 
 
@@ -363,8 +365,7 @@ public class AnalizadorLexico implements Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
-  private UnidadLexicaUnivaluadaBuilder uniULBuilder;
-  private UnidadLexicaMultivaluadaBuilder multiULBuilder;
+  private UnidadLexicaBuilder ULBuilder;
   public String getLexema() {return yytext();}
   public int getFila() {return yyline+1;}
   public int getColumna() {return yycolumn+1;}
@@ -376,8 +377,7 @@ public class AnalizadorLexico implements Scanner {
    * @param   in  the java.io.Reader to read input from.
    */
   public AnalizadorLexico(java.io.Reader in) {
-    uniULBuilder = new UnidadLexicaUnivaluadaBuilder(this);
-  multiULBuilder = new UnidadLexicaMultivaluadaBuilder(this);
+    ULBuilder = new UnidadLexicaBuilder(this);
     this.zzReader = in;
   }
 
@@ -774,7 +774,7 @@ public class AnalizadorLexico implements Scanner {
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
             zzDoEOF();
-          {   return uniULBuilder.construirUL(ClaseLexica.EOF);
+          {   return ULBuilder.construirUL(ClaseLexica.EOF, "<EOF>");
  }
       }
       else {
@@ -790,257 +790,257 @@ public class AnalizadorLexico implements Scanner {
             // fall through
           case 55: break;
           case 3:
-            { return uniULBuilder.construirUL(ClaseLexica.MODULO);
+            { return ULBuilder.construirUL(ClaseLexica.MODULO, "%");
             }
             // fall through
           case 56: break;
           case 4:
-            { return uniULBuilder.construirUL(ClaseLexica.REFERENCIA);
+            { return ULBuilder.construirUL(ClaseLexica.REFERENCIA, "&");
             }
             // fall through
           case 57: break;
           case 5:
-            { return uniULBuilder.construirUL(ClaseLexica.PAP);
+            { return ULBuilder.construirUL(ClaseLexica.PAP, "(");
             }
             // fall through
           case 58: break;
           case 6:
-            { return uniULBuilder.construirUL(ClaseLexica.PCIERRE);
+            { return ULBuilder.construirUL(ClaseLexica.PCIERRE, ")");
             }
             // fall through
           case 59: break;
           case 7:
-            { return uniULBuilder.construirUL(ClaseLexica.POR);
+            { return ULBuilder.construirUL(ClaseLexica.POR, "*");
             }
             // fall through
           case 60: break;
           case 8:
-            { return uniULBuilder.construirUL(ClaseLexica.SUMA);
+            { return ULBuilder.construirUL(ClaseLexica.SUMA, "+");
             }
             // fall through
           case 61: break;
           case 9:
-            { return uniULBuilder.construirUL(ClaseLexica.COMA);
+            { return ULBuilder.construirUL(ClaseLexica.COMA, ",");
             }
             // fall through
           case 62: break;
           case 10:
-            { return uniULBuilder.construirUL(ClaseLexica.RESTA);
+            { return ULBuilder.construirUL(ClaseLexica.RESTA, "-");
             }
             // fall through
           case 63: break;
           case 11:
-            { return uniULBuilder.construirUL(ClaseLexica.ACCESO);
+            { return ULBuilder.construirUL(ClaseLexica.ACCESO, ".");
             }
             // fall through
           case 64: break;
           case 12:
-            { return uniULBuilder.construirUL(ClaseLexica.DIV);
+            { return ULBuilder.construirUL(ClaseLexica.DIV, "/");
             }
             // fall through
           case 65: break;
           case 13:
-            { return multiULBuilder.construirUL(ClaseLexica.LITERAL_ENTERO);
+            { return ULBuilder.construirUL(ClaseLexica.LITERAL_ENTERO, this.getLexema());
             }
             // fall through
           case 66: break;
           case 14:
-            { return uniULBuilder.construirUL(ClaseLexica.PYC);
+            { return ULBuilder.construirUL(ClaseLexica.PYC, ";");
             }
             // fall through
           case 67: break;
           case 15:
-            { return uniULBuilder.construirUL(ClaseLexica.MENOR);
+            { return ULBuilder.construirUL(ClaseLexica.MENOR, "<");
             }
             // fall through
           case 68: break;
           case 16:
-            { return uniULBuilder.construirUL(ClaseLexica.ASIGNACION);
+            { return ULBuilder.construirUL(ClaseLexica.ASIGNACION, "=");
             }
             // fall through
           case 69: break;
           case 17:
-            { return uniULBuilder.construirUL(ClaseLexica.MAYOR);
+            { return ULBuilder.construirUL(ClaseLexica.MAYOR, ">");
             }
             // fall through
           case 70: break;
           case 18:
-            { return uniULBuilder.construirUL(ClaseLexica.EVALUA);
+            { return ULBuilder.construirUL(ClaseLexica.EVALUA, "@");
             }
             // fall through
           case 71: break;
           case 19:
-            { return multiULBuilder.construirUL(ClaseLexica.IDENTIFICADOR);
+            { return ULBuilder.construirUL(ClaseLexica.IDENTIFICADOR, this.getLexema());
             }
             // fall through
           case 72: break;
           case 20:
-            { return uniULBuilder.construirUL(ClaseLexica.COR_APERTURA);
+            { return ULBuilder.construirUL(ClaseLexica.COR_APERTURA, "[");
             }
             // fall through
           case 73: break;
           case 21:
-            { return uniULBuilder.construirUL(ClaseLexica.COR_CIERRE);
+            { return ULBuilder.construirUL(ClaseLexica.COR_CIERRE, "]");
             }
             // fall through
           case 74: break;
           case 22:
-            { return uniULBuilder.construirUL(ClaseLexica.PUNTERO);
+            { return ULBuilder.construirUL(ClaseLexica.PUNTERO, "^");
             }
             // fall through
           case 75: break;
           case 23:
-            { return uniULBuilder.construirUL(ClaseLexica.LLAVE_APERTURA);
+            { return ULBuilder.construirUL(ClaseLexica.LLAVE_APERTURA, "{");
             }
             // fall through
           case 76: break;
           case 24:
-            { return uniULBuilder.construirUL(ClaseLexica.LLAVE_CIERRE);
+            { return ULBuilder.construirUL(ClaseLexica.LLAVE_CIERRE, "}");
             }
             // fall through
           case 77: break;
           case 25:
-            { return uniULBuilder.construirUL(ClaseLexica.DIFERENTE);
+            { return ULBuilder.construirUL(ClaseLexica.DIFERENTE, "!=");
             }
             // fall through
           case 78: break;
           case 26:
-            { return multiULBuilder.construirUL(ClaseLexica.LITERAL_STRING);
+            { return ULBuilder.construirUL(ClaseLexica.LITERAL_STRING, this.getLexema());
             }
             // fall through
           case 79: break;
           case 27:
-            { return uniULBuilder.construirUL(ClaseLexica.CAMBIO_SEC);
+            { return ULBuilder.construirUL(ClaseLexica.CAMBIO_SEC, "&&");
             }
             // fall through
           case 80: break;
           case 28:
-            { return uniULBuilder.construirUL(ClaseLexica.MENOR_IGUAL);
+            { return ULBuilder.construirUL(ClaseLexica.MENOR_IGUAL, "<=");
             }
             // fall through
           case 81: break;
           case 29:
-            { return uniULBuilder.construirUL(ClaseLexica.IGUAL);
+            { return ULBuilder.construirUL(ClaseLexica.IGUAL, "==");
             }
             // fall through
           case 82: break;
           case 30:
-            { return uniULBuilder.construirUL(ClaseLexica.MAYOR_IGUAL);
+            { return ULBuilder.construirUL(ClaseLexica.MAYOR_IGUAL, ">=");
             }
             // fall through
           case 83: break;
           case 31:
-            { return uniULBuilder.construirUL(ClaseLexica.IF);
+            { return ULBuilder.construirUL(ClaseLexica.IF, "<if>");
             }
             // fall through
           case 84: break;
           case 32:
-            { return uniULBuilder.construirUL(ClaseLexica.NL);
+            { return ULBuilder.construirUL(ClaseLexica.NL, "<nl>");
             }
             // fall through
           case 85: break;
           case 33:
-            { return uniULBuilder.construirUL(ClaseLexica.OR);
+            { return ULBuilder.construirUL(ClaseLexica.OR, "<or>");
             }
             // fall through
           case 86: break;
           case 34:
-            { return multiULBuilder.construirUL(ClaseLexica.LITERAL_REAL);
+            { return ULBuilder.construirUL(ClaseLexica.LITERAL_REAL, this.getLexema());
             }
             // fall through
           case 87: break;
           case 35:
-            { return uniULBuilder.construirUL(ClaseLexica.AND);
+            { return ULBuilder.construirUL(ClaseLexica.AND, "<and>");
             }
             // fall through
           case 88: break;
           case 36:
-            { return uniULBuilder.construirUL(ClaseLexica.ENTERO);
+            { return ULBuilder.construirUL(ClaseLexica.ENTERO, "<int>");
             }
             // fall through
           case 89: break;
           case 37:
-            { return uniULBuilder.construirUL(ClaseLexica.NEW);
+            { return ULBuilder.construirUL(ClaseLexica.NEW, "<new>");
             }
             // fall through
           case 90: break;
           case 38:
-            { return uniULBuilder.construirUL(ClaseLexica.NOT);
+            { return ULBuilder.construirUL(ClaseLexica.NOT, "<not>");
             }
             // fall through
           case 91: break;
           case 39:
-            { return uniULBuilder.construirUL(ClaseLexica.BOOLEAN);
+            { return ULBuilder.construirUL(ClaseLexica.BOOLEAN, "<bool>");
             }
             // fall through
           case 92: break;
           case 40:
-            { return uniULBuilder.construirUL(ClaseLexica.CALL);
+            { return ULBuilder.construirUL(ClaseLexica.CALL, "<call>");
             }
             // fall through
           case 93: break;
           case 41:
-            { return uniULBuilder.construirUL(ClaseLexica.ELSE);
+            { return ULBuilder.construirUL(ClaseLexica.ELSE, "<else>");
             }
             // fall through
           case 94: break;
           case 42:
-            { return uniULBuilder.construirUL(ClaseLexica.NULL);
+            { return ULBuilder.construirUL(ClaseLexica.NULL, "<null>");
             }
             // fall through
           case 95: break;
           case 43:
-            { return uniULBuilder.construirUL(ClaseLexica.PROC);
+            { return ULBuilder.construirUL(ClaseLexica.PROC, "<proc>");
             }
             // fall through
           case 96: break;
           case 44:
-            { return uniULBuilder.construirUL(ClaseLexica.READ);
+            { return ULBuilder.construirUL(ClaseLexica.READ, "<read>");
             }
             // fall through
           case 97: break;
           case 45:
-            { return uniULBuilder.construirUL(ClaseLexica.REAL);
+            { return ULBuilder.construirUL(ClaseLexica.REAL, "<real>");
             }
             // fall through
           case 98: break;
           case 46:
-            { return uniULBuilder.construirUL(ClaseLexica.LITERAL_TRUE);
+            { return ULBuilder.construirUL(ClaseLexica.LITERAL_TRUE, "<true>");
             }
             // fall through
           case 99: break;
           case 47:
-            { return uniULBuilder.construirUL(ClaseLexica.TYPE);
+            { return ULBuilder.construirUL(ClaseLexica.TYPE, "<type>");
             }
             // fall through
           case 100: break;
           case 48:
-            { return uniULBuilder.construirUL(ClaseLexica.LITERAL_FALSE);
+            { return ULBuilder.construirUL(ClaseLexica.LITERAL_FALSE, "<false>");
             }
             // fall through
           case 101: break;
           case 49:
-            { return uniULBuilder.construirUL(ClaseLexica.WHILE);
+            { return ULBuilder.construirUL(ClaseLexica.WHILE, "<while>");
             }
             // fall through
           case 102: break;
           case 50:
-            { return uniULBuilder.construirUL(ClaseLexica.WRITE);
+            { return ULBuilder.construirUL(ClaseLexica.WRITE, "<write>");
             }
             // fall through
           case 103: break;
           case 51:
-            { return uniULBuilder.construirUL(ClaseLexica.DELETE);
+            { return ULBuilder.construirUL(ClaseLexica.DELETE, "<delete>");
             }
             // fall through
           case 104: break;
           case 52:
-            { return uniULBuilder.construirUL(ClaseLexica.STRING);
+            { return ULBuilder.construirUL(ClaseLexica.STRING, "<string>");
             }
             // fall through
           case 105: break;
           case 53:
-            { return uniULBuilder.construirUL(ClaseLexica.STRUCT);
+            { return ULBuilder.construirUL(ClaseLexica.STRUCT, "<struct>");
             }
             // fall through
           case 106: break;

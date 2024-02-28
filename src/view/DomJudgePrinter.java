@@ -5,15 +5,17 @@ import model.lexico.UnidadLexica;
 public class DomJudgePrinter implements Printer{
     @Override
     public void write(UnidadLexica unidad) {
-        switch(unidad.clase()) {
-            case IDENTIFICADOR: case LITERAL_ENTERO: case LITERAL_REAL: case LITERAL_STRING: System.out.println(unidad.lexema()); break;
-            default: System.out.println(unidad.clase().getImage());
-        }
+        System.out.println(unidad.lexema());
     }
 
     @Override
-    public void writeException(String message) {
-        System.out.println("ERROR");
+    public void writeLexicoException(String message) {
+        System.out.println("ERROR_LEXICO");
+    }
+
+    @Override
+    public void writeSintaxisException(String message) {
+        System.out.println("ERROR_SINTACTICO");
     }
 
     @Override

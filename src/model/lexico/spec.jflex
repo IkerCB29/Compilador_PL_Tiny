@@ -1,6 +1,8 @@
 package model.lexico;
-import builder.UnidadLexicaMultivaluadaBuilder;
-import builder.UnidadLexicaUnivaluadaBuilder;
+
+import model.sintaxis.ClaseLexica;
+import builder.UnidadLexicaBuilder;
+
 import exceptions.LexicoException;
 import java_cup.runtime.Scanner;
 
@@ -14,20 +16,18 @@ import java_cup.runtime.Scanner;
 %cup
 
 %{
-  private UnidadLexicaUnivaluadaBuilder uniULBuilder;
-  private UnidadLexicaMultivaluadaBuilder multiULBuilder;
+  private UnidadLexicaBuilder ULBuilder;
   public String getLexema() {return yytext();}
   public int getFila() {return yyline+1;}
   public int getColumna() {return yycolumn+1;}
 %}
 
 %eofval{
-  return uniULBuilder.construirUL(ClaseLexica.EOF);
+  return ULBuilder.construirUL(ClaseLexica.EOF, "<EOF>");
 %eofval}
 
 %init{
-  uniULBuilder = new UnidadLexicaUnivaluadaBuilder(this);
-  multiULBuilder = new UnidadLexicaMultivaluadaBuilder(this);
+  ULBuilder = new UnidadLexicaBuilder(this);
 %init}
 
 %yylexthrow{
@@ -97,57 +97,57 @@ separador = [ \t\r\b\n]
 comentario = \#\#[^\n]*
 
 %%
-{entero}				{return uniULBuilder.construirUL(ClaseLexica.ENTERO);}
-{real}					{return uniULBuilder.construirUL(ClaseLexica.REAL);}
-{boolean}				{return uniULBuilder.construirUL(ClaseLexica.BOOLEAN);}
-{string}				{return uniULBuilder.construirUL(ClaseLexica.STRING);}
-{true}					{return uniULBuilder.construirUL(ClaseLexica.LITERAL_TRUE);}
-{false}					{return uniULBuilder.construirUL(ClaseLexica.LITERAL_FALSE);}
-{null}					{return uniULBuilder.construirUL(ClaseLexica.NULL);}
-{proc}					{return uniULBuilder.construirUL(ClaseLexica.PROC);}
-{if}					{return uniULBuilder.construirUL(ClaseLexica.IF);}
-{else}					{return uniULBuilder.construirUL(ClaseLexica.ELSE);}
-{while}					{return uniULBuilder.construirUL(ClaseLexica.WHILE);}
-{struct}				{return uniULBuilder.construirUL(ClaseLexica.STRUCT);}
-{new}					{return uniULBuilder.construirUL(ClaseLexica.NEW);}
-{delete}				{return uniULBuilder.construirUL(ClaseLexica.DELETE);}
-{read}					{return uniULBuilder.construirUL(ClaseLexica.READ);}
-{write}					{return uniULBuilder.construirUL(ClaseLexica.WRITE);}
-{nl}					{return uniULBuilder.construirUL(ClaseLexica.NL);}
-{type}					{return uniULBuilder.construirUL(ClaseLexica.TYPE);}
-{call}					{return uniULBuilder.construirUL(ClaseLexica.CALL);}
-{and}					{return uniULBuilder.construirUL(ClaseLexica.AND);}
-{or}					{return uniULBuilder.construirUL(ClaseLexica.OR);}
-{not}					{return uniULBuilder.construirUL(ClaseLexica.NOT);}
-{identificador}			{return multiULBuilder.construirUL(ClaseLexica.IDENTIFICADOR);}
-{numeroEntero}			{return multiULBuilder.construirUL(ClaseLexica.LITERAL_ENTERO);}
-{numeroReal}			{return multiULBuilder.construirUL(ClaseLexica.LITERAL_REAL);}
-{literalString}			{return multiULBuilder.construirUL(ClaseLexica.LITERAL_STRING);}
-{suma}					{return uniULBuilder.construirUL(ClaseLexica.SUMA);}
-{resta}					{return uniULBuilder.construirUL(ClaseLexica.RESTA);}
-{mul}					{return uniULBuilder.construirUL(ClaseLexica.POR);}
-{div}					{return uniULBuilder.construirUL(ClaseLexica.DIV);}
-{modulo}				{return uniULBuilder.construirUL(ClaseLexica.MODULO);}
-{menorQue}				{return uniULBuilder.construirUL(ClaseLexica.MENOR);}
-{mayorQue}				{return uniULBuilder.construirUL(ClaseLexica.MAYOR);}
-{menorOIgualQue}		{return uniULBuilder.construirUL(ClaseLexica.MENOR_IGUAL);}
-{mayorOIgualQue}		{return uniULBuilder.construirUL(ClaseLexica.MAYOR_IGUAL);}
-{igual} 				{return uniULBuilder.construirUL(ClaseLexica.IGUAL);}
-{diferente} 			{return uniULBuilder.construirUL(ClaseLexica.DIFERENTE);}
-{asignacion}			{return uniULBuilder.construirUL(ClaseLexica.ASIGNACION);}
-{pyc}					{return uniULBuilder.construirUL(ClaseLexica.PYC);}
-{parApertura}			{return uniULBuilder.construirUL(ClaseLexica.PAP);}
-{parCierre}				{return uniULBuilder.construirUL(ClaseLexica.PCIERRE);}
-{corcheteApertura}		{return uniULBuilder.construirUL(ClaseLexica.COR_APERTURA);}
-{corcheteCierre}		{return uniULBuilder.construirUL(ClaseLexica.COR_CIERRE);}
-{llaveApertura}			{return uniULBuilder.construirUL(ClaseLexica.LLAVE_APERTURA);}
-{llaveCierre}			{return uniULBuilder.construirUL(ClaseLexica.LLAVE_CIERRE);}
-{acceso} 				{return uniULBuilder.construirUL(ClaseLexica.ACCESO);}
-{coma} 					{return uniULBuilder.construirUL(ClaseLexica.COMA);}
-{finDeclaracion} 		{return uniULBuilder.construirUL(ClaseLexica.CAMBIO_SEC);}
-{evalua}				{return uniULBuilder.construirUL(ClaseLexica.EVALUA);}
-{puntero}				{return uniULBuilder.construirUL(ClaseLexica.PUNTERO);}
-{referencia}			{return uniULBuilder.construirUL(ClaseLexica.REFERENCIA);}
+{entero}				{return ULBuilder.construirUL(ClaseLexica.ENTERO, "<int>");}
+{real}					{return ULBuilder.construirUL(ClaseLexica.REAL, "<real>");}
+{boolean}				{return ULBuilder.construirUL(ClaseLexica.BOOLEAN, "<bool>");}
+{string}				{return ULBuilder.construirUL(ClaseLexica.STRING, "<string>");}
+{true}					{return ULBuilder.construirUL(ClaseLexica.LITERAL_TRUE, "<true>");}
+{false}					{return ULBuilder.construirUL(ClaseLexica.LITERAL_FALSE, "<false>");}
+{null}					{return ULBuilder.construirUL(ClaseLexica.NULL, "<null>");}
+{proc}					{return ULBuilder.construirUL(ClaseLexica.PROC, "<proc>");}
+{if}					{return ULBuilder.construirUL(ClaseLexica.IF, "<if>");}
+{else}					{return ULBuilder.construirUL(ClaseLexica.ELSE, "<else>");}
+{while}					{return ULBuilder.construirUL(ClaseLexica.WHILE, "<while>");}
+{struct}				{return ULBuilder.construirUL(ClaseLexica.STRUCT, "<struct>");}
+{new}					{return ULBuilder.construirUL(ClaseLexica.NEW, "<new>");}
+{delete}				{return ULBuilder.construirUL(ClaseLexica.DELETE, "<delete>");}
+{read}					{return ULBuilder.construirUL(ClaseLexica.READ, "<read>");}
+{write}					{return ULBuilder.construirUL(ClaseLexica.WRITE, "<write>");}
+{nl}					{return ULBuilder.construirUL(ClaseLexica.NL, "<nl>");}
+{type}					{return ULBuilder.construirUL(ClaseLexica.TYPE, "<type>");}
+{call}					{return ULBuilder.construirUL(ClaseLexica.CALL, "<call>");}
+{and}					{return ULBuilder.construirUL(ClaseLexica.AND, "<and>");}
+{or}					{return ULBuilder.construirUL(ClaseLexica.OR, "<or>");}
+{not}					{return ULBuilder.construirUL(ClaseLexica.NOT, "<not>");}
+{identificador}			{return ULBuilder.construirUL(ClaseLexica.IDENTIFICADOR, this.getLexema());}
+{numeroEntero}			{return ULBuilder.construirUL(ClaseLexica.LITERAL_ENTERO, this.getLexema());}
+{numeroReal}			{return ULBuilder.construirUL(ClaseLexica.LITERAL_REAL, this.getLexema());}
+{literalString}			{return ULBuilder.construirUL(ClaseLexica.LITERAL_STRING, this.getLexema());}
+{suma}					{return ULBuilder.construirUL(ClaseLexica.SUMA, "+");}
+{resta}					{return ULBuilder.construirUL(ClaseLexica.RESTA, "-");}
+{mul}					{return ULBuilder.construirUL(ClaseLexica.POR, "*");}
+{div}					{return ULBuilder.construirUL(ClaseLexica.DIV, "/");}
+{modulo}				{return ULBuilder.construirUL(ClaseLexica.MODULO, "%");}
+{menorQue}				{return ULBuilder.construirUL(ClaseLexica.MENOR, "<");}
+{mayorQue}				{return ULBuilder.construirUL(ClaseLexica.MAYOR, ">");}
+{menorOIgualQue}		{return ULBuilder.construirUL(ClaseLexica.MENOR_IGUAL, "<=");}
+{mayorOIgualQue}		{return ULBuilder.construirUL(ClaseLexica.MAYOR_IGUAL, ">=");}
+{igual} 				{return ULBuilder.construirUL(ClaseLexica.IGUAL, "==");}
+{diferente} 			{return ULBuilder.construirUL(ClaseLexica.DIFERENTE, "!=");}
+{asignacion}			{return ULBuilder.construirUL(ClaseLexica.ASIGNACION, "=");}
+{pyc}					{return ULBuilder.construirUL(ClaseLexica.PYC, ";");}
+{parApertura}			{return ULBuilder.construirUL(ClaseLexica.PAP, "(");}
+{parCierre}				{return ULBuilder.construirUL(ClaseLexica.PCIERRE, ")");}
+{corcheteApertura}		{return ULBuilder.construirUL(ClaseLexica.COR_APERTURA, "[");}
+{corcheteCierre}		{return ULBuilder.construirUL(ClaseLexica.COR_CIERRE, "]");}
+{llaveApertura}			{return ULBuilder.construirUL(ClaseLexica.LLAVE_APERTURA, "{");}
+{llaveCierre}			{return ULBuilder.construirUL(ClaseLexica.LLAVE_CIERRE, "}");}
+{acceso} 				{return ULBuilder.construirUL(ClaseLexica.ACCESO, ".");}
+{coma} 					{return ULBuilder.construirUL(ClaseLexica.COMA, ",");}
+{finDeclaracion} 		{return ULBuilder.construirUL(ClaseLexica.CAMBIO_SEC, "&&");}
+{evalua}				{return ULBuilder.construirUL(ClaseLexica.EVALUA, "@");}
+{puntero}				{return ULBuilder.construirUL(ClaseLexica.PUNTERO, "^");}
+{referencia}			{return ULBuilder.construirUL(ClaseLexica.REFERENCIA, "&");}
 {separador}         	{}
 {comentario}        	{}
 [^]                 	{throw new LexicoException(getFila(), getColumna(), getLexema());}

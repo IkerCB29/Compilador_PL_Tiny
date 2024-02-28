@@ -6,6 +6,7 @@ import java.io.IOException;
 
 public interface Printer {
     void write(UnidadLexica UL) throws IOException;
-    void writeException(String message) throws IOException;
+    void writeLexicoException(String message) throws IOException;
+    void writeSintaxisException(String message) throws IOException;
     void close() throws IOException;
 }

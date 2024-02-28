@@ -1,14 +1,19 @@
 package model.sintaxis;
 
-import java_cup.runtime.*;
+import exceptions.SintaxisException;
 import model.lexico.AnalizadorLexico;
 import model.lexico.UnidadLexica;
+
+import java_cup.runtime.*;
 
 scan with {:
   return getScanner().next_token();
 :};
 
 parser code {:
+   public void syntax_error(Symbol unidadLexica) throws SintaxisException {
+     throw new SintaxisException((UnidadLexica)unidadLexica);
+   }
 :};
 
 init with {:
@@ -16,13 +21,18 @@ init with {:
 :};
 
 
-terminal      LLAVE_APERTURA, LLAVE_CIERRE, CAMBIO_SEC, PYC, TYPE, ENTERO, REAL, IDENTIFICADOR,
-              COR_APERTURA, LITERAL_ENTERO, COR_CIERRE, PUNTERO, STRUCT, COMA, PROC, PAP, PCIERRE;
+terminal      ENTERO, REAL, BOOLEAN, STRING, IDENTIFICADOR, LITERAL_ENTERO, LITERAL_REAL, LITERAL_TRUE, LITERAL_FALSE,
+              LITERAL_STRING, SUMA, RESTA, POR, DIV, MODULO, AND, OR, NOT, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL,
+              IGUAL, DIFERENTE, ASIGNACION, PYC, PAP, PCIERRE, LLAVE_APERTURA, LLAVE_CIERRE, COR_APERTURA, COR_CIERRE,
+              COMA, ACCESO, EVALUA, CAMBIO_SEC, NULL, PROC, IF, ELSE, WHILE, STRUCT, NEW, DELETE, READ, WRITE, NL,
+              TYPE, CALL, REFERENCIA, PUNTERO;
 
-non terminal  programa, bloque, declaraciones_opt, declaraciones, tipo0, tipo1, tipo2, registro, campos, campo,
-              def_proc, lista_parametros_opt, lista_parametros, parametro, instrucciones_opt;
-
-/*Reglas*/
+non terminal  programa, bloque, declaraciones_opt, declaraciones, declaracion, dec_tipo, dec_variable, dec_procedimiento,
+              tipo0, tipo1, tipo2, registro, campos, campo, def_proc, lista_parametros_opt, lista_parametros, parametro,
+              instrucciones_opt, instrucciones, instruccion, instruccion_eval, instruccion_if, instruccion_while,
+              instruccion_read, instruccion_write, instruccion_nl, instruccion_new, instruccion_delete, instruccion_call,
+              instruccion_compuesta, lista_expresiones_opt, lista_expresiones, E0, E1, E2, E3, E4, E5, E6, E7, OP1,
+              OP4, OP5, OP6, operando;
 
 programa ::= bloque ;
 
@@ -39,8 +49,8 @@ declaracion ::= dec_procedimiento ;
 dec_tipo ::= TYPE tipo0 IDENTIFICADOR ;
 
 dec_variable ::= tipo0 IDENTIFICADOR ;
+tipo0 ::= tipo0 COR_APERTURA LITERAL_ENTERO COR_CIERRE ;
 tipo0 ::= tipo1 ;
-tipo1 ::= tipo1 COR_APERTURA LITERAL_ENTERO COR_CIERRE ;
 tipo1 ::= tipo2 ;
 tipo1 ::= PUNTERO tipo1 ;
 tipo2 ::= ENTERO ;
@@ -63,4 +73,76 @@ lista_parametros ::= parametro ;
 parametro ::= tipo0 IDENTIFICADOR ;
 parametro ::= tipo0 REFERENCIA IDENTIFICADOR ;
 
-instrucciones_opt ::= REAL ;
+instrucciones_opt ::= instrucciones ;
+instrucciones_opt ::= ;
+instrucciones ::= instrucciones PYC instruccion ;
+instrucciones ::= instruccion ;
+instruccion ::= instruccion_eval ;
+instruccion ::= instruccion_if ;
+instruccion ::= instruccion_while ;
+instruccion ::= instruccion_read ;
+instruccion ::= instruccion_write ;
+instruccion ::= instruccion_nl ;
+instruccion ::= instruccion_new ;
+instruccion ::= instruccion_delete ;
+instruccion ::= instruccion_call ;
+instruccion ::= instruccion_compuesta ;
+instruccion_eval ::= EVALUA E0 ;
+instruccion_if ::= IF E0 bloque ;
+instruccion_if ::= IF E0 bloque ELSE bloque ;
+instruccion_while ::= WHILE E0 bloque ;
+instruccion_read ::= READ E0 ;
+instruccion_write ::= WRITE E0 ;
+instruccion_nl ::= NL ;
+instruccion_new ::= NEW E0 ;
+instruccion_delete ::= DELETE E0 ;
+instruccion_call ::= CALL IDENTIFICADOR PAP lista_expresiones_opt PCIERRE ;
+instruccion_compuesta ::= bloque ;
+
+lista_expresiones_opt ::= lista_expresiones ;
+lista_expresiones_opt ::= ;
+lista_expresiones ::= lista_expresiones COMA E0 ;
+lista_expresiones ::= E0 ;
+
+E0 ::= E1 ASIGNACION E0 ;
+E0 ::= E1 ;
+E1 ::= E1 OP1 E2 ;
+E1 ::= E2 ;
+E2 ::= E2 SUMA E3 ;
+E2 ::= E3 RESTA E3 ;
+E2 ::= E3 ;
+E3 ::= E4 AND E3 ;
+E3 ::= E4 OR E4 ;
+E3 ::= E4 ;
+E4 ::= E4 OP4 E5 ;
+E4 ::= E5 ;
+E5 ::= OP5 E5 ;
+E5 ::= E6 ;
+E6 ::= E6 OP6 ;
+E6 ::= E7 ;
+E7 ::= PAP E0 PCIERRE ;
+E7 ::= operando ;
+OP1 ::= MAYOR ;
+OP1 ::= MENOR ;
+OP1 ::= MAYOR_IGUAL ;
+OP1 ::= MENOR_IGUAL ;
+OP1 ::= IGUAL ;
+OP1 ::= DIFERENTE ;
+OP4 ::= POR ;
+OP4 ::= DIV ;
+OP4 ::= MODULO ;
+OP5 ::= RESTA ;
+OP5 ::= NOT ;
+OP6 ::= COR_APERTURA E0 COR_CIERRE ;
+OP6 ::= ACCESO IDENTIFICADOR ;
+OP6 ::= PUNTERO ;
+operando ::= LITERAL_REAL;
+operando ::= LITERAL_ENTERO ;
+operando ::= LITERAL_TRUE ;
+operando ::= LITERAL_FALSE ;
+operando ::= LITERAL_STRING ;
+operando ::= IDENTIFICADOR ;
+operando ::= NULL ;
+
+
+
