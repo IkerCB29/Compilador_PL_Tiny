@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!tools/javacc.jar
 *.war
 *.nar
 *.ear
