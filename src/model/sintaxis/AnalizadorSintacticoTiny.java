@@ -43,11 +43,11 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       case Real:
       case Boolean:
       case String:
-      case Puntero:
       case Proc:
       case Struct:
       case Type:
       case Identificador:
+      case Puntero:
         declaraciones();
         jj_consume_token(FinDeclaracion);
         break;
@@ -96,9 +96,9 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       case Real:
       case Boolean:
       case String:
-      case Puntero:
       case Struct:
       case Identificador:
+      case Puntero:
         dec_variable();
         break;
       case Type:
@@ -305,9 +305,9 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       case Real:
       case Boolean:
       case String:
-      case Puntero:
       case Struct:
       case Identificador:
+      case Puntero:
         lista_parametros();
         break;
       default:
@@ -382,8 +382,6 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     trace_call("instrucciones_opt");
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case LlaveApertura:
-      case Evalua:
       case If:
       case While:
       case New:
@@ -392,6 +390,8 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       case Write:
       case Nl:
       case Call:
+      case LlaveApertura:
+      case Evalua:
         instrucciones();
         break;
       default:
@@ -600,16 +600,16 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     trace_call("lista_expresiones_opt");
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case LiteralEntero:
-      case LiteralReal:
       case LiteralTrue:
       case LiteralFalse:
-      case LiteralString:
-      case Resta:
       case Not:
-      case ParAp:
       case Null:
       case Identificador:
+      case LiteralEntero:
+      case LiteralReal:
+      case LiteralString:
+      case Resta:
+      case ParAp:
         lista_expresiones();
         break;
       default:
@@ -820,19 +820,19 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
     trace_call("E5");
     try {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case Resta:
       case Not:
+      case Resta:
         OP5();
         E5();
         break;
-      case LiteralEntero:
-      case LiteralReal:
       case LiteralTrue:
       case LiteralFalse:
-      case LiteralString:
-      case ParAp:
       case Null:
       case Identificador:
+      case LiteralEntero:
+      case LiteralReal:
+      case LiteralString:
+      case ParAp:
         E6();
         break;
       default:
@@ -883,13 +883,13 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
         E0();
         jj_consume_token(ParCierre);
         break;
-      case LiteralEntero:
-      case LiteralReal:
       case LiteralTrue:
       case LiteralFalse:
-      case LiteralString:
       case Null:
       case Identificador:
+      case LiteralEntero:
+      case LiteralReal:
+      case LiteralString:
         operando();
         break;
       default:
@@ -1064,10 +1064,10 @@ public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstan
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1f00,0x0,0x1f00,0x0,0x1f00,0xf00,0x0,0x1f00,0x0,0x2000,0x0,0x0,0x0,0x0,0x417c000,0x0,0x0,0xf8000000,0x80000,0x100000,0x3000000,0xe00000,0x417c000,0x1000,0x7c000,0xf8000000,0xe00000,0x4100000,0x1000,0x7c000,};
+      jj_la1_0 = new int[] {0x50440f00,0x0,0x50440f00,0x0,0x40400f00,0x40400f00,0x0,0x40400f00,0x0,0x40000000,0x2fa80000,0x0,0x2fa80000,0x100000,0xc0033000,0x0,0x0,0x0,0x0,0x0,0xc000,0x0,0xc0033000,0x0,0xc0023000,0x0,0x0,0x10000,0x0,0xc0023000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x5044000,0x4,0x5044000,0x20,0x4040000,0x4040000,0x400,0x4040000,0x400,0x4000000,0x2fa9080,0x4,0x2fa9080,0x10000,0x4002008,0x400,0x2,0x1,0x0,0x0,0x0,0x0,0x4002008,0x220,0x4002008,0x1,0x0,0x0,0x220,0x4002000,};
+      jj_la1_1 = new int[] {0x80,0x10000,0x80,0x80000,0x80,0x0,0x1000000,0x80,0x1000000,0x100,0x4200000,0x10000,0x4200000,0x0,0x2000b,0x1000000,0x8000,0x7e00,0x4,0x8,0x0,0x70,0x2000b,0x880080,0x20003,0x7e00,0x70,0x8,0x880080,0x3,};
    }
 
   /** Constructor with InputStream. */

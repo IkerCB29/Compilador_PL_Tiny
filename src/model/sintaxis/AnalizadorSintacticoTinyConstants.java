@@ -33,99 +33,99 @@ public interface AnalizadorSintacticoTinyConstants {
   /** RegularExpression Id. */
   int String = 11;
   /** RegularExpression Id. */
-  int Puntero = 12;
+  int LiteralTrue = 12;
   /** RegularExpression Id. */
-  int Referencia = 13;
+  int LiteralFalse = 13;
   /** RegularExpression Id. */
-  int LiteralEntero = 14;
+  int And = 14;
   /** RegularExpression Id. */
-  int LiteralReal = 15;
+  int Or = 15;
   /** RegularExpression Id. */
-  int LiteralTrue = 16;
+  int Not = 16;
   /** RegularExpression Id. */
-  int LiteralFalse = 17;
+  int Null = 17;
   /** RegularExpression Id. */
-  int LiteralString = 18;
+  int Proc = 18;
   /** RegularExpression Id. */
-  int Suma = 19;
+  int If = 19;
   /** RegularExpression Id. */
-  int Resta = 20;
+  int Else = 20;
   /** RegularExpression Id. */
-  int Mul = 21;
+  int While = 21;
   /** RegularExpression Id. */
-  int Div = 22;
+  int Struct = 22;
   /** RegularExpression Id. */
-  int Modulo = 23;
+  int New = 23;
   /** RegularExpression Id. */
-  int And = 24;
+  int Delete = 24;
   /** RegularExpression Id. */
-  int Or = 25;
+  int Read = 25;
   /** RegularExpression Id. */
-  int Not = 26;
+  int Write = 26;
   /** RegularExpression Id. */
-  int MenorQue = 27;
+  int Nl = 27;
   /** RegularExpression Id. */
-  int MayorQue = 28;
+  int Type = 28;
   /** RegularExpression Id. */
-  int MenorOIgualQue = 29;
+  int Call = 29;
   /** RegularExpression Id. */
-  int MayorOIgualQue = 30;
+  int Identificador = 30;
   /** RegularExpression Id. */
-  int Igual = 31;
+  int LiteralEntero = 31;
   /** RegularExpression Id. */
-  int Diferente = 32;
+  int LiteralReal = 32;
   /** RegularExpression Id. */
-  int Asignacion = 33;
+  int LiteralString = 33;
   /** RegularExpression Id. */
-  int PyC = 34;
+  int Suma = 34;
   /** RegularExpression Id. */
-  int ParAp = 35;
+  int Resta = 35;
   /** RegularExpression Id. */
-  int ParCierre = 36;
+  int Mul = 36;
   /** RegularExpression Id. */
-  int CorcheteApertura = 37;
+  int Div = 37;
   /** RegularExpression Id. */
-  int CorcheteCierro = 38;
+  int Modulo = 38;
   /** RegularExpression Id. */
-  int LlaveApertura = 39;
+  int Puntero = 39;
   /** RegularExpression Id. */
-  int LlaveCierre = 40;
+  int Referencia = 40;
   /** RegularExpression Id. */
-  int Acceso = 41;
+  int MenorQue = 41;
   /** RegularExpression Id. */
-  int Coma = 42;
+  int MayorQue = 42;
   /** RegularExpression Id. */
-  int FinDeclaracion = 43;
+  int MenorOIgualQue = 43;
   /** RegularExpression Id. */
-  int Evalua = 44;
+  int MayorOIgualQue = 44;
   /** RegularExpression Id. */
-  int Null = 45;
+  int Igual = 45;
   /** RegularExpression Id. */
-  int Proc = 46;
+  int Diferente = 46;
   /** RegularExpression Id. */
-  int If = 47;
+  int Asignacion = 47;
   /** RegularExpression Id. */
-  int Else = 48;
+  int PyC = 48;
   /** RegularExpression Id. */
-  int While = 49;
+  int ParAp = 49;
   /** RegularExpression Id. */
-  int Struct = 50;
+  int ParCierre = 50;
   /** RegularExpression Id. */
-  int New = 51;
+  int CorcheteApertura = 51;
   /** RegularExpression Id. */
-  int Delete = 52;
+  int CorcheteCierro = 52;
   /** RegularExpression Id. */
-  int Read = 53;
+  int LlaveApertura = 53;
   /** RegularExpression Id. */
-  int Write = 54;
+  int LlaveCierre = 54;
   /** RegularExpression Id. */
-  int Nl = 55;
+  int Acceso = 55;
   /** RegularExpression Id. */
-  int Type = 56;
+  int Coma = 56;
   /** RegularExpression Id. */
-  int Call = 57;
+  int FinDeclaracion = 57;
   /** RegularExpression Id. */
-  int Identificador = 58;
+  int Evalua = 58;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -144,21 +144,35 @@ public interface AnalizadorSintacticoTinyConstants {
     "<Real>",
     "<Boolean>",
     "<String>",
-    "\"^\"",
-    "\"&\"",
-    "<LiteralEntero>",
-    "<LiteralReal>",
     "<LiteralTrue>",
     "<LiteralFalse>",
+    "<And>",
+    "<Or>",
+    "<Not>",
+    "<Null>",
+    "<Proc>",
+    "<If>",
+    "<Else>",
+    "<While>",
+    "<Struct>",
+    "<New>",
+    "<Delete>",
+    "<Read>",
+    "<Write>",
+    "<Nl>",
+    "<Type>",
+    "<Call>",
+    "<Identificador>",
+    "<LiteralEntero>",
+    "<LiteralReal>",
     "<LiteralString>",
     "\"+\"",
     "\"-\"",
     "\"*\"",
     "\"/\"",
     "\"%\"",
-    "<And>",
-    "<Or>",
-    "<Not>",
+    "\"^\"",
+    "\"&\"",
     "\"<\"",
     "\">\"",
     "\"<=\"",
@@ -177,20 +191,6 @@ public interface AnalizadorSintacticoTinyConstants {
     "\",\"",
     "\"&&\"",
     "\"@\"",
-    "<Null>",
-    "<Proc>",
-    "<If>",
-    "<Else>",
-    "<While>",
-    "<Struct>",
-    "<New>",
-    "<Delete>",
-    "<Read>",
-    "<Write>",
-    "<Nl>",
-    "<Type>",
-    "<Call>",
-    "<Identificador>",
     "<token of kind 59>",
     "<token of kind 60>",
   };

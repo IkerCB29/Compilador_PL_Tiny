@@ -22,21 +22,37 @@ PARSER_END(AnalizadorSintacticoTiny)
 	TOKEN:{<Real:("r"|"R")("e"|"E")("a"|"A")("l"|"L")>}
 	TOKEN:{<Boolean:("b"|"B")("o"|"O")("o"|"O")("l"|"L")>}
 	TOKEN:{<String:("s"|"S")("t"|"T")("r"|"R")("i"|"I")("n"|"N")("g"|"G")>}
-	TOKEN:{<Puntero: "^">}
-	TOKEN:{<Referencia: "&">}
-	TOKEN:{<LiteralEntero: (["+", "-"])? <ParteEntera>>}
-	TOKEN:{<LiteralReal: <LiteralEntero> ( <ParteDecimal> | <ParteExponencial> | <ComboPartes> )>}
 	TOKEN:{<LiteralTrue:("t"|"T")("r"|"R")("u"|"U")("e"|"E")>}
 	TOKEN:{<LiteralFalse:("f"|"F")("a"|"A")("l"|"L")("s"|"S")("e"|"E")>}
+	TOKEN:{<And:("a"|"A")("n"|"N")("d"|"D")>}
+	TOKEN:{<Or:("o"|"O")("r"|"R")>}
+	TOKEN:{<Not:("n"|"N")("o"|"O")("t"|"T")>}
+	TOKEN:{<Null:("n"|"N")("u"|"U")("l"|"L")("l"|"L")>}
+	TOKEN:{<Proc:("p"|"P")("r"|"R")("o"|"O")("c"|"C")>}
+	TOKEN:{<If:("i"|"I")("f"|"F")>}
+	TOKEN:{<Else:("e"|"E")("l"|"L")("s"|"S")("e"|"E")>}
+	TOKEN:{<While:("w"|"W")("h"|"H")("i"|"I")("l"|"L")("e"|"E")>}
+	TOKEN:{<Struct:("s"|"S")("t"|"T")("r"|"R")("u"|"U")("c"|"C")("t"|"T")>}
+	TOKEN:{<New:("n"|"N")("e"|"E")("w"|"W")>}
+	TOKEN:{<Delete:("d"|"D")("e"|"E")("l"|"L")("e"|"E")("t"|"T")("e"|"E")>}
+	TOKEN:{<Read:("r"|"R")("e"|"E")("a"|"A")("d"|"D")>}
+	TOKEN:{<Write:("w"|"W")("r"|"R")("i"|"I")("t"|"T")("e"|"E")>}
+	TOKEN:{<Nl:("n"|"N")("l"|"L")>}
+	TOKEN:{<Type:("t"|"T")("y"|"Y")("p"|"P")("e"|"E")>}
+	TOKEN:{<Call:("c"|"C")("a"|"A")("l"|"L")("l"|"L")>}
+	TOKEN:{<Identificador: <Letra> (<Letra> | <Digito>)*>}
+
+	TOKEN:{<LiteralEntero: (["+", "-"])? <ParteEntera>>}
+	TOKEN:{<LiteralReal: <LiteralEntero> ( <ParteDecimal> | <ParteExponencial> | <ComboPartes> )>}
 	TOKEN:{<LiteralString: "\"" (~["\""])* "\"">}
+	
 	TOKEN:{<Suma:"+">}
 	TOKEN:{<Resta:"-">}
 	TOKEN:{<Mul:"*">}
 	TOKEN:{<Div:"/">}
 	TOKEN:{<Modulo:"%">}
-	TOKEN:{<And:("a"|"A")("n"|"N")("d"|"D")>}
-	TOKEN:{<Or:("o"|"O")("r"|"R")>}
-	TOKEN:{<Not:("n"|"N")("o"|"O")("t"|"T")>}
+	TOKEN:{<Puntero: "^">}
+	TOKEN:{<Referencia: "&">}
 	TOKEN:{<MenorQue:"<">}
 	TOKEN:{<MayorQue:">">}
 	TOKEN:{<MenorOIgualQue:"<=">}
@@ -55,23 +71,9 @@ PARSER_END(AnalizadorSintacticoTiny)
 	TOKEN:{<Coma:",">}
 	TOKEN:{<FinDeclaracion:"&&">}
 	TOKEN:{<Evalua:"@">}
-	TOKEN:{<Null:("n"|"N")("u"|"U")("l"|"L")("l"|"L")>}
-	TOKEN:{<Proc:("p"|"P")("r"|"R")("o"|"O")("c"|"C")>}
-	TOKEN:{<If:("i"|"I")("f"|"F")>}
-	TOKEN:{<Else:("e"|"E")("l"|"L")("s"|"S")("e"|"E")>}
-	TOKEN:{<While:("w"|"W")("h"|"H")("i"|"I")("l"|"L")("e"|"E")>}
-	TOKEN:{<Struct:("s"|"S")("t"|"T")("r"|"R")("u"|"U")("c"|"C")("t"|"T")>}
-	TOKEN:{<New:("n"|"N")("e"|"E")("w"|"W")>}
-	TOKEN:{<Delete:("d"|"D")("e"|"E")("l"|"L")("e"|"E")("t"|"T")("e"|"E")>}
-	TOKEN:{<Read:("r"|"R")("e"|"E")("a"|"A")("d"|"D")>}
-	TOKEN:{<Write:("w"|"W")("r"|"R")("i"|"I")("t"|"T")("e"|"E")>}
-	TOKEN:{<Nl:("n"|"N")("l"|"L")>}
-	TOKEN:{<Type:("t"|"T")("y"|"Y")("p"|"P")("e"|"E")>}
-	TOKEN:{<Call:("c"|"C")("a"|"A")("l"|"L")("l"|"L")>}
-	TOKEN:{<Identificador: <Letra> (<Letra> | <Digito>)*>}
 
 	SKIP:{<["\t"," ","\r","\b","\n"]>}
-	SKIP:{<"##"(~["\n"])*>}
+	SKIP:{<"##"((~["\n"]))*>}
 
 void analiza() : {} {programa() <EOF>}
 void programa(): {} { bloque() }
