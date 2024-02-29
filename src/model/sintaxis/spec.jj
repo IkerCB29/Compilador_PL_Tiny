@@ -3,7 +3,7 @@ options {
 }
 
 PARSER_BEGIN(AnalizadorSintacticoTiny)
-package asint;
+package model.sintaxis;
 
 public class AnalizadorSintacticoTiny {
 	    protected 	void newToken(Token t) {}
@@ -72,6 +72,7 @@ PARSER_END(AnalizadorSintacticoTiny)
 	SKIP:{<["\t"," ","\r","\b","\n"]>}
 	SKIP:{<"##"(~["\n"])*>}
 
+void analiza() : {} {programa() <EOF>}
 void programa(): {} { bloque() }
 void bloque(): {} { "{" declaraciones_opt() instrucciones_opt() "}" }
 void declaraciones_opt(): {} { declaraciones() <FinDeclaracion> | {} }

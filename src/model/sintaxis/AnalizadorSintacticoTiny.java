@@ -4,6 +4,11 @@ package model.sintaxis;
 public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstants {
             protected   void newToken(Token t) {}
 
+  final public void analiza() throws ParseException {
+    programa();
+    jj_consume_token(0);
+  }
+
   final public void programa() throws ParseException {
     bloque();
   }

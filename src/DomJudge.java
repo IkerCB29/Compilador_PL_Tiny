@@ -1,20 +1,21 @@
-import java.io.BufferedReader;
+import model.sintaxis.AnalizadorSintacticoTiny;
+import model.sintaxis.AnalizadorSintacticoTinyDJ;
+import model.sintaxis.ParseException;
+import model.sintaxis.TokenMgrError;
 import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
 
-import controller.Controller;
-import view.DomJudgePrinter;
-import view.Printer;
-
-public class DomJudge {
-	public static void main(String[] args) throws Exception {
-		//Este es para el DOMJUDGE
-		Reader input  = new InputStreamReader(System.in);
-		//Este es para probar nosotros
-		//Reader input = new BufferedReader(new FileReader("files/codigo4.tiny"));
-		Printer output = new DomJudgePrinter();
-		Controller c = new Controller();
-		c.analisisLexico(input, output);
-	}
-} 
+public class DomJudge{
+   public static void main(String[] args) throws Exception {
+     try{
+      AnalizadorSintacticoTiny asint = new AnalizadorSintacticoTinyDJ(new InputStreamReader(System.in));
+      asint.analiza();
+     }
+     catch(ParseException e) {
+        System.out.println("ERROR_SINTACTICO"); 
+     }
+     catch(TokenMgrError e) {
+        System.out.println("ERROR_LEXICO"); 
+     }
+   }
+}
