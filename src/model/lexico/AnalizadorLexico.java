@@ -10,7 +10,6 @@ import exceptions.LexicoException;
 import model.sintaxis.ClaseLexica;
 import java_cup.runtime.Scanner;
 
-
 // See https://github.com/jflex-de/jflex/issues/222
 @SuppressWarnings("FallThrough")
 public class AnalizadorLexico implements Scanner {

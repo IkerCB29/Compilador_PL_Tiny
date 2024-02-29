@@ -1,1 +1,1 @@
--parser AnalizadorSintactico -symbols ClaseLexica
+-parser AsinCUP -symbols ClaseLexica

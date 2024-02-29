@@ -9,12 +9,11 @@ import exceptions.SintaxisException;
 import model.lexico.AnalizadorLexico;
 import model.lexico.UnidadLexica;
 import java_cup.runtime.*;
-import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
   */
 @SuppressWarnings({"rawtypes"})
-public class AnalizadorSintactico extends java_cup.runtime.lr_parser {
+public class AsinCUP extends java_cup.runtime.lr_parser {
 
  public final Class getSymbolContainer() {
     return ClaseLexica.class;
@@ -22,14 +21,14 @@ public class AnalizadorSintactico extends java_cup.runtime.lr_parser {
 
   /** Default constructor. */
   @Deprecated
-  public AnalizadorSintactico() {super();}
+  public AsinCUP() {super();}
 
   /** Constructor which sets the default scanner. */
   @Deprecated
-  public AnalizadorSintactico(java_cup.runtime.Scanner s) {super(s);}
+  public AsinCUP(java_cup.runtime.Scanner s) {super(s);}
 
   /** Constructor which sets the default scanner. */
-  public AnalizadorSintactico(java_cup.runtime.Scanner s, java_cup.runtime.SymbolFactory sf) {super(s,sf);}
+  public AsinCUP(java_cup.runtime.Scanner s, java_cup.runtime.SymbolFactory sf) {super(s,sf);}
 
   /** Production table. */
   protected static final short _production_table[][] = 
@@ -441,7 +440,7 @@ public class AnalizadorSintactico extends java_cup.runtime.lr_parser {
     }
 
 
-   public void syntax_error(Symbol unidadLexica)  {
+   public void syntax_error(Symbol unidadLexica) {
      throw new SintaxisException((UnidadLexica)unidadLexica);
    }
 
@@ -449,10 +448,10 @@ public class AnalizadorSintactico extends java_cup.runtime.lr_parser {
 /** Cup generated class to encapsulate user supplied action code.*/
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
 class CUP$AnalizadorSintactico$actions {
-  private final AnalizadorSintactico parser;
+  private final AsinCUP parser;
 
   /** Constructor */
-  CUP$AnalizadorSintactico$actions(AnalizadorSintactico parser) {
+  CUP$AnalizadorSintactico$actions(AsinCUP parser) {
     this.parser = parser;
   }
 
