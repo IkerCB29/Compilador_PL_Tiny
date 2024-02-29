@@ -1,11 +1,7 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 
 import controller.Controller;
-import view.DomJudgePrinter;
-import view.Printer;
 
 public class DomJudge {
 	public static void main(String[] args) throws Exception {
@@ -14,6 +10,6 @@ public class DomJudge {
 		//Este es para probar nosotros
 		//Reader input = new BufferedReader(new FileReader("files/codigo5.tiny"));
 		Controller c = new Controller();
-		c.analisisSintacticoDebug(input);
+		c.analisisSintacticoCUPDebug(input);
 	}
 } 

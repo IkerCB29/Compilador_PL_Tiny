@@ -6,7 +6,6 @@ import java.io.Reader;
 
 import controller.Controller;
 import view.FullPrinter;
-import view.Printer;
 
 public class Main {
 	private final static String[] FILES = {
@@ -28,7 +27,7 @@ public class Main {
 				input.close();
 
 				input = new BufferedReader(new FileReader(file));
-				c.analisisSintactico(input);
+				c.analisisSintacticoCUP(input);
 				input.close();
 			}
 			catch (Exception e) {

@@ -28,7 +28,7 @@ public class Controller {
         output.close();
     }
 
-    public void analisisSintactico(Reader input) throws Exception {
+    public void analisisSintacticoCUP(Reader input) throws Exception {
         try {
             AnalizadorLexico alex = new AnalizadorLexico(input);
             AnalizadorSintacticoCUP asin = new AnalizadorSintacticoCUP(alex);
@@ -43,7 +43,7 @@ public class Controller {
         }
     }
 
-    public void analisisSintacticoDebug(Reader input) throws Exception {
+    public void analisisSintacticoCUPDebug(Reader input) throws Exception {
         Printer output = new DomJudgePrinter();
         try {
             AnalizadorLexico alex = new AnalizadorLexico(input);
