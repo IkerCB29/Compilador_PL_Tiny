@@ -1,6 +1,6 @@
 package exceptions;
 
-public class LexicoException extends Exception{
+public class LexicoException extends RuntimeException{
     private final int fila;
     private final int columna;
     private final String lexema;

@@ -18,7 +18,12 @@ public class FullPrinter implements Printer{
     }
 
     @Override
-    public void writeException(String message) throws IOException{
+    public void writeLexicoException(String message) throws IOException{
+        writer.write(message + "\n");
+    }
+
+    @Override
+    public void writeSintaxisException(String message) throws IOException {
         writer.write(message + "\n");
     }
 

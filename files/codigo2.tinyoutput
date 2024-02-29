@@ -4,4 +4,4 @@
 [clase: IDENTIFICADOR, fila: 1, col: 18, lexema: iniciado]
 [ERROR: fila:5, col:1, Caracter inexperado: $]
 [ERROR: fila:6, col:1, Caracter inexperado: !]
-[clase: EOF, fila: 7, col: 50]
+[clase: EOF, fila: 7, col: 50, lexema: <EOF>]
