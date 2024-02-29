@@ -1,0 +1,117 @@
+programa → bloque
+bloque → { declaraciones_opt instrucciones_opt }
+declaraciones_opt → declaraciones FinDeclaracion
+declaraciones_opt → ε
+declaraciones → declaracion r_declaraciones
+r_declaraciones → ; declaración r_declaraciones
+r_declaraciones → ε
+declaración → dec_variable
+declaración → dec_tipo
+declaración → dec_procedimiento
+dec_tipo → Type tipo0 Identificador
+dec_variable → tipo0 Identificador
+tipo0 → tipo1 r_tipo0
+r_tipo0 → [LiteralEntero]
+r_tipo0 → ε
+tipo1 → Puntero tipo1
+tipo1 → tipo2
+tipo2 → Entero
+tipo2 → Real
+tipo2 → Boolean
+tipo2 → String
+tipo2 → Identificador
+tipo2 → registro
+registro → Struct { campos }
+campos → campo r_campos
+r_campos → , campo r_campos
+r_campos → ε
+campo → dec_variable
+dec_procedimiento → Proc Identificador parametros_formales bloque
+parametros_formales → ( lista_parametros_opt )
+lista_parametros_opt → lista_parametros
+lista_parametros_opt → ε
+lista_parametros → parametro r_lista_parametros
+r_lista_parametros → ; parametro r_lista_parametros
+r_lista_parametros → ε
+parametro → tipo0 r_parametro
+r_parametro → Identificador
+r_parametro → & Identificador
+instrucciones_opt → instrucciones
+instrucciones_opt → ε
+instrucciones → instruccion r_instrucciones
+r_instrucciones → ; instruccion r_instrucciones
+r_instrucciones → ε
+instruccion → instruccion_eval
+instruccion → instruccion_if
+instruccion → instruccion_while
+instruccion → instruccion_read
+instruccion → instruccion_write
+instruccion → instruccion_nl
+instruccion → instruccion_new
+instruccion → instruccion_delete
+instruccion → instruccion_call
+instruccion → instruccion_compuesta
+instruccion_eval → @ E0
+instrucción_if → If E0 bloque r_instruccion_if
+r_instruccion_if → Else bloque
+r_instruccion_if → ε
+instruccion_while → While E0 bloque
+instruccion_read → Read E0
+instruccion_write → Write E0
+instruccion_nl → Nl
+instruccion_new → New E0
+instruccion_delete → Delete E0
+instruccion_call → Call Identificador ( lista_expresiones_opt )
+instruccion_compuesta → bloque
+lista_expresiones_opt → lista_expresiones
+lista_expresiones_opt → ε
+lista_expresiones → E0 r_lista_expresiones
+r_lista_expresiones→ , E0 r_lista_expresiones
+r_lista_expresiones→ ε
+E0 → E1 RE0
+RE0 → = E0
+RE0 → ε
+E1 → E2 RE1
+RE1 → OP1 E2 RE1
+RE1 → ε
+E2 → E3 R2E2 R1E2
+R1E2 → + E3 R1E2
+R1E2 → ε
+R2E2 → - E3
+R2E2 → ε
+E3 → E4 RE3
+RE3 → And E3
+RE3 → Or E4
+RE3 → ε
+E4 → E5 RE4
+RE4 → OP4 E5 RE4
+RE4 → ε
+E5 → OP5 E5
+E5 → E6
+E6 → E7 RE6
+RE6 → OP6 RE6
+RE6 → ε
+E7 → (E0)
+E7 → operando
+OP1 → >
+OP1 → <
+OP1 → MenorOIgualQue
+OP1 → MayorOIgualQue
+OP1 → Igual
+OP1 → Diferente
+OP4 → *
+OP4 → /
+OP4 → %
+OP5 → -
+OP5 → Not
+OP6 → [E0]
+OP6 → acceso_registro
+OP6 → Puntero
+acceso_registro → Acceso Identificador
+operando → LiteralReal
+operando → LiteralEntero
+operando → LiteralTrue
+operando → LiteralFalse
+operando → LiteralString
+operando → Identificador
+operando → Null
