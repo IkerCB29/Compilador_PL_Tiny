@@ -9,7 +9,7 @@ package model.sintaxis;
 public class AsinCC {
   protected void newToken(Token t) {}
 }
-PARSER_END(AnalizadorSintacticoTiny)
+PARSER_END(AsinCC)
 	TOKEN:{<#Letra:["a"-"z","A"-"Z", "_"]>}
 	TOKEN:{<#DigitoPositivo:["1"-"9"]>}
 	TOKEN:{<#Digito:<DigitoPositivo>|"0">}
