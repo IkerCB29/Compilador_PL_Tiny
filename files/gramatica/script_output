@@ -1,0 +1,62 @@
+void programa(): {} { bloque() }
+void bloque(): {} { "{" declaraciones_opt() instrucciones_opt() "}" }
+void declaraciones_opt(): {} { declaraciones() <FinDeclaracion> | {} }
+void declaraciones(): {} { declaracion() r_declaraciones() }
+void r_declaraciones(): {} { ";" declaración() r_declaraciones() | {} }
+void declaración(): {} { dec_variable() | dec_tipo() | dec_procedimiento() }
+void dec_tipo(): {} { type() tipo0() <Identificador> }
+void dec_variable(): {} { tipo0() <Identificador> }
+void tipo0(): {} { tipo1() r_tipo0() }
+void r_tipo0(): {} { [LiteralEntero]() | {} }
+void tipo1(): {} { <Puntero> tipo1() | tipo2() }
+void tipo2(): {} { <Entero> | <Real> | <Boolean> | <String> | <Identificador> | registro() }
+void registro(): {} { <Struct> "{" campos() "}" }
+void campos(): {} { campo() r_campos() }
+void r_campos(): {} { "," campo() r_campos() | {} }
+void campo(): {} { dec_variable() }
+void dec_procedimiento(): {} { proc() <Identificador> parametros_formales() bloque() }
+void parametros_formales(): {} { "(" lista_parametros_opt() ")" }
+void lista_parametros_opt(): {} { lista_parametros() | {} }
+void lista_parametros(): {} { parametro() r_lista_parametros() }
+void r_lista_parametros(): {} { ";" parametro() r_lista_parametros() | {} }
+void parametro(): {} { tipo0() r_parametro() }
+void r_parametro(): {} { <Identificador> | "&" <Identificador> }
+void instrucciones_opt(): {} { instrucciones() | {} }
+void instrucciones(): {} { instruccion() r_instrucciones() }
+void r_instrucciones(): {} { ";" instruccion() r_instrucciones() | {} }
+void instruccion(): {} { instruccion_eval() | instruccion_if() | instruccion_while() | instruccion_read() | instruccion_write() | instruccion_nl() | instruccion_new() | instruccion_delete() | instruccion_call() | instruccion_compuesta() }
+void instruccion_eval(): {} { "@" E0() }
+void instrucción_if(): {} { <If> E0() bloque() r_instruccion_if() }
+void r_instruccion_if(): {} { <Else> bloque() | {} }
+void instruccion_while(): {} { <While> E0() bloque() }
+void instruccion_read(): {} { <Read> E0() }
+void instruccion_write(): {} { <Write> E0() }
+void instruccion_nl(): {} { <Nl> }
+void instruccion_new(): {} { <New> E0() }
+void instruccion_delete(): {} { <Delete> E0() }
+void instruccion_call(): {} { <Call> <Identificador> "(" lista_expresiones_opt() ")" }
+void instruccion_compuesta(): {} { bloque() }
+void lista_expresiones_opt(): {} { lista_expresiones() | {} }
+void lista_expresiones(): {} { E0() r_lista_expresiones() }
+void r_lista_expresiones→(): {} { E0() r_lista_expresiones() }
+void E0(): {} { E1() RE0() }
+void RE0(): {} { "=" E0() | {} }
+void E1(): {} { E2() RE1() }
+void RE1(): {} { OP1() E2() RE1() | {} }
+void E2(): {} { E3() R2E2() R1E2() }
+void R1E2(): {} { "+" E3() R1E2() | {} }
+void R2E2(): {} { "-" E3() | {} }
+void E3(): {} { E4() RE3() }
+void RE3(): {} { <And> E3() | <Or> E4() | {} }
+void E4(): {} { E5() RE4() }
+void RE4(): {} { OP4() E5() RE4() | {} }
+void E5(): {} { OP5() E5() | E6() }
+void E6(): {} { E7() RE6() }
+void RE6(): {} { OP6() RE6() | {} }
+void E7(): {} { (E0)() | operando() }
+void OP1(): {} { ">" | "<" | <MenorOIgualQue> | <MayorOIgualQue> | <Igual> | <Diferente> }
+void OP4(): {} { "*" | "/" | "%" }
+void OP5(): {} { "-" | <Not> }
+void OP6(): {} { [E0]() | acceso_registro() | <Puntero> }
+void acceso_registro(): {} { <Acceso> <Identificador> }
+void operando(): {} { <LiteralReal> | <LiteralEntero> | <LiteralTrue> | <LiteralFalse> | <LiteralString> | <Identificador> | <Null> 

@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+!tools/javacc.jar
 !libraries/java-cup-11b-runtime.jar
 !tools/java-cup-11b.jar
 *.war
@@ -36,3 +37,4 @@ replay_pid*
 Compilador_PL_Tiny.iml
 /out/
 
+javacc*/
