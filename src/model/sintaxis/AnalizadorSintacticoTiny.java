@@ -2,7 +2,7 @@
 package model.sintaxis;
 
 public class AnalizadorSintacticoTiny implements AnalizadorSintacticoTinyConstants {
-            protected   void newToken(Token t) {}
+  protected void newToken(Token t) {}
 
   final public void analiza() throws ParseException {
     trace_call("analiza");

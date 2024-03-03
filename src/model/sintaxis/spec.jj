@@ -7,16 +7,16 @@ PARSER_BEGIN(AnalizadorSintacticoTiny)
 package model.sintaxis;
 
 public class AnalizadorSintacticoTiny {
-	    protected 	void newToken(Token t) {}
+  protected void newToken(Token t) {}
 }
 PARSER_END(AnalizadorSintacticoTiny)
 	TOKEN:{<#Letra:["a"-"z","A"-"Z", "_"]>}
 	TOKEN:{<#DigitoPositivo:["1"-"9"]>}
 	TOKEN:{<#Digito:<DigitoPositivo>|"0">}
 	TOKEN:{<#ParteEntera:<DigitoPositivo> (<Digito>)* |"0">}
-	TOKEN:{<#ParteDecimal: <Acceso>(<Digito>)* <DigitoPositivo> | "0">}
-	TOKEN:{<#ParteExponencial: ("e"|"E") (["+", "-"])? <ParteEntera>>}
-	TOKEN:{<#ComboPartes: <ParteDecimal><ParteExponencial>>}
+	TOKEN:{<#ParteDecimal: <Acceso>((<Digito>)*<DigitoPositivo>|"0")>}
+	TOKEN:{<#ParteExponencial:("e"|"E") (["+", "-"])? <ParteEntera>>}
+	TOKEN:{<#ComboPartes:<ParteDecimal><ParteExponencial>>}
 
 	TOKEN:{<Entero:("i"|"I")("n"|"N")("t"|"T")>}
 	TOKEN:{<Real:("r"|"R")("e"|"E")("a"|"A")("l"|"L")>}
@@ -43,7 +43,7 @@ PARSER_END(AnalizadorSintacticoTiny)
 	TOKEN:{<Identificador: <Letra> (<Letra> | <Digito>)*>}
 
 	TOKEN:{<LiteralEntero: (["+", "-"])? <ParteEntera>>}
-	TOKEN:{<LiteralReal: <LiteralEntero> ( <ParteDecimal> | <ParteExponencial> | <ComboPartes> )>}
+	TOKEN:{<LiteralReal: <LiteralEntero> (<ParteDecimal> | <ParteExponencial> | <ComboPartes> )>}
 	TOKEN:{<LiteralString: "\"" (~["\""])* "\"">}
 	
 	TOKEN:{<Suma:"+">}
