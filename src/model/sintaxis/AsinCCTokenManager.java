@@ -2,7 +2,7 @@
 package model.sintaxis;
 
 /** Token Manager. */
-public class AnalizadorSintacticoTinyTokenManager implements AnalizadorSintacticoTinyConstants
+public class AsinCCTokenManager implements AsinCCTinyConstants
 {
 
    /** Debug output. */
@@ -784,14 +784,14 @@ public class AnalizadorSintacticoTinyTokenManager implements AnalizadorSintactic
    private final int[] jjstateSet = new int[224];
    protected char curChar;
    /** Constructor. */
-   public AnalizadorSintacticoTinyTokenManager(SimpleCharStream stream){
+   public AsinCCTokenManager(SimpleCharStream stream){
       if (SimpleCharStream.staticFlag)
          throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
       input_stream = stream;
    }
 
    /** Constructor. */
-   public AnalizadorSintacticoTinyTokenManager(SimpleCharStream stream, int lexState){
+   public AsinCCTokenManager(SimpleCharStream stream, int lexState){
       this(stream);
       SwitchTo(lexState);
    }

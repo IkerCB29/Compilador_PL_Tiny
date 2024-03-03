@@ -83,7 +83,7 @@ public class AnalizadorSintacticoCC extends AsinCC {
                 default:
                     lexema = t.image;
             }
-            output.write(AnalizadorSintacticoTinyTokenManager.tokenImage[t.kind],t.beginLine, t.beginColumn, lexema);
+            output.write(AsinCCTokenManager.tokenImage[t.kind],t.beginLine, t.beginColumn, lexema);
         }
         catch (IOException e){
             throw new RuntimeException(e.getMessage());

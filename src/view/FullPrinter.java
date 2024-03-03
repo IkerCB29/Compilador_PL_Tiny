@@ -1,7 +1,5 @@
 package view;
 
-import model.lexico.UnidadLexica;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;

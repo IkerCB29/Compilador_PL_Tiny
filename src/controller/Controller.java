@@ -38,10 +38,10 @@ public class Controller {
             AsinCC asint = new AnalizadorSintacticoCC(input, output);
             asint.analiza();
         }
-        catch(ParseException e) {
+        catch(TokenMgrError e) {
             output.writeLexicoException(e.getMessage());
         }
-        catch(TokenMgrError e) {
+        catch(ParseException e) {
             output.writeSintaxisException(e.getMessage());
         }
         output.close();
