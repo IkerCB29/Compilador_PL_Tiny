@@ -11,7 +11,7 @@ declaración → dec_procedimiento
 dec_tipo → Type tipo0 Identificador
 dec_variable → tipo0 Identificador
 tipo0 → tipo1 r_tipo0
-r_tipo0 → [LiteralEntero]
+r_tipo0 → [LiteralEntero] r_tipo0
 r_tipo0 → ε
 tipo1 → Puntero tipo1
 tipo1 → tipo2
