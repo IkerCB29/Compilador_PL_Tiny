@@ -1,11 +1,12 @@
 package view;
 
+import java.io.IOException;
 import model.lexico.UnidadLexica;
 
 public class DomJudgePrinter implements Printer{
     @Override
-    public void write(UnidadLexica unidad) {
-        System.out.println(unidad.lexema());
+    public void write(String clase, int fila, int columna, String lexema) throws IOException {
+        System.out.println(lexema);
     }
 
     @Override

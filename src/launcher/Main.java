@@ -23,11 +23,15 @@ public class Main {
 		for(String file : FILES) {
 			try {
 				Reader input = new BufferedReader(new FileReader(file));
-				c.analisisLexico(input, new FullPrinter(file + "output"));
+				c.analisisLexico(input, new FullPrinter(file + "outputLexico"));
 				input.close();
 
 				input = new BufferedReader(new FileReader(file));
-				c.analisisSintacticoCUP(input);
+				c.analisisSintacticoCC(input, new FullPrinter(file + "outputCC"));
+				input.close();
+
+				input = new BufferedReader(new FileReader(file));
+				c.analisisSintacticoCUP(input, new FullPrinter(file + "outputCUP"));
 				input.close();
 			}
 			catch (Exception e) {

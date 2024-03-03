@@ -22,14 +22,59 @@ public class UnidadLexica extends Symbol {
 
     public int columna() { return columna; }
 
-    /*
-    @Override
-    public String toString() {
-        return "[clase: "+ ClaseLexica.terminalNames[clase()] +", fila: "+fila()+", col: "+columna()+", lexema: "+lexema()+"]";
-    }*/
-
-    @Override
-    public String toString() {
-        return "[clase: "+ clase() +", fila: "+fila()+", col: "+columna()+", lexema: "+lexema()+"]";
-    }
+    public static final String[] terminalNames = new String[] {
+        "EOF",
+        "error",
+        "ENTERO",
+        "REAL",
+        "BOOLEAN",
+        "STRING",
+        "IDENTIFICADOR",
+        "LITERAL_ENTERO",
+        "LITERAL_REAL",
+        "LITERAL_TRUE",
+        "LITERAL_FALSE",
+        "LITERAL_STRING",
+        "SUMA",
+        "RESTA",
+        "POR",
+        "DIV",
+        "MODULO",
+        "AND",
+        "OR",
+        "NOT",
+        "MENOR",
+        "MAYOR",
+        "MENOR_IGUAL",
+        "MAYOR_IGUAL",
+        "IGUAL",
+        "DIFERENTE",
+        "ASIGNACION",
+        "PYC",
+        "PAP",
+        "PCIERRE",
+        "LLAVE_APERTURA",
+        "LLAVE_CIERRE",
+        "COR_APERTURA",
+        "COR_CIERRE",
+        "COMA",
+        "ACCESO",
+        "EVALUA",
+        "CAMBIO_SEC",
+        "NULL",
+        "PROC",
+        "IF",
+        "ELSE",
+        "WHILE",
+        "STRUCT",
+        "NEW",
+        "DELETE",
+        "READ",
+        "WRITE",
+        "NL",
+        "TYPE",
+        "CALL",
+        "REFERENCIA",
+        "PUNTERO"
+    };
 }

@@ -34,7 +34,7 @@ replay_pid*
 
 #Intellij
 .idea
-Compilador_PL_Tiny.iml
+*.iml
 /out/
 
 javacc*/

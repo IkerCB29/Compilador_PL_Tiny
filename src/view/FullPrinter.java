@@ -13,8 +13,8 @@ public class FullPrinter implements Printer{
         writer = new BufferedWriter(new FileWriter(output));
     }
     @Override
-    public void write(UnidadLexica unidad) throws IOException{
-        writer.write(unidad.toString() + "\n");
+    public void write(String clase, int fila, int columna, String lexema) throws IOException{
+        writer.write("[clase: "+ clase +", fila: "+fila+", col: "+columna+", lexema: "+lexema+"]\n");
     }
 
     @Override
