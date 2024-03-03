@@ -13,6 +13,6 @@ public class DomJudge{
       //Este es para probar nosotros
       //Reader input = new BufferedReader(new FileReader("files/codigo6.tiny"));
       Controller c = new Controller();
-      c.analisisSintacticoCC(input, new DomJudgePrinter());
+      c.analisisSintacticoCUP(input, new DomJudgePrinter());
    }
 }
