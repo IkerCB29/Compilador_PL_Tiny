@@ -14,7 +14,13 @@ public class Main {
 			"files/codigo3.tiny",
 			"files/codigo4.tiny",
 			"files/codigo5.tiny",
-			"files/codigo6.tiny"
+			"files/codigo6.tiny",
+			"files/codigo7.tiny",
+			"files/codigo8.tiny",
+			"files/codigo9.tiny",
+			"files/codigo10.tiny",
+			"files/codigo11.tiny",
+			"files/codigo12.tiny"
 	};
 
 	public static void main(String[] args) {

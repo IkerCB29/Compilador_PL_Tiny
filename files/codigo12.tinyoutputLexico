@@ -3,4 +3,4 @@
 [clase: ASIGNACION, fila: 3, col: 3, lexema: =]
 [clase: LITERAL_ENTERO, fila: 3, col: 5, lexema: 5]
 [clase: LLAVE_CIERRE, fila: 4, col: 1, lexema: }]
-[clase: EOF, fila: 5, col: 1, lexema: <EOF>]
+[clase: EOF, fila: 4, col: 2, lexema: <EOF>]

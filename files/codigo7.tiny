@@ -1,0 +1,6 @@
+{
+  ##Solo seccion de declaraciones
+  reAL var1; booL var2; INT var3
+  ##La parte de instrucciones es opcional
+  &&
+}
