@@ -9,12 +9,12 @@ import view.FullPrinter;
 
 public class Main {
 	private final static String[] FILES = {
-			"files/codigo1.tiny",
-			"files/codigo2.tiny",
-			"files/codigo3.tiny",
-			"files/codigo4.tiny",
-			"files/codigo5.tiny",
-			"files/codigo6.tiny"
+		"files/codigo1.tiny",
+		"files/codigo2.tiny",
+		"files/codigo3.tiny",
+		"files/codigo4.tiny",
+		"files/codigo5.tiny",
+		"files/codigo6.tiny"
 	};
 
 	public static void main(String[] args) {
@@ -23,11 +23,11 @@ public class Main {
 		for(String file : FILES) {
 			try {
 				Reader input = new BufferedReader(new FileReader(file));
-				c.analisisLexico(input, new FullPrinter(file + "output"));
+				c.analisisLexico(input, new FullPrinter(file + "outputLexico"));
 				input.close();
 
 				input = new BufferedReader(new FileReader(file));
-				c.analisisSintacticoCUP(input);
+				c.analisisSintacticoCUP(input, new FullPrinter(file + "outputCUP"));
 				input.close();
 			}
 			catch (Exception e) {

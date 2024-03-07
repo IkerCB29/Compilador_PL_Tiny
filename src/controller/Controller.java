@@ -8,7 +8,6 @@ import model.lexico.AnalizadorLexico;
 import model.lexico.UnidadLexica;
 import model.sintaxis.AnalizadorSintacticoCUP;
 import model.sintaxis.ClaseLexica;
-import view.DomJudgePrinter;
 import view.Printer;
 
 public class Controller {
@@ -18,7 +17,7 @@ public class Controller {
         do {
             try {
                 unidad = alex.next_token();
-                output.write(unidad);
+                output.write(UnidadLexica.terminalNames[unidad.clase()], unidad.fila(), unidad.columna(), unidad.lexema());
             }
             catch(LexicoException e) {
                 output.writeLexicoException(e.getMessage());
@@ -28,26 +27,10 @@ public class Controller {
         output.close();
     }
 
-    public void analisisSintacticoCUP(Reader input) throws Exception {
+    public void analisisSintacticoCUP(Reader input, Printer output) throws Exception {
         try {
             AnalizadorLexico alex = new AnalizadorLexico(input);
-            AnalizadorSintacticoCUP asin = new AnalizadorSintacticoCUP(alex);
-            asin.parse();
-            System.out.println("Analisis sintáctico sin problemas");
-        }
-        catch (LexicoException e){
-            System.out.println(e.getMessage());
-        }
-        catch (SintaxisException e){
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void analisisSintacticoCUPDebug(Reader input) throws Exception {
-        Printer output = new DomJudgePrinter();
-        try {
-            AnalizadorLexico alex = new AnalizadorLexico(input);
-            AnalizadorSintacticoCUP asin = new AnalizadorSintacticoCUP(alex);
+            AnalizadorSintacticoCUP asin = new AnalizadorSintacticoCUP(alex, output);
             asin.debug_parse();
         }
         catch (LexicoException e){
@@ -56,6 +39,7 @@ public class Controller {
         catch (SintaxisException e){
             output.writeSintaxisException(e.getMessage());
         }
+        output.close();
     }
 }
 
