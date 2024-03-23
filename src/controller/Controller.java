@@ -12,8 +12,6 @@ import model.sintaxis.AsinCC;
 import model.sintaxis.ClaseLexica;
 import model.sintaxis.ParseException;
 import model.sintaxis.TokenMgrError;
-import view.DomJudgePrinter;
-import view.FullPrinter;
 import view.Printer;
 
 public class Controller {
