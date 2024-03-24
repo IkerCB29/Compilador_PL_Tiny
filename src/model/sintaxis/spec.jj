@@ -124,18 +124,18 @@ Decs_opt declaraciones_opt():
 Decs declaraciones():
     {Decs decs; Dec dec;}
     {
-      dec = declaración() decs = r_declaraciones(sem.una_dec(dec))
-        {return decs}
+      dec = declaracion() decs = r_declaraciones(sem.una_dec(dec))
+        {return decs;}
     }
 Decs r_declaraciones(Decs decsh):
     {Decs decs; Dec dec;}
     {
-      <PyC> dec = declaración() decs = r_declaraciones(sem.l_decs(decsh, dec))
+      <PyC> dec = declaracion() decs = r_declaraciones(sem.l_decs(decsh, dec))
         {return decs;}
       |
         {return decsh;}
     }
-Dec declaración():
+Dec declaracion():
     {Dec dec;}
     {
       dec = dec_variable()
@@ -162,13 +162,13 @@ Dec dec_variable():
         {return (Dec)sem.v_dec(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
     }
 Tipo tipo0():
-    {Tipo tipo; Tipo rtipo}
+    {Tipo tipo; Tipo rtipo;}
     {
       tipo=tipo1() rtipo = r_tipo0(tipo)
         { return rtipo; }
     }
 Tipo r_tipo0(Tipo tipoh):
-    {Token cap; Tipo rtipo}
+    {Token cap; Tipo rtipo;}
     {
       <CorcheteApertura> cap = <LiteralEntero> <CorcheteCierro> rtipo = r_tipo0((Tipo)sem.a_tipo(tipoh, cap.image).ponFila(cap.beginLine).ponCol(cap.beginColumn))
         {return rtipo;}
@@ -200,7 +200,7 @@ Tipo tipo2():
         {return sem.string_tipo();}
       |
       id = <Identificador>
-        {return (Tipo)sem.id_tipo(id.image).ponFila(id.beginLine).ponCol(id.beginColumn));}
+        {return (Tipo)sem.id_tipo(id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
       |
       tipo = registro()
         {return tipo;}
@@ -235,7 +235,7 @@ Campo campo():
 Dec dec_procedimiento():
     {Token id; LParam_opt lParam; Bloque bq;}
     {
-      <Proc> id = <Identificador> <ParAp> lParam = lista_parametros_opt() <ParCie> bq = bloque()
+      <Proc> id = <Identificador> <ParAp> lParam = lista_parametros_opt() <ParCierre> bq = bloque()
         {return (Dec)sem.p_dec(id.image, lParam, bq).ponFila(id.beginLine).ponCol(id.beginColumn);}
     }
 LParam_opt lista_parametros_opt():
@@ -256,9 +256,9 @@ LParam r_lista_parametros(LParam lParamh):
     {LParam lParam; Param param;}
     {
       <Coma> param = parametro() lParam = r_lista_parametros(sem.l_param(lParamh, param))
-        {return lParam}
+        {return lParam;}
       |
-        {return lParamh}
+        {return lParamh;}
     }
 Param parametro():
     {Tipo tipo; Param param;}
@@ -287,7 +287,7 @@ Instrs_opt instrucciones_opt():
 Instrs instrucciones():
     {Instrs instrs; Instr instr;}
     {
-      instr = instruccion() instrs = r_instrucciones(sem.una_instr(instr));
+      instr = instruccion() instrs = r_instrucciones(sem.una_instr(instr))
         {return instrs;}
     }
 Instrs r_instrucciones(Instrs instrsh):
@@ -337,14 +337,14 @@ Instr instruccion_eval():
       <Evalua> exp = E0()
         {return sem.rd(exp);}
     }
-void instruccion_if():
-    {Exp exp; Bloque bq; Instr instr}
+Instr instruccion_if():
+    {Exp exp; Bloque bq; Instr instr;}
     {
       <If> exp = E0() bq = bloque() instr = r_instruccion_if(exp, bq)
         {return instr;}
     }
-void r_instruccion_if(Exp exp, Bloque bq1):
-    {Bloque bq2}
+Instr r_instruccion_if(Exp exp, Bloque bq1):
+    {Bloque bq2;}
     {
       <Else> bq2 = bloque()
         {return sem.if_el(exp, bq1, bq2);}
@@ -390,7 +390,7 @@ Instr instruccion_delete():
 Instr instruccion_call():
     {Token id; Exps_opt exps;}
     {
-      <Call> id = <Identificador> <ParAp> exps = lista_expresiones_opt() <ParCie>
+      <Call> id = <Identificador> <ParAp> exps = lista_expresiones_opt() <ParCierre>
         {return sem.cl(id.image, exps).ponFila(id.beginLine).ponCol(id.beginColumn);}
     }
 Instr instruccion_compuesta():
@@ -399,9 +399,28 @@ Instr instruccion_compuesta():
       bq = bloque()
         {return sem.bq_instr(bq);}
     }
-void lista_expresiones_opt(): {} { lista_expresiones() | {} }
-void lista_expresiones(): {} { E0() r_lista_expresiones() }
-void r_lista_expresiones(): {} { "," E0() r_lista_expresiones() | {}}
+Exps_opt lista_expresiones_opt():
+    {Exps exps;}
+    {
+      exps = lista_expresiones()
+        {return sem.si_exps(exps);}
+      |
+        {return sem.no_exps();}
+    }
+Exps lista_expresiones():
+    {Exps exps; Exp exp;}
+    {
+      exp = E0() exps = r_lista_expresiones(sem.una_exp(exp))
+        {return exps;}
+    }
+Exps r_lista_expresiones(Exps expsh):
+    {Exps exps; Exp exp;}
+    {
+      <Coma> exp = E0() exps = r_lista_expresiones(sem.l_exps(expsh, exp))
+        {return exps;}
+      |
+        {return expsh;}
+    }
 
 void E0(): {} { E1() RE0() }
 void RE0(): {} { "=" E0() | {} }
