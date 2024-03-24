@@ -232,29 +232,173 @@ Campo campo():
         {return (Campo)sem.camp(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
     }
 
-void dec_procedimiento(): {} { <Proc> <Identificador> parametros_formales() bloque() }
-void parametros_formales(): {} { "(" lista_parametros_opt() ")" }
-void lista_parametros_opt(): {} { lista_parametros() | {} }
-void lista_parametros(): {} { parametro() r_lista_parametros() }
-void r_lista_parametros(): {} { "," parametro() r_lista_parametros() | {} }
-void parametro(): {} { tipo0() r_parametro() }
-void r_parametro(): {} { <Identificador> | "&" <Identificador> }
+Dec dec_procedimiento():
+    {Token id; LParam_opt lParam; Bloque bq;}
+    {
+      <Proc> id = <Identificador> <ParAp> lParam = lista_parametros_opt() <ParCie> bq = bloque()
+        {return (Dec)sem.p_dec(id.image, lParam, bq).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+LParam_opt lista_parametros_opt():
+    {LParam lParam;}
+    {
+      lParam = lista_parametros()
+        {return sem.si_param(lParam);}
+      |
+        {return sem.no_param();}
+    }
+LParam lista_parametros():
+    {LParam lParam; Param param;}
+    {
+      param = parametro() lParam = r_lista_parametros(sem.un_param(param))
+        {return lParam();}
+    }
+LParam r_lista_parametros(LParam lParamh):
+    {LParam lParam; Param param;}
+    {
+      <Coma> param = parametro() lParam = r_lista_parametros(sem.l_param(lParamh, param))
+        {return lParam}
+      |
+        {return lParamh}
+    }
+Param parametro():
+    {Tipo tipo; Param param;}
+    {
+      tipo = tipo0() param = r_parametro(tipo)
+        {return param;}
+    }
+Param r_parametro(Tipo tipo):
+    {Token id;}
+    {
+      id = <Identificador>
+        {return (Param)sem.param_simple(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+      |
+      "&" id = <Identificador>
+        {return (Param)sem.param_ref(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
 
-void instrucciones_opt(): {} { instrucciones() | {} }
-void instrucciones(): {} { instruccion() r_instrucciones() }
-void r_instrucciones(): {} { ";" instruccion() r_instrucciones() | {} }
-void instruccion(): {} { instruccion_eval() | instruccion_if() | instruccion_while() | instruccion_read() | instruccion_write() | instruccion_nl() | instruccion_new() | instruccion_delete() | instruccion_call() | instruccion_compuesta() }
-void instruccion_eval(): {} { "@" E0() }
-void instruccion_if(): {} { <If> E0() bloque() r_instruccion_if() }
-void r_instruccion_if(): {} { <Else> bloque() | {} }
-void instruccion_while(): {} { <While> E0() bloque() }
-void instruccion_read(): {} { <Read> E0() }
-void instruccion_write(): {} { <Write> E0() }
-void instruccion_nl(): {} { <Nl> }
-void instruccion_new(): {} { <New> E0() }
-void instruccion_delete(): {} { <Delete> E0() }
-void instruccion_call(): {} { <Call> <Identificador> "(" lista_expresiones_opt() ")" }
-void instruccion_compuesta(): {} { bloque() }
+Instrs_opt instrucciones_opt():
+    {Instrs instrs;}
+    {
+      instrs = instrucciones()
+        {return sem.si_instrs(instrs);}
+      |
+        {return sem.no_instrs();}
+    }
+Instrs instrucciones():
+    {Instrs instrs; Instr instr;}
+    {
+      instr = instruccion() instrs = r_instrucciones(sem.una_instr(instr));
+        {return instrs;}
+    }
+Instrs r_instrucciones(Instrs instrsh):
+    {Instrs instrs; Instr instr;}
+    {
+      <PyC> instr = instruccion() instrs = r_instrucciones(sem.l_instrs(instrsh, instr))
+        {return instrs;}
+      |
+        {return instrsh;}
+    }
+Instr instruccion():
+    {Instr instr;}
+    {
+      instr = instruccion_eval()
+        {return instr;}
+      |
+      instr = instruccion_if()
+        {return instr;}
+      |
+      instr = instruccion_while()
+        {return instr;}
+      |
+      instr = instruccion_read()
+        {return instr;}
+      |
+      instr = instruccion_write()
+        {return instr;}
+      |
+      instr = instruccion_nl()
+        {return instr;}
+      |
+      instr = instruccion_new()
+        {return instr;}
+      |
+      instr = instruccion_delete()
+        {return instr;}
+      |
+      instr = instruccion_call()
+        {return instr;}
+      |
+      instr = instruccion_compuesta()
+        {return instr;}
+    }
+Instr instruccion_eval():
+    {Exp exp;}
+    {
+      <Evalua> exp = E0()
+        {return sem.rd(exp);}
+    }
+void instruccion_if():
+    {Exp exp; Bloque bq; Instr instr}
+    {
+      <If> exp = E0() bq = bloque() instr = r_instruccion_if(exp, bq)
+        {return instr;}
+    }
+void r_instruccion_if(Exp exp, Bloque bq1):
+    {Bloque bq2}
+    {
+      <Else> bq2 = bloque()
+        {return sem.if_el(exp, bq1, bq2);}
+      |
+        {return sem.if_instr(exp, bq1);}
+    }
+Instr instruccion_while():
+    {Exp exp; Bloque bq;}
+    {
+      <While> exp = E0() bq = bloque()
+        {return sem.wh(exp, bq);}
+    }
+Instr instruccion_read():
+    {Exp exp;}
+    {
+      <Read> exp = E0()
+        {return sem.rd(exp);}
+    }
+Instr instruccion_write():
+    {Exp exp;}
+    {
+      <Write> exp = E0()
+        {return sem.wr(exp);}
+    }
+Instr instruccion_nl():
+    {}
+    {
+      <Nl>
+        {return sem.nl();}
+    }
+Instr instruccion_new():
+    {Exp exp;}
+    {
+      <New> exp = E0()
+        {return sem.nw(exp);}
+    }
+Instr instruccion_delete():
+    {Exp exp;}
+    {
+      <Delete> exp = E0()
+        {return sem.dl(exp);}
+    }
+Instr instruccion_call():
+    {Token id; Exps_opt exps;}
+    {
+      <Call> id = <Identificador> <ParAp> exps = lista_expresiones_opt() <ParCie>
+        {return sem.cl(id.image, exps).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+Instr instruccion_compuesta():
+    {Bloque bq;}
+    {
+      bq = bloque()
+        {return sem.bq_instr(bq);}
+    }
 void lista_expresiones_opt(): {} { lista_expresiones() | {} }
 void lista_expresiones(): {} { E0() r_lista_expresiones() }
 void r_lista_expresiones(): {} { "," E0() r_lista_expresiones() | {}}
