@@ -1,1 +1,1 @@
--parser AsinCUP -symbols ClaseLexica
+-parser ConstructorASTsCUP -symbols ClaseLexica

@@ -3,13 +3,33 @@ options {
 	DEBUG_PARSER=true;
 }
 
-PARSER_BEGIN(AsinCC)
+PARSER_BEGIN(ConstructorASTsJJ)
 package model.sintaxis;
 
-public class AsinCC {
-  protected void newToken(Token t) {}
+import model.sintaxis.SintaxisAbstracta.Prog;
+import model.sintaxis.SintaxisAbstracta.Bloque;
+import model.sintaxis.SintaxisAbstracta.Decs_opt;
+import model.sintaxis.SintaxisAbstracta.Decs;
+import model.sintaxis.SintaxisAbstracta.Dec;
+import model.sintaxis.SintaxisAbstracta.Tipo;
+import model.sintaxis.SintaxisAbstracta.Campos;
+import model.sintaxis.SintaxisAbstracta.Campo;
+import model.sintaxis.SintaxisAbstracta.LParam_opt;
+import model.sintaxis.SintaxisAbstracta.LParam;
+import model.sintaxis.SintaxisAbstracta.Param;
+import model.sintaxis.SintaxisAbstracta.Instrs_opt;
+import model.sintaxis.SintaxisAbstracta.Instrs;
+import model.sintaxis.SintaxisAbstracta.Instr;
+import model.sintaxis.SintaxisAbstracta.Exps_opt;
+import model.sintaxis.SintaxisAbstracta.Exps;
+import model.sintaxis.SintaxisAbstracta.Exp;
+import model.lexico.UnidadLexica.StringLocalizado;
+
+public class ConstructorASTsJJ {
+  private ClaseSemantica sem = new ClaseSemantica();
 }
-PARSER_END(AsinCC)
+PARSER_END(ConstructorASTsJJ)
+
 	TOKEN:{<#Letra:["a"-"z","A"-"Z", "_"]>}
 	TOKEN:{<#DigitoPositivo:["1"-"9"]>}
 	TOKEN:{<#Digito:<DigitoPositivo>|"0">}
@@ -75,23 +95,142 @@ PARSER_END(AsinCC)
 	SKIP:{<["\t"," ","\r","\b","\n"]>}
 	SKIP:{<"##"((~["\n"]))*>}
 
-void analiza() : {} {programa() <EOF>}
-void programa(): {} { bloque() }
-void bloque(): {} { "{" declaraciones_opt() instrucciones_opt() "}" }
-void declaraciones_opt(): {} { declaraciones() <FinDeclaracion> | {} }
-void declaraciones(): {} { declaración() r_declaraciones() }
-void r_declaraciones(): {} { ";" declaración() r_declaraciones() | {} }
-void declaración(): {} { dec_variable() | dec_tipo() | dec_procedimiento() }
-void dec_tipo(): {} { <Type> tipo0() <Identificador> }
-void dec_variable(): {} { tipo0() <Identificador> }
-void tipo0(): {} { tipo1() r_tipo0()}
-void r_tipo0(): {} { ("["<LiteralEntero>"]") r_tipo0() | {} }
-void tipo1(): {} { <Puntero> tipo1() | tipo2() }
-void tipo2(): {} { <Entero> | <Real> | <Boolean> | <String> | <Identificador> | registro() }
-void registro(): {} { <Struct> "{" campos() "}" }
-void campos(): {} { campo() r_campos() }
-void r_campos(): {} { "," campo() r_campos() | {} }
-void campo(): {} { dec_variable() }
+Prog analiza() :
+    {Prog prog;}
+    {
+      prog = programa() <EOF>
+        {return prog;}
+    }
+Prog programa():
+    {Bloque bq;}
+    {
+      bq = bloque()
+        {return sem.prog(bq);}
+    }
+Bloque bloque():
+    {Decs_opt decs; Instrs_opt instrs;}
+    {
+      <LlaveApertura> decs = declaraciones_opt() instrs = instrucciones_opt() <LlaveCierre>
+        {return sem.bloque(decs, instrs);}
+    }
+Decs_opt declaraciones_opt():
+    {Decs decs;}
+    {
+      decs = declaraciones() <FinDeclaracion>
+        {return sem.si_decs(decs);}
+      |
+        {return sem.no_decs();}
+    }
+Decs declaraciones():
+    {Decs decs; Dec dec;}
+    {
+      dec = declaración() decs = r_declaraciones(sem.una_dec(dec))
+        {return decs}
+    }
+Decs r_declaraciones(Decs decsh):
+    {Decs decs; Dec dec;}
+    {
+      <PyC> dec = declaración() decs = r_declaraciones(sem.l_decs(decsh, dec))
+        {return decs;}
+      |
+        {return decsh;}
+    }
+Dec declaración():
+    {Dec dec;}
+    {
+      dec = dec_variable()
+        {return dec;}
+      |
+      dec = dec_tipo()
+        {return dec;}
+      |
+      dec = dec_procedimiento()
+        {return dec;}
+    }
+
+Dec dec_tipo():
+    {Tipo tipo; Token id;}
+    {
+      <Type> tipo = tipo0() id = <Identificador>
+        {return (Dec)sem.t_dec(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+
+Dec dec_variable():
+    {Tipo tipo; Token id;}
+    {
+      tipo = tipo0() id = <Identificador>
+        {return (Dec)sem.v_dec(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+Tipo tipo0():
+    {Tipo tipo; Tipo rtipo}
+    {
+      tipo=tipo1() rtipo = r_tipo0(tipo)
+        { return rtipo; }
+    }
+Tipo r_tipo0(Tipo tipoh):
+    {Token cap; Tipo rtipo}
+    {
+      <CorcheteApertura> cap = <LiteralEntero> <CorcheteCierro> rtipo = r_tipo0((Tipo)sem.a_tipo(tipoh, cap.image).ponFila(cap.beginLine).ponCol(cap.beginColumn))
+        {return rtipo;}
+      |
+        {return tipoh;}
+    }
+Tipo tipo1():
+    {Tipo tipo;}
+    {
+      <Puntero> tipo = tipo1()
+        {return sem.p_tipo(tipo);}
+      |
+      tipo = tipo2()
+        {return tipo;}
+    }
+Tipo tipo2():
+    {Tipo tipo; Token id;}
+    {
+      <Entero>
+        {return sem.in_tipo();}
+      |
+      <Real>
+        {return sem.r_tipo();}
+      |
+      <Boolean>
+        {return sem.b_tipo();}
+      |
+      <String>
+        {return sem.string_tipo();}
+      |
+      id = <Identificador>
+        {return (Tipo)sem.id_tipo(id.image).ponFila(id.beginLine).ponCol(id.beginColumn));}
+      |
+      tipo = registro()
+        {return tipo;}
+    }
+Tipo registro():
+    {Campos campos;}
+    {
+      <Struct> <LlaveApertura> campos = campos() <LlaveCierre>
+        {return sem.struct_tipo(campos);}
+    }
+Campos campos():
+    {Campos campos; Campo campo;}
+    {
+      campo = campo() campos = r_campos(sem.un_campo(campo))
+        {return campos;}
+    }
+Campos r_campos(Campos camposh):
+    {Campos campos; Campo campo;}
+    {
+      <Coma> campo = campo() campos = r_campos(sem.l_campos(camposh, campo))
+        {return campos;}
+      |
+        {return camposh;}
+    }
+Campo campo():
+    {Tipo tipo; Token id;}
+    {
+      tipo = tipo0() id = <Identificador>
+        {return (Campo)sem.camp(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
 
 void dec_procedimiento(): {} { <Proc> <Identificador> parametros_formales() bloque() }
 void parametros_formales(): {} { "(" lista_parametros_opt() ")" }
@@ -100,6 +239,7 @@ void lista_parametros(): {} { parametro() r_lista_parametros() }
 void r_lista_parametros(): {} { "," parametro() r_lista_parametros() | {} }
 void parametro(): {} { tipo0() r_parametro() }
 void r_parametro(): {} { <Identificador> | "&" <Identificador> }
+
 void instrucciones_opt(): {} { instrucciones() | {} }
 void instrucciones(): {} { instruccion() r_instrucciones() }
 void r_instrucciones(): {} { ";" instruccion() r_instrucciones() | {} }
