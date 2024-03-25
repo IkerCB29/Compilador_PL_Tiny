@@ -82,7 +82,7 @@ public class AnalizadorSintacticoCC extends ConstructorASTsCC {
                 default:
                     lexema = t.image;
             }
-            output.write(AsinCCTokenManager.tokenImage[t.kind],t.beginLine, t.beginColumn, lexema);
+            output.write(ConstructorASTsCCTokenManager.tokenImage[t.kind],t.beginLine, t.beginColumn, lexema);
         }
         catch (IOException e){
             throw new RuntimeException(e.getMessage());

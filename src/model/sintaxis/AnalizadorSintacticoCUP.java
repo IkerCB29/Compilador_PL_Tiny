@@ -7,7 +7,7 @@ import java_cup.runtime.Symbol;
 import model.lexico.UnidadLexica;
 import view.Printer;
 
-public class AnalizadorSintacticoCUP extends AsinCUP {
+public class AnalizadorSintacticoCUP extends ConstructorASTsCUP {
     private final Printer output;
     public void debug_message(String msg) {}
     public void debug_shift(Symbol token) {

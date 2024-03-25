@@ -467,13 +467,13 @@ Exp E3():
         {return rexp;}
     }
 Exp RE3(Exp exph):
-    {Token op; Exp exp;}
+    {Exp exp;}
     {
-      op = <And> exp = E3()
-        {return sem.mkop(op.image, exph, exp);}
+      <And> exp = E3()
+        {return sem.mkop("and", exph, exp);}
       |
-      op = <Or> exp = E4()
-        {return sem.mkop(op.image, exph, exp);}
+      <Or> exp = E4()
+        {return sem.mkop("or", exph, exp);}
       |
         {return exph;}
     }
@@ -569,7 +569,7 @@ String OP5():
         {return "-";}
       |
       op = <Not>
-        {return op.image;}
+        {return "not";}
     }
 Exp operando():
     {Token opnd;}

@@ -8,7 +8,6 @@ import model.lexico.AnalizadorLexico;
 import model.lexico.UnidadLexica;
 import model.sintaxis.AnalizadorSintacticoCC;
 import model.sintaxis.AnalizadorSintacticoCUP;
-import model.sintaxis.AsinCC;
 import model.sintaxis.ClaseLexica;
 import model.sintaxis.ParseException;
 import model.sintaxis.TokenMgrError;
