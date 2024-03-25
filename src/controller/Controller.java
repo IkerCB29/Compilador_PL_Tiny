@@ -33,7 +33,7 @@ public class Controller {
 
     public void analisisSintacticoCC(Reader input, Printer output) throws Exception {
         try{
-            AsinCC asint = new AnalizadorSintacticoCC(input, output);
+            AnalizadorSintacticoCC asint = new AnalizadorSintacticoCC(input, output);
             asint.analiza();
         }
         catch(TokenMgrError e) {

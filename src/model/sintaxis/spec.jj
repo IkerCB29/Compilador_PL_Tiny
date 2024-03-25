@@ -3,7 +3,7 @@ options {
 	DEBUG_PARSER=true;
 }
 
-PARSER_BEGIN(ConstructorASTsJJ)
+PARSER_BEGIN(ConstructorASTsCC)
 package model.sintaxis;
 
 import model.sintaxis.SintaxisAbstracta.Prog;
@@ -25,10 +25,10 @@ import model.sintaxis.SintaxisAbstracta.Exps;
 import model.sintaxis.SintaxisAbstracta.Exp;
 import model.lexico.UnidadLexica.StringLocalizado;
 
-public class ConstructorASTsJJ {
+public class ConstructorASTsCC {
   private ClaseSemantica sem = new ClaseSemantica();
 }
-PARSER_END(ConstructorASTsJJ)
+PARSER_END(ConstructorASTsCC)
 
 	TOKEN:{<#Letra:["a"-"z","A"-"Z", "_"]>}
 	TOKEN:{<#DigitoPositivo:["1"-"9"]>}
@@ -66,20 +66,9 @@ PARSER_END(ConstructorASTsJJ)
 	TOKEN:{<LiteralReal: <LiteralEntero> (<ParteDecimal> | <ParteExponencial> | <ComboPartes> )>}
 	TOKEN:{<LiteralString: "\"" (~["\""])* "\"">}
 
-	TOKEN:{<Suma:"+">}
-	TOKEN:{<Resta:"-">}
-	TOKEN:{<Mul:"*">}
-	TOKEN:{<Div:"/">}
-	TOKEN:{<Modulo:"%">}
+  TOKEN:{<Acceso: ".">}
 	TOKEN:{<Puntero: "^">}
 	TOKEN:{<Referencia: "&">}
-	TOKEN:{<MenorQue:"<">}
-	TOKEN:{<MayorQue:">">}
-	TOKEN:{<MenorOIgualQue:"<=">}
-	TOKEN:{<MayorOIgualQue:">=">}
-	TOKEN:{<Igual:"==">}
-	TOKEN:{<Diferente:"!=">}
-	TOKEN:{<Asignacion:"=">}
 	TOKEN:{<PyC:";">}
 	TOKEN:{<ParAp:"(">}
 	TOKEN:{<ParCierre:")">}
@@ -87,7 +76,6 @@ PARSER_END(ConstructorASTsJJ)
 	TOKEN:{<CorcheteCierro:"]">}
 	TOKEN:{<LlaveApertura:"{">}
 	TOKEN:{<LlaveCierre:"}">}
-	TOKEN:{<Acceso:".">}
 	TOKEN:{<Coma:",">}
 	TOKEN:{<FinDeclaracion:"&&">}
 	TOKEN:{<Evalua:"@">}
@@ -162,7 +150,7 @@ Dec dec_variable():
         {return (Dec)sem.v_dec(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
     }
 Tipo tipo0():
-    {Tipo tipo; Tipo rtipo;}
+    {Tipo tipo, rtipo;}
     {
       tipo=tipo1() rtipo = r_tipo0(tipo)
         { return rtipo; }
@@ -250,7 +238,7 @@ LParam lista_parametros():
     {LParam lParam; Param param;}
     {
       param = parametro() lParam = r_lista_parametros(sem.un_param(param))
-        {return lParam();}
+        {return lParam;}
     }
 LParam r_lista_parametros(LParam lParamh):
     {LParam lParam; Param param;}
@@ -272,7 +260,7 @@ Param r_parametro(Tipo tipo):
       id = <Identificador>
         {return (Param)sem.param_simple(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
       |
-      "&" id = <Identificador>
+      <Referencia> id = <Identificador>
         {return (Param)sem.param_ref(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
     }
 
@@ -391,7 +379,7 @@ Instr instruccion_call():
     {Token id; Exps_opt exps;}
     {
       <Call> id = <Identificador> <ParAp> exps = lista_expresiones_opt() <ParCierre>
-        {return sem.cl(id.image, exps).ponFila(id.beginLine).ponCol(id.beginColumn);}
+        {return (Instr)sem.cl(id.image, exps).ponFila(id.beginLine).ponCol(id.beginColumn);}
     }
 Instr instruccion_compuesta():
     {Bloque bq;}
@@ -422,24 +410,188 @@ Exps r_lista_expresiones(Exps expsh):
         {return expsh;}
     }
 
-void E0(): {} { E1() RE0() }
-void RE0(): {} { "=" E0() | {} }
-void E1(): {} { E2() RE1() }
-void RE1(): {} { OP1() E2() RE1() | {} }
-void E2(): {} { E3() R2E2() R1E2() }
-void R1E2(): {} { "+" E3() R1E2() | {} }
-void R2E2(): {} { "-" E3() | {} }
-void E3(): {} { E4() RE3() }
-void RE3(): {} { <And> E3() | <Or> E4() | {} }
-void E4(): {} { E5() RE4() }
-void RE4(): {} { OP4() E5() RE4() | {} }
-void E5(): {} { OP5() E5() | E6() }
-void E6(): {} { E7() RE6() }
-void RE6(): {} { OP6() RE6() | {} }
-void E7(): {} { "("E0()")" | operando() }
-void OP1(): {} { ">" | "<" | <MenorOIgualQue> | <MayorOIgualQue> | <Igual> | <Diferente> }
-void OP4(): {} { "*" | "/" | "%" }
-void OP5(): {} { "-" | <Not> }
-void OP6(): {} { "["E0()"]" | acceso_registro() | <Puntero> }
-void acceso_registro(): {} { <Acceso> <Identificador> }
-void operando(): {} { <LiteralReal> | <LiteralEntero> | <LiteralTrue> | <LiteralFalse> | <LiteralString> | <Identificador> | <Null> }
+Exp E0():
+    {Exp exp; Exp rexp;}
+    {
+      exp = E1() rexp = RE0(exp)
+        {return rexp;}
+    }
+Exp RE0(Exp exph):
+    {Exp exp;}
+    {
+      "=" exp = E0()
+        {return sem.mkop("=", exph, exp);}
+      |
+        {return exph;}
+    }
+Exp E1():
+    {Exp exp, rexp;}
+    {
+      exp = E2() rexp = RE1(exp)
+        {return rexp;}
+    }
+Exp RE1(Exp exph):
+    {String op; Exp exp, rexp;}
+    {
+      op = OP1() exp = E2() rexp = RE1(sem.mkop(op, exph, exp))
+        {return rexp;}
+      |
+        {return exph;}
+    }
+Exp E2():
+    {Exp exp, rexp1, rexp2;}
+    {
+      exp = E3() rexp2 = R2E2(exp) rexp1 = R1E2(rexp2)
+        {return rexp1;}
+    }
+Exp R1E2(Exp exph):
+    {Exp exp, rexp;}
+    {
+      "+" exp = E3() rexp = R1E2(sem.mkop("+", exph, exp))
+        {return rexp;}
+      |
+        {return exph;}
+    }
+Exp R2E2(Exp exph):
+    {Exp exp;}
+    {
+      "-" exp = E3()
+        {return sem.mkop("-", exph, exp);}
+      |
+        {return exph;}
+    }
+Exp E3():
+    {Exp exp, rexp;}
+    {
+      exp = E4() rexp = RE3(exp)
+        {return rexp;}
+    }
+Exp RE3(Exp exph):
+    {Token op; Exp exp;}
+    {
+      op = <And> exp = E3()
+        {return sem.mkop(op.image, exph, exp);}
+      |
+      op = <Or> exp = E4()
+        {return sem.mkop(op.image, exph, exp);}
+      |
+        {return exph;}
+    }
+Exp E4():
+    {Exp exp, rexp;}
+    {
+      exp = E5() rexp = RE4(exp)
+        {return rexp;}
+    }
+Exp RE4(Exp exph):
+    {String op; Exp exp, rexp;}
+    {
+      op = OP4() exp = E5() rexp = RE4(sem.mkop(op, exph, exp))
+        {return rexp;}
+      |
+        {return exph;}
+    }
+Exp E5():
+    {String op; Exp exp;}
+    {
+      op = OP5() exp = E5()
+        {return sem.mkop_pre(op, exp);}
+      |
+      exp = E6()
+        {return exp;}
+    }
+Exp E6():
+    {Exp exp, rexp;}
+    {
+      exp = E7() rexp = RE6(exp)
+        {return rexp;}
+    }
+Exp RE6(Exp exph):
+    {Token acc; Exp exp, rexp;}
+    {
+      <CorcheteApertura> exp =E0() <CorcheteCierro> rexp = RE6(sem.indexacion(exph, exp))
+        {return rexp;}
+      |
+      <Acceso> acc = <Identificador> rexp = RE6(sem.acceso(exph, acc.image))
+        {return rexp;}
+      |
+      <Puntero> rexp = RE6(sem.indireccion(exph))
+        {return rexp;}
+      |
+        {return exph;}
+    }
+Exp E7():
+    {Exp exp;}
+    {
+      <ParAp> exp = E0() <ParCierre>
+        {return exp;}
+      |
+      exp = operando()
+        {return exp;}
+    }
+String OP1():
+    {}
+    {
+      ">"
+        {return ">";}
+      |
+      "<"
+        {return "<";}
+      |
+      ">="
+        {return ">=";}
+      |
+      "<="
+        {return "<=";}
+      |
+      "=="
+        {return "==";}
+      |
+      "!="
+        {return "!=";}
+    }
+String OP4():
+    {}
+    {
+      "*"
+        {return "*";}
+      |
+      "/"
+        {return "/";}
+      |
+      "%"
+        {return "%";}
+    }
+String OP5():
+    {Token op;}
+    {
+      "-"
+        {return "-";}
+      |
+      op = <Not>
+        {return op.image;}
+    }
+Exp operando():
+    {Token opnd;}
+    {
+      opnd = <LiteralReal>
+        {return (Exp)sem.real(opnd.image).ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <LiteralEntero>
+        {return (Exp)sem.entero(opnd.image).ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <LiteralTrue>
+        {return (Exp)sem.true_exp().ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <LiteralFalse>
+          {return (Exp)sem.false_exp().ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <LiteralString>
+        {return (Exp)sem.string(opnd.image).ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <Identificador>
+        {return (Exp)sem.iden(opnd.image).ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <Null>
+        {return (Exp)sem.nulo().ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+    }

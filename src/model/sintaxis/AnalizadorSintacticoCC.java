@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Reader;
 import view.Printer;
 
-public class AnalizadorSintacticoCC extends AsinCC {
+public class AnalizadorSintacticoCC extends ConstructorASTsCC {
     private final Printer output;
     private void imprime(Token t) {
         try {
