@@ -7,6 +7,8 @@ import java.io.Reader;
 import model.lexico.AnalizadorLexico;
 import model.sintaxis.ConstructorASTsCC;
 import model.sintaxis.ConstructorASTsCUP;
+import model.sintaxis.SintaxisAbstracta.Prog;
+import model.sintaxis.impresionRecursiva.ImpresionBonitaRecursiva;
 import view.DomJudgePrinter;
 
 public class DomJudge{
@@ -24,58 +26,18 @@ public class DomJudge{
    }
 
    public static void ASTS_CC() throws Exception{
-      Reader input = new InputStreamReader(new FileInputStream("files/codigo1.tiny"));
+      Reader input = new InputStreamReader(new FileInputStream("files/codigo11.tiny"));
+      ImpresionBonitaRecursiva output = new ImpresionBonitaRecursiva(System.out);
       ConstructorASTsCC asint = new ConstructorASTsCC(input);
       asint.disable_tracing();
-      String str = asint.analiza().toString();
-      int numTabs = 0;
-      for (int i = 0; i < str.length(); i++) {
-         char ch = str.charAt(i);
-         if(ch == ')') {
-            numTabs--;
-            System.out.print('\n');
-            for (int j = 0; j < numTabs; j++) {
-               System.out.print('\t');
-            }
-         }
-         System.out.print(ch);
-         if(ch == '(' ) {
-            numTabs++;
-            if(str.charAt(i + 1) != ')') {
-               System.out.print('\n');
-               for (int j = 0; j < numTabs; j++) {
-                  System.out.print('\t');
-               }
-            }
-         }
-      }
+      output.imprime(asint.analiza());
    }
 
    public static void ASTS_CUP() throws Exception{
       Reader input = new InputStreamReader(new FileInputStream("files/codigo1.tiny"));
+      ImpresionBonitaRecursiva output = new ImpresionBonitaRecursiva(System.out);
       AnalizadorLexico alex = new AnalizadorLexico(input);
       ConstructorASTsCUP asint = new ConstructorASTsCUP(alex);
-      String str = asint.parse().value.toString();
-      int numTabs = 0;
-      for (int i = 0; i < str.length(); i++) {
-         char ch = str.charAt(i);
-         if(ch == ')') {
-            numTabs--;
-            System.out.print('\n');
-            for (int j = 0; j < numTabs; j++) {
-               System.out.print('\t');
-            }
-         }
-         System.out.print(ch);
-         if(ch == '(' ) {
-            numTabs++;
-            if(str.charAt(i + 1) != ')') {
-               System.out.print('\n');
-               for (int j = 0; j < numTabs; j++) {
-                  System.out.print('\t');
-               }
-            }
-         }
-      }
+      output.imprime((Prog)asint.parse().value);
    }
 }

@@ -1,16 +1,22 @@
 package model.sintaxis;
 
-public class SintaxisAbstracta {
-    public static abstract class Nodo {
+public abstract class SintaxisAbstracta {
+    private interface Editable{
+        Nodo ponFila(int fila);
+        Nodo ponCol(int col);
+    }
+    public static abstract class Nodo implements Editable {
         public Nodo() {
             fila=col=-1;
         }
         private int fila;
         private int col;
+        @Override
         public Nodo ponFila(int fila) {
             this.fila = fila;
             return this;
         }
+        @Override
         public Nodo ponCol(int col) {
             this.col = col;
             return this;
@@ -26,78 +32,95 @@ public class SintaxisAbstracta {
     /*
       Géneros
     */
-    public static abstract class Decs_opt extends Nodo {
-        public Decs_opt() { super(); }
+    public interface Decs_opt extends Editable {
+        Decs decs();
     }
 
-    public static abstract class Decs extends Nodo {
-        public Decs() { super(); }
+    public interface Decs extends Editable {
+        Decs decs();
+        Dec dec();
     }
 
-    public static abstract class Dec extends Nodo {
-        public Dec() { super(); }
+    public interface Dec extends Editable {
+        Tipo tipo();
+        String iden();
+        LParam_opt lParamOpt();
+        Bloque bloque();
     }
 
-    public static abstract class Tipo extends Nodo {
-        public Tipo() { super(); }
+    public interface Tipo extends Editable {
+        Tipo tipo();
+        String iden();
+        String capacidad();
+        Campos campos();
     }
 
-    public static abstract class Campos extends Nodo {
-        public Campos() { super(); }
+    public interface Campos extends Editable {
+        Campos campos();
+        Campo campo();
     }
 
-    public static abstract class Campo extends Nodo {
-        public Campo() { super(); }
+    public interface Campo extends Editable {
+        Tipo tipo();
+        String iden();
     }
 
-    public static abstract class LParam_opt extends Nodo {
-        public LParam_opt() { super(); }
+    public interface LParam_opt extends Editable {
+        LParam lParam();
     }
 
-    public static abstract class LParam extends Nodo {
-        public LParam() { super(); }
+    public interface LParam extends Editable {
+        LParam lParam();
+        Param param();
     }
 
-    public static abstract class Param extends Nodo {
-        public Param() { super(); }
+    public interface Param extends Editable {
+        Tipo tipo();
+        String iden();
     }
 
-    public static abstract class Instrs_opt extends Nodo {
-        public Instrs_opt() { super(); }
+    public interface Instrs_opt extends Editable {
+        Instrs instrs();
     }
 
-    public static abstract class Instrs extends Nodo {
-        public Instrs() { super(); }
+    public interface Instrs extends Editable {
+        Instrs instrs();
+        Instr instr();
     }
 
-    public static abstract class Instr extends Nodo {
-        public Instr() { super(); }
+    public interface Instr extends Editable {
+        Exp exp();
+        Bloque bloque();
+        Bloque bloqueElse();
+        String iden();
+        Exps_opt expsOpt();
     }
 
-    public static abstract class Exps_opt extends Nodo {
-        public Exps_opt() { super(); }
+    public interface Exps_opt extends Editable {
+        Exps exps();
     }
 
-    public static abstract class Exps extends Nodo {
-        public Exps() { super(); }
+    public interface Exps extends Editable {
+        Exps exps();
+        Exp exp();
     }
 
-    public static abstract class Exp extends Nodo {
-        public Exp() { super(); }
+    public interface Exp extends Editable {
     }
 
     /*
       Constructores
     */
     public static class Prog extends Nodo {
-        private final Bloque bloque;
+        private final Bloque bq;
         public Prog(Bloque bloque) {
             super();
-            this.bloque = bloque;
+            this.bq = bloque;
         }
         public String toString() {
-            return "prog("+bloque+")";
+            return "prog("+bq+")";
         }
+        public Bloque bloque() { return bq; }
     }
 
     public static class Bloque extends Nodo {
@@ -111,9 +134,11 @@ public class SintaxisAbstracta {
         public String toString() {
             return "bloq("+decs+","+instrs+")";
         }
+        public Decs_opt decsOpt() { return decs; }
+        public Instrs_opt instrsOpt() { return instrs; }
     }
 
-    public static class Si_decs extends Decs_opt {
+    public static class Si_decs extends Nodo implements Decs_opt {
         private final Decs decs;
         public Si_decs(Decs decs) {
             super();
@@ -122,18 +147,22 @@ public class SintaxisAbstracta {
         public String toString() {
             return "si_decs("+decs+")";
         }
+        @Override
+        public Decs decs() { return decs; }
     }
 
-    public static class No_decs extends Decs_opt {
+    public static class No_decs extends Nodo implements Decs_opt {
         public No_decs() {
             super();
         }
         public String toString() {
             return "no_decs()";
         }
+        @Override
+        public Decs decs() { throw new UnsupportedOperationException(); }
     }
 
-    public static class L_decs extends Decs {
+    public static class L_decs extends Nodo implements Decs {
         private final Decs decs;
         private final Dec dec;
         public L_decs(Decs decs, Dec dec) {
@@ -144,9 +173,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "l_decs("+decs+","+dec+")";
         }
+        @Override
+        public Decs decs() { return decs; }
+        @Override
+        public Dec dec() { return dec; }
     }
 
-    public static class Una_dec extends Decs {
+    public static class Una_dec extends Nodo implements Decs {
         private final Dec dec;
         public Una_dec(Dec dec) {
             super();
@@ -155,9 +188,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "una_dec("+dec+")";
         }
+        @Override
+        public Decs decs() { throw new UnsupportedOperationException(); }
+        @Override
+        public Dec dec() { return dec; }
     }
 
-    public static class T_dec extends Dec {
+    public static class T_dec extends Nodo implements Dec {
         private final Tipo tipo;
         private final String iden;
         public T_dec(Tipo tipo, String iden) {
@@ -165,12 +202,20 @@ public class SintaxisAbstracta {
             this.tipo = tipo;
             this.iden = iden;
         }
+        @Override
         public String toString() {
             return "t_decs("+tipo+","+iden+")";
         }
+        public Tipo tipo() { return tipo; }
+        @Override
+        public String iden() { return iden; }
+        @Override
+        public LParam_opt lParamOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
     }
 
-    public static class V_dec extends Dec {
+    public static class V_dec extends Nodo implements Dec {
         private final Tipo tipo;
         private final String iden;
         public V_dec(Tipo tipo, String iden) {
@@ -181,9 +226,17 @@ public class SintaxisAbstracta {
         public String toString() {
             return "v_decs("+tipo+","+iden+")";
         }
+        @Override
+        public Tipo tipo() { return tipo; }
+        @Override
+        public String iden() { return iden; }
+        @Override
+        public LParam_opt lParamOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
     }
 
-    public static class P_dec extends Dec {
+    public static class P_dec extends Nodo implements Dec {
         private final String iden;
         private final LParam_opt param;
         private final Bloque bloque;
@@ -196,9 +249,17 @@ public class SintaxisAbstracta {
         public String toString() {
             return "p_decs("+iden+","+param+","+bloque+")";
         }
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { return iden; }
+        @Override
+        public LParam_opt lParamOpt() { return param; }
+        @Override
+        public Bloque bloque() { return bloque; }
     }
 
-    public static class A_tipo extends Tipo {
+    public static class A_tipo extends Nodo implements Tipo {
         private final Tipo tipo;
         private final String capacidad;
         public A_tipo(Tipo tipo, String capacidad) {
@@ -209,9 +270,17 @@ public class SintaxisAbstracta {
         public String toString() {
             return "a_tipo("+tipo+","+capacidad+")";
         }
+        @Override
+        public Tipo tipo() { return tipo; }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String capacidad() { return capacidad; }
+        @Override
+        public Campos campos() { throw new UnsupportedOperationException(); }
     }
 
-    public static class P_tipo extends Tipo {
+    public static class P_tipo extends Nodo implements Tipo {
         private final Tipo tipo;
         public P_tipo(Tipo tipo) {
             super();
@@ -220,45 +289,85 @@ public class SintaxisAbstracta {
         public String toString() {
             return "p_tipo("+tipo+")";
         }
+        @Override
+        public Tipo tipo() { return tipo; }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String capacidad() { throw new UnsupportedOperationException(); }
+        @Override
+        public Campos campos() { throw new UnsupportedOperationException(); }
     }
 
-    public static class In_tipo extends Tipo {
+    public static class In_tipo extends Nodo implements Tipo {
         public In_tipo() {
             super();
         }
         public String toString() {
             return "in_tipo()";
         }
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String capacidad() { throw new UnsupportedOperationException(); }
+        @Override
+        public Campos campos() { throw new UnsupportedOperationException(); }
     }
 
-    public static class R_tipo extends Tipo {
+    public static class R_tipo extends Nodo implements Tipo {
         public R_tipo() {
             super();
         }
         public String toString() {
             return "r_tipo()";
         }
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String capacidad() { throw new UnsupportedOperationException(); }
+        @Override
+        public Campos campos() { throw new UnsupportedOperationException(); }
     }
 
-    public static class B_tipo extends Tipo {
+    public static class B_tipo extends Nodo implements Tipo {
         public B_tipo() {
             super();
         }
         public String toString() {
             return "b_tipo()";
         }
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String capacidad() { throw new UnsupportedOperationException(); }
+        @Override
+        public Campos campos() { throw new UnsupportedOperationException(); }
     }
 
-    public static class String_tipo extends Tipo {
+    public static class String_tipo extends Nodo implements Tipo {
         public String_tipo() {
             super();
         }
         public String toString() {
             return "string_tipo()";
         }
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String capacidad() { throw new UnsupportedOperationException(); }
+        @Override
+        public Campos campos() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Id_tipo extends Tipo {
+    public static class Id_tipo extends Nodo implements Tipo {
         private final String iden;
         public Id_tipo(String iden) {
             super();
@@ -267,9 +376,17 @@ public class SintaxisAbstracta {
         public String toString() {
             return "id_tipo("+iden+")";
         }
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { return iden; }
+        @Override
+        public String capacidad() { throw new UnsupportedOperationException(); }
+        @Override
+        public Campos campos() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Struct_tipo extends Tipo {
+    public static class Struct_tipo extends Nodo implements Tipo {
         private final Campos campos;
         public Struct_tipo(Campos campos) {
             super();
@@ -278,9 +395,17 @@ public class SintaxisAbstracta {
         public String toString() {
             return "struct_tipo("+campos+")";
         }
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String capacidad() { throw new UnsupportedOperationException(); }
+        @Override
+        public Campos campos() { return campos; }
     }
 
-    public static class L_campos extends Campos {
+    public static class L_campos extends Nodo implements Campos {
         private final Campos campos;
         private final Campo campo;
         public L_campos(Campos campos, Campo campo) {
@@ -291,9 +416,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "l_campos("+campos+","+campo+")";
         }
+        @Override
+        public Campos campos() { return campos; }
+        @Override
+        public Campo campo() { return campo; }
     }
 
-    public static class Un_campo extends Campos {
+    public static class Un_campo extends Nodo implements Campos {
         private final Campo campo;
         public Un_campo(Campo campo) {
             super();
@@ -302,9 +431,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "un_campo("+campo+")";
         }
+        @Override
+        public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public Campo campo() { return campo; }
     }
 
-    public static class Camp extends Campo {
+    public static class Camp extends Nodo implements Campo {
         private final Tipo tipo;
         private final String iden;
         public Camp(Tipo tipo, String iden) {
@@ -315,9 +448,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "camp("+tipo+","+iden+")";
         }
+        @Override
+        public Tipo tipo() { return tipo; }
+        @Override
+        public String iden() { return iden; }
     }
 
-    public static class Si_param extends LParam_opt {
+    public static class Si_param extends Nodo implements LParam_opt {
         private final LParam lParam;
         public Si_param(LParam lParam) {
             super();
@@ -326,18 +463,22 @@ public class SintaxisAbstracta {
         public String toString() {
             return "si_param("+lParam+")";
         }
+        @Override
+        public LParam lParam() { return lParam; }
     }
 
-    public static class No_param extends LParam_opt {
+    public static class No_param extends Nodo implements LParam_opt {
         public No_param() {
             super();
         }
         public String toString() {
             return "no_param()";
         }
+        @Override
+        public LParam lParam() { throw new UnsupportedOperationException(); }
     }
 
-    public static class L_param extends LParam {
+    public static class L_param extends Nodo implements LParam {
         private final LParam lParam;
         private final Param param;
         public L_param(LParam lParam, Param param) {
@@ -348,9 +489,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "l_param("+lParam+","+param+")";
         }
+        @Override
+        public LParam lParam() { return lParam; }
+        @Override
+        public Param param() { return param; }
     }
 
-    public static class Un_param extends LParam {
+    public static class Un_param extends Nodo implements LParam {
         private final Param param;
         public Un_param(Param param) {
             super();
@@ -359,9 +504,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "un_param("+param+")";
         }
+        @Override
+        public LParam lParam() { throw new UnsupportedOperationException(); }
+        @Override
+        public Param param() { return param; }
     }
 
-    public static class Param_simple extends Param{
+    public static class Param_simple extends Nodo implements Param{
         private final Tipo tipo;
         private final String iden;
         public Param_simple(Tipo tipo, String iden) {
@@ -372,9 +521,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "param_simple("+tipo+","+iden+")";
         }
+        @Override
+        public Tipo tipo() { return  tipo; }
+        @Override
+        public String iden() { return iden; }
     }
 
-    public static class Param_ref extends Param{
+    public static class Param_ref extends Nodo implements  Param{
         private final Tipo tipo;
         private final String iden;
         public Param_ref(Tipo tipo, String iden) {
@@ -385,9 +538,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "param_ref("+tipo+","+iden+")";
         }
+        @Override
+        public Tipo tipo() { return  tipo; }
+        @Override
+        public String iden() { return iden; }
     }
 
-    public static class Si_instrs extends Instrs_opt {
+    public static class Si_instrs extends Nodo implements Instrs_opt {
         private final Instrs instrs;
         public Si_instrs(Instrs instrs) {
             super();
@@ -396,18 +553,23 @@ public class SintaxisAbstracta {
         public String toString() {
             return "si_instrs("+instrs+")";
         }
+        @Override
+        public Instrs instrs() { return instrs; }
     }
 
-    public static class No_instrs extends Instrs_opt {
+    public static class No_instrs extends Nodo implements Instrs_opt {
         public No_instrs() {
             super();
         }
         public String toString() {
             return "no_instrs()";
         }
+        @Override
+        public Instrs instrs() { throw new UnsupportedOperationException(); }
+
     }
 
-    public static class L_instrs extends Instrs {
+    public static class L_instrs extends Nodo implements Instrs {
         private final Instrs instrs;
         private final Instr instr;
         public L_instrs(Instrs instrs, Instr instr) {
@@ -418,9 +580,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "l_instrs("+instrs+","+instr+")";
         }
+        @Override
+        public Instrs instrs() { return instrs; }
+        @Override
+        public Instr instr() { return instr; }
     }
 
-    public static class Una_instr extends Instrs {
+    public static class Una_instr extends Nodo implements Instrs {
         private final Instr instr;
         public Una_instr(Instr instr) {
             super();
@@ -429,9 +595,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "una_instr("+instr+")";
         }
+        @Override
+        public Instrs instrs() { throw new UnsupportedOperationException(); }
+        @Override
+        public Instr instr() { return instr; }
     }
 
-    public static class Eva extends Instr {
+    public static class Eva extends Nodo implements Instr {
         private final Exp exp;
         public Eva(Exp exp) {
             super();
@@ -440,9 +610,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "eva("+exp+")";
         }
+        @Override
+        public Exp exp() { return exp; }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class If_instr extends Instr {
+    public static class If_instr extends Nodo implements Instr {
         private final Exp exp;
         private final Bloque bloque;
         public If_instr(Exp exp, Bloque bloque) {
@@ -453,9 +633,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "if("+exp+","+bloque+")";
         }
+        @Override
+        public Exp exp() { return exp; }
+        @Override
+        public Bloque bloque() { return bloque; }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class If_el extends Instr {
+    public static class If_el extends Nodo implements Instr {
         private final Exp exp;
         private final Bloque bloqueIf;
         private final Bloque bloqueElse;
@@ -468,9 +658,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "if_el("+exp+","+bloqueIf+","+bloqueElse+")";
         }
+        @Override
+        public Exp exp() { return exp; }
+        @Override
+        public Bloque bloque() { return bloqueIf; }
+        @Override
+        public Bloque bloqueElse() { return bloqueElse; }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Wh extends Instr {
+    public static class Wh extends Nodo implements Instr {
         private final Exp exp;
         private final Bloque bloque;
         public Wh(Exp exp, Bloque bloque) {
@@ -481,9 +681,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "wh("+exp+","+bloque+")";
         }
+        @Override
+        public Exp exp() { return exp; }
+        @Override
+        public Bloque bloque() { return bloque; }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Rd extends Instr {
+    public static class Rd extends Nodo implements Instr {
         private final Exp exp;
         public Rd(Exp exp) {
             super();
@@ -492,9 +702,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "rd("+exp+")";
         }
+        @Override
+        public Exp exp() { return exp; }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Wr extends Instr {
+    public static class Wr extends Nodo implements Instr {
         private final Exp exp;
         public Wr(Exp exp) {
             super();
@@ -503,9 +723,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "wr("+exp+")";
         }
+        @Override
+        public Exp exp() { return exp; }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Nw extends Instr {
+    public static class Nw extends Nodo implements Instr {
         private final Exp exp;
         public Nw(Exp exp) {
             super();
@@ -514,9 +744,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "nw("+exp+")";
         }
+        @Override
+        public Exp exp() { return exp; }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Dl extends Instr {
+    public static class Dl extends Nodo implements  Instr {
         private final Exp exp;
         public Dl(Exp exp) {
             super();
@@ -525,18 +765,38 @@ public class SintaxisAbstracta {
         public String toString() {
             return "dl("+exp+")";
         }
+        @Override
+        public Exp exp() { return exp; }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Nl_instr extends Instr {
+    public static class Nl_instr extends Nodo implements Instr {
         public Nl_instr() {
             super();
         }
         public String toString() {
             return "nl()";
         }
+        @Override
+        public Exp exp() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Cl extends Instr {
+    public static class Cl extends Nodo implements Instr {
         private final String iden;
         private final Exps_opt exps;
         public Cl(String iden, Exps_opt exps) {
@@ -547,9 +807,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "cl("+iden+","+exps+")";
         }
+        @Override
+        public Exp exp() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() { return iden; }
+        @Override
+        public Exps_opt expsOpt() { return exps; }
     }
 
-    public static class Bq_instr extends Instr {
+    public static class Bq_instr extends Nodo implements Instr {
         private final Bloque bloque;
         public Bq_instr(Bloque bloque) {
             super();
@@ -558,9 +828,19 @@ public class SintaxisAbstracta {
         public String toString() {
             return "bq_instr("+bloque+")";
         }
+        @Override
+        public Exp exp() { throw new UnsupportedOperationException(); }
+        @Override
+        public Bloque bloque() { return bloque; }
+        @Override
+        public Bloque bloqueElse() { throw new UnsupportedOperationException(); }
+        @Override
+        public String iden() {throw new UnsupportedOperationException(); }
+        @Override
+        public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
     }
 
-    public static class Si_exps extends Exps_opt {
+    public static class Si_exps extends Nodo implements Exps_opt {
         private final Exps exps;
         public Si_exps(Exps exps) {
             super();
@@ -569,18 +849,22 @@ public class SintaxisAbstracta {
         public String toString() {
             return "si_exps("+exps+")";
         }
+        @Override
+        public Exps exps() { return exps; }
     }
 
-    public static class No_exps extends Exps_opt {
+    public static class No_exps extends Nodo implements Exps_opt {
         public No_exps() {
             super();
         }
         public String toString() {
             return "no_exps()";
         }
+        @Override
+        public Exps exps() { throw new UnsupportedOperationException(); }
     }
 
-    public static class L_exps extends Exps {
+    public static class L_exps extends Nodo implements Exps {
         private final Exps exps;
         private final Exp exp;
         public L_exps(Exps exps, Exp exp) {
@@ -591,9 +875,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "l_exps("+exps+","+exp+")";
         }
+        @Override
+        public Exps exps() { return exps; }
+        @Override
+        public Exp exp() { return exp; }
     }
 
-    public static class Una_exp extends Exps {
+    public static class Una_exp extends Nodo implements Exps {
         private final Exp exp;
         public Una_exp(Exp exp) {
             super();
@@ -602,9 +890,13 @@ public class SintaxisAbstracta {
         public String toString() {
             return "una_exp("+exp+")";
         }
+        @Override
+        public Exps exps() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp exp() { return exp; }
     }
 
-    private static abstract class ExpBin extends Exp {
+    private static abstract class ExpBin extends Nodo implements Exp {
         protected Exp opnd0;
         protected Exp opnd1;
         public ExpBin(Exp opnd0, Exp opnd1) {
@@ -614,7 +906,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    private static abstract class ExpPre extends Exp {
+    private static abstract class ExpPre extends Nodo implements Exp {
         protected Exp opnd;
         public ExpPre(Exp opnd) {
             super();
@@ -764,7 +1056,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class Indexacion extends Exp {
+    public static class Indexacion extends Nodo implements Exp {
         private final Exp opnd;
         private final Exp pos;
         public Indexacion(Exp opnd, Exp pos) {
@@ -777,7 +1069,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class Acceso extends Exp {
+    public static class Acceso extends Nodo implements Exp {
         private final Exp opnd;
         private final String acceso;
         public Acceso(Exp opnd, String acceso) {
@@ -790,7 +1082,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class Indireccion extends Exp {
+    public static class Indireccion extends Nodo implements Exp {
         private final Exp opnd;
         public Indireccion(Exp opnd) {
             super();
@@ -801,7 +1093,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class Real extends Exp {
+    public static class Real extends Nodo implements Exp {
         private final String num;
         public Real(String num) {
             super();
@@ -812,7 +1104,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class Entero extends Exp {
+    public static class Entero extends Nodo implements Exp {
         private final String num;
         public Entero(String num) {
             super();
@@ -823,7 +1115,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class True extends Exp {
+    public static class True extends Nodo implements Exp {
         public True() {
             super();
         }
@@ -832,7 +1124,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class False extends Exp {
+    public static class False extends Nodo implements Exp {
         public False() {
             super();
         }
@@ -841,7 +1133,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class String_exp extends Exp {
+    public static class String_exp extends Nodo implements Exp {
         private final String string;
         public String_exp(String string) {
             super();
@@ -852,7 +1144,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class Iden extends Exp {
+    public static class Iden extends Nodo implements Exp {
         private final String id;
         public Iden(String id) {
             super();
@@ -863,7 +1155,7 @@ public class SintaxisAbstracta {
         }
     }
 
-    public static class Null_exp extends Exp {
+    public static class Null_exp extends Nodo implements Exp {
         public Null_exp() {
             super();
         }
