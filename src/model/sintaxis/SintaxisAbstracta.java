@@ -1,5 +1,7 @@
 package model.sintaxis;
 
+import model.sintaxis.impresionVisitante.Procesamiento;
+
 public abstract class SintaxisAbstracta {
     private interface Editable{
         Nodo ponFila(int fila);
@@ -34,11 +36,13 @@ public abstract class SintaxisAbstracta {
     */
     public interface Decs_opt extends Editable {
         Decs decs();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Decs extends Editable {
         Decs decs();
         Dec dec();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Dec extends Editable {
@@ -46,6 +50,7 @@ public abstract class SintaxisAbstracta {
         String iden();
         LParam_opt lParamOpt();
         Bloque bloque();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Tipo extends Editable {
@@ -53,39 +58,47 @@ public abstract class SintaxisAbstracta {
         String iden();
         String capacidad();
         Campos campos();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Campos extends Editable {
         Campos campos();
         Campo campo();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Campo extends Editable {
         Tipo tipo();
         String iden();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface LParam_opt extends Editable {
         LParam lParam();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface LParam extends Editable {
         LParam lParam();
         Param param();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Param extends Editable {
         Tipo tipo();
         String iden();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Instrs_opt extends Editable {
         Instrs instrs();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Instrs extends Editable {
         Instrs instrs();
         Instr instr();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Instr extends Editable {
@@ -94,18 +107,27 @@ public abstract class SintaxisAbstracta {
         Bloque bloqueElse();
         String iden();
         Exps_opt expsOpt();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Exps_opt extends Editable {
         Exps exps();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Exps extends Editable {
         Exps exps();
         Exp exp();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     public interface Exp extends Editable {
+        String iden();
+        String valor();
+        Exp opnd0();
+        Exp opnd1();
+        int prioridad();
+        void procesa(Procesamiento p) throws Exception;
     }
 
     /*
@@ -121,6 +143,7 @@ public abstract class SintaxisAbstracta {
             return "prog("+bq+")";
         }
         public Bloque bloque() { return bq; }
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Bloque extends Nodo {
@@ -136,6 +159,7 @@ public abstract class SintaxisAbstracta {
         }
         public Decs_opt decsOpt() { return decs; }
         public Instrs_opt instrsOpt() { return instrs; }
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Si_decs extends Nodo implements Decs_opt {
@@ -149,6 +173,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Decs decs() { return decs; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class No_decs extends Nodo implements Decs_opt {
@@ -160,6 +186,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Decs decs() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class L_decs extends Nodo implements Decs {
@@ -177,6 +205,8 @@ public abstract class SintaxisAbstracta {
         public Decs decs() { return decs; }
         @Override
         public Dec dec() { return dec; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Una_dec extends Nodo implements Decs {
@@ -192,6 +222,8 @@ public abstract class SintaxisAbstracta {
         public Decs decs() { throw new UnsupportedOperationException(); }
         @Override
         public Dec dec() { return dec; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class T_dec extends Nodo implements Dec {
@@ -213,6 +245,8 @@ public abstract class SintaxisAbstracta {
         public LParam_opt lParamOpt() { throw new UnsupportedOperationException(); }
         @Override
         public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class V_dec extends Nodo implements Dec {
@@ -234,6 +268,8 @@ public abstract class SintaxisAbstracta {
         public LParam_opt lParamOpt() { throw new UnsupportedOperationException(); }
         @Override
         public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class P_dec extends Nodo implements Dec {
@@ -257,6 +293,8 @@ public abstract class SintaxisAbstracta {
         public LParam_opt lParamOpt() { return param; }
         @Override
         public Bloque bloque() { return bloque; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class A_tipo extends Nodo implements Tipo {
@@ -278,6 +316,8 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { return capacidad; }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class P_tipo extends Nodo implements Tipo {
@@ -297,6 +337,8 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class In_tipo extends Nodo implements Tipo {
@@ -314,6 +356,8 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class R_tipo extends Nodo implements Tipo {
@@ -331,6 +375,8 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class B_tipo extends Nodo implements Tipo {
@@ -348,6 +394,8 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class String_tipo extends Nodo implements Tipo {
@@ -365,6 +413,8 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Id_tipo extends Nodo implements Tipo {
@@ -384,6 +434,8 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Struct_tipo extends Nodo implements Tipo {
@@ -403,6 +455,8 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { return campos; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class L_campos extends Nodo implements Campos {
@@ -420,6 +474,8 @@ public abstract class SintaxisAbstracta {
         public Campos campos() { return campos; }
         @Override
         public Campo campo() { return campo; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Un_campo extends Nodo implements Campos {
@@ -435,6 +491,8 @@ public abstract class SintaxisAbstracta {
         public Campos campos() { throw new UnsupportedOperationException(); }
         @Override
         public Campo campo() { return campo; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Camp extends Nodo implements Campo {
@@ -452,6 +510,8 @@ public abstract class SintaxisAbstracta {
         public Tipo tipo() { return tipo; }
         @Override
         public String iden() { return iden; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Si_param extends Nodo implements LParam_opt {
@@ -465,6 +525,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public LParam lParam() { return lParam; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class No_param extends Nodo implements LParam_opt {
@@ -476,6 +538,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public LParam lParam() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class L_param extends Nodo implements LParam {
@@ -493,6 +557,8 @@ public abstract class SintaxisAbstracta {
         public LParam lParam() { return lParam; }
         @Override
         public Param param() { return param; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Un_param extends Nodo implements LParam {
@@ -508,6 +574,8 @@ public abstract class SintaxisAbstracta {
         public LParam lParam() { throw new UnsupportedOperationException(); }
         @Override
         public Param param() { return param; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Param_simple extends Nodo implements Param{
@@ -525,6 +593,8 @@ public abstract class SintaxisAbstracta {
         public Tipo tipo() { return  tipo; }
         @Override
         public String iden() { return iden; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Param_ref extends Nodo implements  Param{
@@ -542,6 +612,8 @@ public abstract class SintaxisAbstracta {
         public Tipo tipo() { return  tipo; }
         @Override
         public String iden() { return iden; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Si_instrs extends Nodo implements Instrs_opt {
@@ -555,6 +627,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Instrs instrs() { return instrs; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class No_instrs extends Nodo implements Instrs_opt {
@@ -566,7 +640,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Instrs instrs() { throw new UnsupportedOperationException(); }
-
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class L_instrs extends Nodo implements Instrs {
@@ -584,6 +659,8 @@ public abstract class SintaxisAbstracta {
         public Instrs instrs() { return instrs; }
         @Override
         public Instr instr() { return instr; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Una_instr extends Nodo implements Instrs {
@@ -599,6 +676,8 @@ public abstract class SintaxisAbstracta {
         public Instrs instrs() { throw new UnsupportedOperationException(); }
         @Override
         public Instr instr() { return instr; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Eva extends Nodo implements Instr {
@@ -620,6 +699,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class If_instr extends Nodo implements Instr {
@@ -643,6 +724,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class If_el extends Nodo implements Instr {
@@ -668,6 +751,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Wh extends Nodo implements Instr {
@@ -691,6 +776,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Rd extends Nodo implements Instr {
@@ -712,6 +799,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Wr extends Nodo implements Instr {
@@ -733,6 +822,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Nw extends Nodo implements Instr {
@@ -754,9 +845,11 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
-    public static class Dl extends Nodo implements  Instr {
+    public static class Dl extends Nodo implements Instr {
         private final Exp exp;
         public Dl(Exp exp) {
             super();
@@ -775,6 +868,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Nl_instr extends Nodo implements Instr {
@@ -794,6 +889,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Cl extends Nodo implements Instr {
@@ -817,6 +914,8 @@ public abstract class SintaxisAbstracta {
         public String iden() { return iden; }
         @Override
         public Exps_opt expsOpt() { return exps; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Bq_instr extends Nodo implements Instr {
@@ -838,6 +937,8 @@ public abstract class SintaxisAbstracta {
         public String iden() {throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Si_exps extends Nodo implements Exps_opt {
@@ -851,6 +952,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Exps exps() { return exps; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class No_exps extends Nodo implements Exps_opt {
@@ -862,6 +965,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Exps exps() { throw new UnsupportedOperationException(); }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class L_exps extends Nodo implements Exps {
@@ -879,6 +984,8 @@ public abstract class SintaxisAbstracta {
         public Exps exps() { return exps; }
         @Override
         public Exp exp() { return exp; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Una_exp extends Nodo implements Exps {
@@ -894,6 +1001,8 @@ public abstract class SintaxisAbstracta {
         public Exps exps() { throw new UnsupportedOperationException(); }
         @Override
         public Exp exp() { return exp; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     private static abstract class ExpBin extends Nodo implements Exp {
@@ -904,6 +1013,14 @@ public abstract class SintaxisAbstracta {
             this.opnd0 = opnd0;
             this.opnd1 = opnd1;
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { return opnd0; }
+        @Override
+        public Exp opnd1() { return opnd1;}
     }
 
     private static abstract class ExpPre extends Nodo implements Exp {
@@ -912,6 +1029,14 @@ public abstract class SintaxisAbstracta {
             super();
             this.opnd = opnd;
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { return opnd; }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
     }
 
     public static class Asig extends ExpBin {
@@ -921,6 +1046,11 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "asig("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 0; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+
     }
 
     public static class My extends ExpBin {
@@ -930,6 +1060,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "my("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 1; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Mn extends ExpBin {
@@ -939,6 +1073,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "mn("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 1; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Myig extends ExpBin {
@@ -948,6 +1086,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "myig("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 1; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Mnig extends ExpBin {
@@ -957,6 +1099,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "mnig("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 1; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Ig extends ExpBin {
@@ -966,6 +1112,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "ig("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 1; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Dif extends ExpBin {
@@ -975,6 +1125,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "dif("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 1; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Suma extends ExpBin {
@@ -984,6 +1138,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "suma("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 2; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
     public static class Resta extends ExpBin {
         public Resta(Exp opnd0, Exp opnd1) {
@@ -992,6 +1150,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "resta("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 2; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class And extends ExpBin {
@@ -1001,6 +1163,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "and("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 3; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Or extends ExpBin {
@@ -1010,6 +1176,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "or("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 3; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Mul extends ExpBin {
@@ -1019,6 +1189,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "mul("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 4; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
     public static class Div extends ExpBin {
         public Div(Exp opnd0, Exp opnd1) {
@@ -1027,6 +1201,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "div("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 4; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Mod extends ExpBin {
@@ -1036,6 +1214,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "mod("+opnd0+","+opnd1+")";
         }
+        @Override
+        public int prioridad() {  return 4; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Menos_unario extends ExpPre {
@@ -1045,6 +1227,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "menos_unario("+opnd+")";
         }
+        @Override
+        public int prioridad() {  return 5; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Not extends ExpPre {
@@ -1054,6 +1240,10 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "not("+opnd+")";
         }
+        @Override
+        public int prioridad() {  return 5; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Indexacion extends Nodo implements Exp {
@@ -1067,6 +1257,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "indexacion("+opnd+","+pos+")";
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { return opnd; }
+        @Override
+        public Exp opnd1() { return pos; }
+        @Override
+        public int prioridad() {  return 6; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Acceso extends Nodo implements Exp {
@@ -1080,6 +1282,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "acceso("+opnd+","+acceso+")";
         }
+        @Override
+        public String iden() { return acceso; }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { return opnd; }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 6; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Indireccion extends Nodo implements Exp {
@@ -1091,6 +1305,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "indireccion("+opnd+")";
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { return opnd; }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 6; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Real extends Nodo implements Exp {
@@ -1102,6 +1328,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "real("+num+"["+leeFila()+","+leeCol()+"])";
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { return num; }
+        @Override
+        public Exp opnd0() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 7; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Entero extends Nodo implements Exp {
@@ -1113,6 +1351,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "entero("+num+"["+leeFila()+","+leeCol()+"])";
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { return num; }
+        @Override
+        public Exp opnd0() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 7; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class True extends Nodo implements Exp {
@@ -1122,6 +1372,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "true("+"["+leeFila()+","+leeCol()+"])";
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 7; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class False extends Nodo implements Exp {
@@ -1131,6 +1393,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "false("+"["+leeFila()+","+leeCol()+"])";
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 7; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class String_exp extends Nodo implements Exp {
@@ -1142,6 +1416,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "string("+string+"["+leeFila()+","+leeCol()+"])";
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { return string; }
+        @Override
+        public Exp opnd0() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 7; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Iden extends Nodo implements Exp {
@@ -1153,6 +1439,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "iden("+id+"["+leeFila()+","+leeCol()+"])";
         }
+        @Override
+        public String iden() { return id; }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 7; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public static class Null_exp extends Nodo implements Exp {
@@ -1162,6 +1460,18 @@ public abstract class SintaxisAbstracta {
         public String toString() {
             return "null("+"["+leeFila()+","+leeCol()+"])";
         }
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+        @Override
+        public String valor() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd0() { throw new UnsupportedOperationException(); }
+        @Override
+        public Exp opnd1() { throw new UnsupportedOperationException(); }
+        @Override
+        public int prioridad() {  return 7; }
+        @Override
+        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
     public Prog prog(Bloque bloque){ return new Prog(bloque); }

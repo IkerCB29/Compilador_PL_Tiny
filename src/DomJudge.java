@@ -9,6 +9,7 @@ import model.sintaxis.ConstructorASTsCC;
 import model.sintaxis.ConstructorASTsCUP;
 import model.sintaxis.SintaxisAbstracta.Prog;
 import model.sintaxis.impresionRecursiva.ImpresionBonitaRecursiva;
+import model.sintaxis.impresionVisitante.ImpresionBonitaVisitante;
 import view.DomJudgePrinter;
 
 public class DomJudge{
@@ -27,14 +28,16 @@ public class DomJudge{
 
    public static void ASTS_CC() throws Exception{
       Reader input = new InputStreamReader(new FileInputStream("files/codigo11.tiny"));
-      ImpresionBonitaRecursiva output = new ImpresionBonitaRecursiva(System.out);
+      ImpresionBonitaVisitante output = new ImpresionBonitaVisitante(System.out);
+      ImpresionBonitaRecursiva output2 = new ImpresionBonitaRecursiva(System.out);
       ConstructorASTsCC asint = new ConstructorASTsCC(input);
       asint.disable_tracing();
-      output.imprime(asint.analiza());
+      //output.procesa(asint.analiza());
+      output2.imprime(asint.analiza());
    }
 
    public static void ASTS_CUP() throws Exception{
-      Reader input = new InputStreamReader(new FileInputStream("files/codigo1.tiny"));
+      Reader input = new InputStreamReader(new FileInputStream("files/codigo10.tiny"));
       ImpresionBonitaRecursiva output = new ImpresionBonitaRecursiva(System.out);
       AnalizadorLexico alex = new AnalizadorLexico(input);
       ConstructorASTsCUP asint = new ConstructorASTsCUP(alex);

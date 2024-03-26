@@ -323,7 +323,7 @@ Instr instruccion_eval():
     {Exp exp;}
     {
       <Evalua> exp = E0()
-        {return sem.rd(exp);}
+        {return sem.eva(exp);}
     }
 Instr instruccion_if():
     {Exp exp; Bloque bq; Instr instr;}

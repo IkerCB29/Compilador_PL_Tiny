@@ -623,7 +623,7 @@ Instr instr;
 Exp exp;
       jj_consume_token(Evalua);
       exp = E0();
-{if ("" != null) return sem.rd(exp);}
+{if ("" != null) return sem.eva(exp);}
     throw new Error("Missing return statement in function");
     } finally {
       trace_return("instruccion_eval");
