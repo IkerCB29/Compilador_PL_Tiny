@@ -1,6 +1,5 @@
 package model.sintaxis.impresionVisitante;
 
-import javax.sound.sampled.Port;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
 import model.sintaxis.SintaxisAbstracta.And;

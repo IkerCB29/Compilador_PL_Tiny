@@ -4,11 +4,12 @@
 
 package model.lexico;
 
+import model.sintaxis.ClaseLexica;
 import builder.UnidadLexicaBuilder;
 
 import exceptions.LexicoException;
-import model.sintaxis.ClaseLexica;
 import java_cup.runtime.Scanner;
+
 
 // See https://github.com/jflex-de/jflex/issues/222
 @SuppressWarnings("FallThrough")
@@ -142,7 +143,7 @@ public class AnalizadorLexico implements Scanner {
 
   private static final String ZZ_ROWMAP_PACKED_0 =
     "\0\0\0\60\0\60\0\140\0\220\0\300\0\60\0\360"+
-    "\0\60\0\60\0\60\0\u0120\0\u0120\0\u0120\0\60\0\60"+
+    "\0\60\0\60\0\60\0\u0120\0\60\0\u0120\0\60\0\60"+
     "\0\u0150\0\u0180\0\60\0\u01b0\0\u01e0\0\u0210\0\60\0\u0240"+
     "\0\u0270\0\u02a0\0\u02d0\0\u0300\0\u0330\0\u0360\0\u0390\0\u03c0"+
     "\0\u03f0\0\u0420\0\u0450\0\u0480\0\u04b0\0\u04e0\0\60\0\60"+
@@ -281,10 +282,10 @@ public class AnalizadorLexico implements Scanner {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\2\11\3\1\1\11\1\1\3\11\3\1\2\11"+
-    "\2\1\1\11\3\1\1\11\17\1\6\11\1\0\1\11"+
-    "\1\1\1\11\2\0\3\11\25\1\1\0\1\11\22\1"+
-    "\1\0\30\1";
+    "\1\0\2\11\3\1\1\11\1\1\3\11\1\1\1\11"+
+    "\1\1\2\11\2\1\1\11\3\1\1\11\17\1\6\11"+
+    "\1\0\1\11\1\1\1\11\2\0\3\11\25\1\1\0"+
+    "\1\11\22\1\1\0\30\1";
 
   private static int [] zzUnpackAttribute() {
     int [] result = new int[119];

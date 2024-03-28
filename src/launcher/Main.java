@@ -5,7 +5,7 @@ import java.io.FileReader;
 import java.io.Reader;
 
 import controller.Controller;
-import view.FullPrinter;
+import view.FilePrinter;
 
 public class Main {
 	private final static String[] FILES = {
@@ -29,15 +29,11 @@ public class Main {
 		for(String file : FILES) {
 			try {
 				Reader input = new BufferedReader(new FileReader(file));
-				c.analisisLexico(input, new FullPrinter(file + "outputLexico"));
+				c.analisisSintacticoCC(input, new FilePrinter(file + "outputCC"), 0);
 				input.close();
 
 				input = new BufferedReader(new FileReader(file));
-				c.analisisSintacticoCC(input, new FullPrinter(file + "outputCC"));
-				input.close();
-
-				input = new BufferedReader(new FileReader(file));
-				c.analisisSintacticoCUP(input, new FullPrinter(file + "outputCUP"));
+				c.analisisSintacticoCUP(input, new FilePrinter(file + "outputCUP"), 0);
 				input.close();
 			}
 			catch (Exception e) {

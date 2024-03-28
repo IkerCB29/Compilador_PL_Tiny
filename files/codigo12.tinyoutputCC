@@ -1,7 +1,1 @@
-[clase: "{", fila: 1, col: 1, lexema: {]
-[clase: <Identificador>, fila: 3, col: 1, lexema: x]
-Encountered " "=" "= "" at line 3, column 3.
-Was expecting one of:
-    <Identificador> ...
-    "[" ...
-    
+ERROR_SINTACTICO

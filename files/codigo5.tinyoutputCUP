@@ -1,11 +1,1 @@
-[clase: LLAVE_APERTURA, fila: 1, col: 1, lexema: {]
-[clase: EVALUA, fila: 2, col: 2, lexema: @]
-[clase: LITERAL_ENTERO, fila: 2, col: 4, lexema: 5]
-[clase: ASIGNACION, fila: 2, col: 6, lexema: =]
-[clase: LITERAL_ENTERO, fila: 2, col: 8, lexema: 34]
-[clase: PYC, fila: 2, col: 10, lexema: ;]
-[clase: EVALUA, fila: 3, col: 2, lexema: @]
-[clase: LITERAL_ENTERO, fila: 3, col: 4, lexema: 5]
-[clase: RESTA, fila: 3, col: 6, lexema: -]
-[clase: LITERAL_ENTERO, fila: 3, col: 8, lexema: 3]
-[ERROR: fila: 3, columna: 10, Elemento inexperado: -]
+ERROR_SINTACTICO

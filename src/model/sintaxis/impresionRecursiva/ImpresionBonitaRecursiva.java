@@ -1,38 +1,38 @@
 package model.sintaxis.impresionRecursiva;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import model.sintaxis.SintaxisAbstracta;
+import view.Printer;
 
 public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
-    private final OutputStream output;
-    public ImpresionBonitaRecursiva(OutputStream output){
+    private final Printer output;
+    public ImpresionBonitaRecursiva(Printer output){
         this.output = output;
     }
 
     public void imprime(Prog prog) throws IOException {
         imprime(prog.bloque());
-        output.write("<EOF>\n".getBytes());
+        output.write("<EOF>\n");
     }
 
     private void imprime(Bloque bq) throws IOException {
-        output.write("{\n".getBytes());
+        output.write("{\n");
         imprime(bq.decsOpt());
         imprime(bq.instrsOpt());
-        output.write("}\n".getBytes());
+        output.write("}\n");
     }
 
     private void imprime(Decs_opt decsOpt) throws IOException {
         if(claseDe(decsOpt, Si_decs.class)){
             imprime(decsOpt.decs());
-            output.write("&&\n".getBytes());
+            output.write("&&\n");
         }
     }
 
     private void imprime(Decs decs) throws IOException{
         if(claseDe(decs, L_decs.class)) {
             imprime(decs.decs());
-            output.write(";\n".getBytes());
+            output.write(";\n");
             imprime(decs.dec());
         }
         else{
@@ -42,20 +42,20 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
 
     private void imprime(Dec dec) throws IOException{
         if(claseDe(dec, T_dec.class)){
-            output.write("<type>\n".getBytes());
+            output.write("<type>\n");
             imprime(dec.tipo());
-            output.write((dec.iden() + "\n").getBytes());
+            output.write((dec.iden() + "\n"));
         }
         else if(claseDe(dec, V_dec.class)){
             imprime(dec.tipo());
-            output.write((dec.iden() + "\n").getBytes());
+            output.write((dec.iden() + "\n"));
         }
         else{
-            output.write("<proc>\n".getBytes());
-            output.write((dec.iden() + "\n").getBytes());
-            output.write("(\n".getBytes());
+            output.write("<proc>\n");
+            output.write((dec.iden() + "\n"));
+            output.write("(\n");
             imprime(dec.lParamOpt());
-            output.write(")\n".getBytes());
+            output.write(")\n");
             imprime(dec.bloque());
         }
     }
@@ -63,41 +63,41 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
     private void imprime(Tipo tipo) throws IOException{
         if(claseDe(tipo, A_tipo.class)){
             imprime(tipo.tipo());
-            output.write("[\n".getBytes());
-            output.write((tipo.capacidad() + "\n").getBytes());
-            output.write("]\n".getBytes());
+            output.write("[\n");
+            output.write((tipo.capacidad() + "\n"));
+            output.write("]\n");
         }
         else if(claseDe(tipo, P_tipo.class)){
-            output.write("^\n".getBytes());
+            output.write("^\n");
             imprime(tipo.tipo());
         }
         else if(claseDe(tipo, In_tipo.class)){
-            output.write("<int>\n".getBytes());
+            output.write("<int>\n");
         }
         else if(claseDe(tipo, R_tipo.class)){
-            output.write("<real>\n".getBytes());
+            output.write("<real>\n");
         }
         else if(claseDe(tipo, B_tipo.class)){
-            output.write("<bool>\n".getBytes());
+            output.write("<bool>\n");
         }
         else if(claseDe(tipo, String_tipo.class)){
-            output.write("<string>\n".getBytes());
+            output.write("<string>\n");
         }
         else if(claseDe(tipo, Id_tipo.class)){
-            output.write((tipo.iden() + "\n").getBytes());
+            output.write((tipo.iden() + "\n"));
         }
         else {
-            output.write("<struct>\n".getBytes());
-            output.write("{\n".getBytes());
+            output.write("<struct>\n");
+            output.write("{\n");
             imprime(tipo.campos());
-            output.write("}\n".getBytes());
+            output.write("}\n");
         }
     }
 
     private void imprime(Campos campos) throws IOException{
         if(claseDe(campos, L_campos.class)) {
             imprime(campos.campos());
-            output.write(",\n".getBytes());
+            output.write(",\n");
             imprime(campos.campo());
         }
         else{
@@ -107,7 +107,7 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
 
     private void imprime(Campo campo) throws IOException{
         imprime(campo.tipo());
-        output.write((campo.iden() + "\n").getBytes());
+        output.write((campo.iden() + "\n"));
     }
 
     private void imprime(LParam_opt lParamOpt) throws IOException{
@@ -119,7 +119,7 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
     private void imprime(LParam lParam) throws IOException{
         if(claseDe(lParam, L_param.class)){
             imprime(lParam.lParam());
-            output.write(",\n".getBytes());
+            output.write(",\n");
             imprime(lParam.param());
         }
         else{
@@ -130,12 +130,12 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
     private void imprime(Param param) throws IOException{
         if(claseDe(param, Param_simple.class)){
             imprime(param.tipo());
-            output.write((param.iden() + "\n").getBytes());
+            output.write((param.iden() + "\n"));
         }
         else{
             imprime(param.tipo());
-            output.write("&\n".getBytes());
-            output.write((param.iden() + "\n").getBytes());
+            output.write("&\n");
+            output.write((param.iden() + "\n"));
         }
     }
 
@@ -148,7 +148,7 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
     private void imprime(Instrs instrs) throws IOException {
         if(claseDe(instrs, L_instrs.class)){
             imprime(instrs.instrs());
-            output.write(";\n".getBytes());
+            output.write(";\n");
             imprime(instrs.instr());
         }
         else{
@@ -158,51 +158,51 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
 
     private void imprime(Instr instr) throws IOException {
         if(claseDe(instr, Eva.class)){
-            output.write("@\n".getBytes());
+            output.write("@\n");
             imprime(instr.exp());
         }
         else if(claseDe(instr, If_instr.class)){
-            output.write("<if>\n".getBytes());
+            output.write("<if>\n");
             imprime(instr.exp());
             imprime(instr.bloque());
         }
         else if(claseDe(instr, If_el.class)){
-            output.write("<if>\n".getBytes());
+            output.write("<if>\n");
             imprime(instr.exp());
             imprime(instr.bloque());
-            output.write("<else>\n".getBytes());
+            output.write("<else>\n");
             imprime(instr.bloqueElse());
         }
         else if(claseDe(instr, Wh.class)){
-            output.write("<while>\n".getBytes());
+            output.write("<while>\n");
             imprime(instr.exp());
             imprime(instr.bloque());
         }
         else if(claseDe(instr, Rd.class)){
-            output.write("<read>\n".getBytes());
+            output.write("<read>\n");
             imprime(instr.exp());
         }
         else if(claseDe(instr, Wr.class)){
-            output.write("<write>\n".getBytes());
+            output.write("<write>\n");
             imprime(instr.exp());
         }
         else if(claseDe(instr, Nw.class)){
-            output.write("<new>\n".getBytes());
+            output.write("<new>\n");
             imprime(instr.exp());
         }
         else if(claseDe(instr, Dl.class)){
-            output.write("<delete>\n".getBytes());
+            output.write("<delete>\n");
             imprime(instr.exp());
         }
         else if(claseDe(instr, Nl_instr.class)){
-            output.write("<nl>\n".getBytes());
+            output.write("<nl>\n");
         }
         else if(claseDe(instr, Cl.class)){
-            output.write("<call>\n".getBytes());
-            output.write((instr.iden() + "\n").getBytes());
-            output.write("(\n".getBytes());
+            output.write("<call>\n");
+            output.write((instr.iden() + "\n"));
+            output.write("(\n");
             imprime(instr.expsOpt());
-            output.write(")\n".getBytes());
+            output.write(")\n");
         }
         else{
             imprime(instr.bloque());
@@ -218,7 +218,7 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
     private void imprime(Exps exps) throws IOException {
         if(claseDe(exps, L_exps.class)){
             imprime(exps.exps());
-            output.write(",\n".getBytes());
+            output.write(",\n");
             imprime(exps.exp());
         }
         else{
@@ -277,54 +277,54 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
         }
         else if(claseDe(exp, Indexacion.class)){
             imprimeOpnd(exp.opnd0(), 6);
-            output.write("[\n".getBytes());
-            imprimeOpnd(exp.opnd1(), 6);
-            output.write("]\n".getBytes());
+            output.write("[\n");
+            imprimeOpnd(exp.opnd1(), 0);
+            output.write("]\n");
         }
         else if(claseDe(exp, Acceso.class)){
             imprimeOpnd(exp.opnd0(), 6);
-            output.write(".\n".getBytes());
-            output.write((exp.iden() + "\n").getBytes());
+            output.write(".\n");
+            output.write((exp.iden() + "\n"));
         }
         else if(claseDe(exp, Indireccion.class)){
             imprimeOpnd(exp.opnd0(), 6);
-            output.write("^\n".getBytes());
+            output.write("^\n");
         }
         else if(claseDe(exp, Iden.class)){
-            output.write((exp.iden() + "\n").getBytes());
+            output.write((exp.iden() + "\n"));
         }
         else if(claseDe(exp, True.class)){
-            output.write("<true>\n".getBytes());
+            output.write("<true>\n");
         }
         else if(claseDe(exp, False.class)){
-            output.write("<false>\n".getBytes());
+            output.write("<false>\n");
         }
         else if(claseDe(exp, Null_exp.class)){
-            output.write("<null>\n".getBytes());
+            output.write("<null>\n");
         }
         else{
-            output.write((exp.valor() + "\n").getBytes());
+            output.write((exp.valor() + "\n"));
         }
     }
 
     private void imprimeExpPre(Exp opnd, String op, int np) throws IOException {
-        output.write((op + "\n").getBytes());
+        output.write((op + "\n"));
         imprimeOpnd(opnd, np);
     }
 
     private void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1) throws IOException {
         imprimeOpnd(opnd0, np0);
-        output.write((op + "\n").getBytes());
+        output.write((op + "\n"));
         imprimeOpnd(opnd1, np1);
     }
 
     private void imprimeOpnd(Exp opnd, int minPrior) throws IOException {
         if (prioridad(opnd) < minPrior){
-            output.write("(\n".getBytes());
+            output.write("(\n");
         }
         imprime(opnd);
         if (prioridad(opnd) < minPrior){
-            output.write(")\n".getBytes());
+            output.write(")\n");
         }
     }
 

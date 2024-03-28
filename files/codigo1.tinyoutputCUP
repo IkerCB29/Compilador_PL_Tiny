@@ -1,36 +1,34 @@
-[clase: LLAVE_APERTURA, fila: 1, col: 1, lexema: {]
-[clase: REAL, fila: 3, col: 1, lexema: <real>]
-[clase: IDENTIFICADOR, fila: 3, col: 6, lexema: peso]
-[clase: PYC, fila: 3, col: 10, lexema: ;]
-[clase: BOOLEAN, fila: 4, col: 1, lexema: <bool>]
-[clase: IDENTIFICADOR, fila: 4, col: 6, lexema: pesado]
-[clase: CAMBIO_SEC, fila: 5, col: 1, lexema: &&]
-[clase: EVALUA, fila: 6, col: 1, lexema: @]
-[clase: IDENTIFICADOR, fila: 6, col: 3, lexema: peso]
-[clase: ASIGNACION, fila: 6, col: 8, lexema: =]
-[clase: PAP, fila: 6, col: 10, lexema: (]
-[clase: LITERAL_REAL, fila: 6, col: 11, lexema: 45.0]
-[clase: POR, fila: 6, col: 16, lexema: *]
-[clase: LITERAL_REAL, fila: 6, col: 18, lexema: 12e-56]
-[clase: PCIERRE, fila: 6, col: 24, lexema: )]
-[clase: DIV, fila: 6, col: 26, lexema: /]
-[clase: LITERAL_REAL, fila: 6, col: 28, lexema: -2.05]
-[clase: PYC, fila: 6, col: 33, lexema: ;]
-[clase: EVALUA, fila: 7, col: 1, lexema: @]
-[clase: IDENTIFICADOR, fila: 7, col: 3, lexema: pesado]
-[clase: ASIGNACION, fila: 7, col: 10, lexema: =]
-[clase: PAP, fila: 7, col: 12, lexema: (]
-[clase: IDENTIFICADOR, fila: 7, col: 13, lexema: peso]
-[clase: MAYOR, fila: 7, col: 18, lexema: >]
-[clase: LITERAL_REAL, fila: 7, col: 20, lexema: 10.0]
-[clase: PCIERRE, fila: 7, col: 24, lexema: )]
-[clase: OR, fila: 7, col: 26, lexema: <or>]
-[clase: PAP, fila: 7, col: 29, lexema: (]
-[clase: IDENTIFICADOR, fila: 7, col: 30, lexema: peso]
-[clase: DIV, fila: 7, col: 35, lexema: /]
-[clase: LITERAL_ENTERO, fila: 7, col: 37, lexema: 2]
-[clase: MENOR_IGUAL, fila: 7, col: 39, lexema: <=]
-[clase: LITERAL_REAL, fila: 8, col: 1, lexema: +0.0]
-[clase: PCIERRE, fila: 8, col: 5, lexema: )]
-[clase: LLAVE_CIERRE, fila: 9, col: 1, lexema: }]
-[clase: EOF, fila: 10, col: 1, lexema: <EOF>]
+{
+<real>
+peso
+;
+<bool>
+pesado
+&&
+@
+peso
+=
+45.0
+*
+12e-56
+/
+-2.05
+;
+@
+pesado
+=
+(
+peso
+>
+10.0
+)
+<or>
+(
+peso
+/
+2
+<=
++0.0
+)
+}
+<EOF>

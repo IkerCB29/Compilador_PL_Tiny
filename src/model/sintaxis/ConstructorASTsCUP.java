@@ -27,6 +27,7 @@ import model.lexico.AnalizadorLexico;
 import model.lexico.UnidadLexica;
 import model.lexico.UnidadLexica.StringLocalizado;
 import java_cup.runtime.*;
+import java_cup.runtime.XMLElement;
 
 /** CUP v0.11b 20160615 (GIT 4ac7450) generated parser.
   */
@@ -402,12 +403,12 @@ public class ConstructorASTsCUP extends java_cup.runtime.lr_parser {
   public short[][] reduce_table() {return _reduce_table;}
 
   /** Instance of action encapsulation class. */
-  protected CUP$ConstructorASTs$actions action_obj;
+  protected CUP$ConstructorASTsCUP$actions action_obj;
 
   /** Action encapsulation object initializer. */
   protected void init_actions()
     {
-      action_obj = new CUP$ConstructorASTs$actions(this);
+      action_obj = new CUP$ConstructorASTsCUP$actions(this);
     }
 
   /** Invoke a user supplied parse action. */
@@ -419,7 +420,7 @@ public class ConstructorASTsCUP extends java_cup.runtime.lr_parser {
     throws java.lang.Exception
   {
     /* call code in generated class */
-    return action_obj.CUP$ConstructorASTs$do_action(act_num, parser, stack, top);
+    return action_obj.CUP$ConstructorASTsCUP$do_action(act_num, parser, stack, top);
   }
 
   /** Indicates start state. */
@@ -452,14 +453,19 @@ public class ConstructorASTsCUP extends java_cup.runtime.lr_parser {
     }
 
 
-   public void syntax_error(Symbol unidadLexica) {
-     throw new SintaxisException((UnidadLexica)unidadLexica);
-   }
+  @Override
+  public void debug_message(String msg) {}
+  @Override
+  public void debug_shift(Symbol token) {}
+  @Override
+  public void syntax_error(Symbol unidadLexica) {
+    throw new SintaxisException((UnidadLexica)unidadLexica);
+  }
 
 
 /** Cup generated class to encapsulate user supplied action code.*/
 @SuppressWarnings({"rawtypes", "unchecked", "unused"})
-class CUP$ConstructorASTs$actions {
+class CUP$ConstructorASTsCUP$actions {
 
 
   ClaseSemantica sem = new ClaseSemantica();
@@ -467,1280 +473,1280 @@ class CUP$ConstructorASTs$actions {
   private final ConstructorASTsCUP parser;
 
   /** Constructor */
-  CUP$ConstructorASTs$actions(ConstructorASTsCUP parser) {
+  CUP$ConstructorASTsCUP$actions(ConstructorASTsCUP parser) {
     this.parser = parser;
   }
 
   /** Method 0 with the actual generated action code for actions 0 to 300. */
-  public final java_cup.runtime.Symbol CUP$ConstructorASTs$do_action_part00000000(
-    int                        CUP$ConstructorASTs$act_num,
-    java_cup.runtime.lr_parser CUP$ConstructorASTs$parser,
-    java.util.Stack            CUP$ConstructorASTs$stack,
-    int                        CUP$ConstructorASTs$top)
+  public final java_cup.runtime.Symbol CUP$ConstructorASTsCUP$do_action_part00000000(
+    int                        CUP$ConstructorASTsCUP$act_num,
+    java_cup.runtime.lr_parser CUP$ConstructorASTsCUP$parser,
+    java.util.Stack            CUP$ConstructorASTsCUP$stack,
+    int                        CUP$ConstructorASTsCUP$top)
     throws java.lang.Exception
     {
       /* Symbol object for return from actions */
-      java_cup.runtime.Symbol CUP$ConstructorASTs$result;
+      java_cup.runtime.Symbol CUP$ConstructorASTsCUP$result;
 
       /* select the action based on the action number */
-      switch (CUP$ConstructorASTs$act_num)
+      switch (CUP$ConstructorASTsCUP$act_num)
         {
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 0: // programa ::= bloque 
             {
               Prog RESULT =null;
-		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.prog(bq); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("programa",0, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("programa",0, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 1: // $START ::= programa EOF 
             {
               Object RESULT =null;
-		int start_valleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int start_valright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Prog start_val = (Prog)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int start_valleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int start_valright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Prog start_val = (Prog)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		RESULT = start_val;
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("$START",0, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("$START",0, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
           /* ACCEPT */
-          CUP$ConstructorASTs$parser.done_parsing();
-          return CUP$ConstructorASTs$result;
+          CUP$ConstructorASTsCUP$parser.done_parsing();
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 2: // bloque ::= LLAVE_APERTURA declaraciones_opt instrucciones_opt LLAVE_CIERRE 
             {
               Bloque RESULT =null;
-		int decsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int decsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Decs_opt decs = (Decs_opt)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int instrsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int instrsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Instrs_opt instrs = (Instrs_opt)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int decsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int decsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Decs_opt decs = (Decs_opt)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int instrsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int instrsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Instrs_opt instrs = (Instrs_opt)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		 RESULT = sem.bloque(decs, instrs); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("bloque",1, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("bloque",1, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 3: // declaraciones_opt ::= declaraciones CAMBIO_SEC 
             {
               Decs_opt RESULT =null;
-		int decsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int decsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Decs decs = (Decs)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int decsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int decsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Decs decs = (Decs)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		 RESULT = sem.si_decs(decs); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("declaraciones_opt",2, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("declaraciones_opt",2, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 4: // declaraciones_opt ::= 
             {
               Decs_opt RESULT =null;
 		 RESULT = sem.no_decs(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("declaraciones_opt",2, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("declaraciones_opt",2, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 5: // declaraciones ::= declaraciones PYC declaracion 
             {
               Decs RESULT =null;
-		int decsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int decsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Decs decs = (Decs)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int decsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int decsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Decs decs = (Decs)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.l_decs(decs, dec); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("declaraciones",3, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("declaraciones",3, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 6: // declaraciones ::= declaracion 
             {
               Decs RESULT =null;
-		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.una_dec(dec); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("declaraciones",3, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("declaraciones",3, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 7: // declaracion ::= dec_tipo 
             {
               Dec RESULT =null;
-		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = dec; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("declaracion",4, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("declaracion",4, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 8: // declaracion ::= dec_variable 
             {
               Dec RESULT =null;
-		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = dec; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("declaracion",4, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("declaracion",4, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 9: // declaracion ::= dec_procedimiento 
             {
               Dec RESULT =null;
-		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int decleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int decright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Dec dec = (Dec)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = dec; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("declaracion",4, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("declaracion",4, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 10: // dec_tipo ::= TYPE tipo0 IDENTIFICADOR 
             {
               Dec RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Dec)sem.t_dec(tipo, id.str()).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("dec_tipo",5, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("dec_tipo",5, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 11: // dec_variable ::= tipo0 IDENTIFICADOR 
             {
               Dec RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Dec)sem.v_dec(tipo, id.str()).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("dec_variable",6, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("dec_variable",6, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 12: // tipo0 ::= tipo0 COR_APERTURA LITERAL_ENTERO COR_CIERRE 
             {
               Tipo RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).value;
-		int capleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int capright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		StringLocalizado cap = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).value;
+		int capleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int capright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		StringLocalizado cap = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		 RESULT = (Tipo)sem.a_tipo(tipo, cap.str()).ponFila(cap.fila()).ponCol(cap.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo0",8, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo0",8, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 13: // tipo0 ::= tipo1 
             {
               Tipo RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = tipo; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo0",8, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo0",8, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 14: // tipo1 ::= tipo2 
             {
               Tipo RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = tipo; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo1",9, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo1",9, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 15: // tipo1 ::= PUNTERO tipo1 
             {
               Tipo RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.p_tipo(tipo); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo1",9, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo1",9, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 16: // tipo2 ::= ENTERO 
             {
               Tipo RESULT =null;
 		 RESULT = sem.in_tipo(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 17: // tipo2 ::= REAL 
             {
               Tipo RESULT =null;
 		 RESULT = sem.r_tipo(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 18: // tipo2 ::= BOOLEAN 
             {
               Tipo RESULT =null;
 		 RESULT = sem.b_tipo(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 19: // tipo2 ::= STRING 
             {
               Tipo RESULT =null;
 		 RESULT = sem.string_tipo(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 20: // tipo2 ::= IDENTIFICADOR 
             {
               Tipo RESULT =null;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Tipo)sem.id_tipo(id.str()).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 21: // tipo2 ::= registro 
             {
               Tipo RESULT =null;
-		int regleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int regright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Tipo reg = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int regleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int regright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Tipo reg = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = reg; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("tipo2",10, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 22: // registro ::= STRUCT LLAVE_APERTURA campos LLAVE_CIERRE 
             {
               Tipo RESULT =null;
-		int campsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int campsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Campos camps = (Campos)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int campsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int campsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Campos camps = (Campos)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		 RESULT = sem.struct_tipo(camps); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("registro",11, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("registro",11, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 23: // campos ::= campos COMA campo 
             {
               Campos RESULT =null;
-		int campsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int campsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Campos camps = (Campos)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int camleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int camright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Campo cam = (Campo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int campsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int campsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Campos camps = (Campos)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int camleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int camright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Campo cam = (Campo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.l_campos(camps, cam); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("campos",12, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("campos",12, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 24: // campos ::= campo 
             {
               Campos RESULT =null;
-		int camleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int camright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Campo cam = (Campo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int camleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int camright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Campo cam = (Campo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.un_campo(cam); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("campos",12, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("campos",12, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 25: // campo ::= tipo0 IDENTIFICADOR 
             {
               Campo RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Campo)sem.camp(tipo, id.str()).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("campo",13, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("campo",13, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 26: // dec_procedimiento ::= PROC IDENTIFICADOR PAP lista_parametros_opt PCIERRE bloque 
             {
               Dec RESULT =null;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-4)).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-4)).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-4)).value;
-		int paramsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int paramsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		LParam_opt params = (LParam_opt)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-4)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-4)).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-4)).value;
+		int paramsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int paramsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		LParam_opt params = (LParam_opt)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Dec)sem.p_dec(id.str(), params, bq).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("dec_procedimiento",7, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-5)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("dec_procedimiento",7, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-5)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 27: // lista_parametros_opt ::= lista_parametros 
             {
               LParam_opt RESULT =null;
-		int paramsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int paramsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		LParam params = (LParam)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int paramsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int paramsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		LParam params = (LParam)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.si_param(params); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("lista_parametros_opt",14, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("lista_parametros_opt",14, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 28: // lista_parametros_opt ::= 
             {
               LParam_opt RESULT =null;
 		 RESULT = sem.no_param(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("lista_parametros_opt",14, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("lista_parametros_opt",14, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 29: // lista_parametros ::= lista_parametros COMA parametro 
             {
               LParam RESULT =null;
-		int paramsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int paramsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		LParam params = (LParam)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int paramleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int paramright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Param param = (Param)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int paramsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int paramsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		LParam params = (LParam)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int paramleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int paramright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Param param = (Param)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.l_param(params, param); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("lista_parametros",15, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("lista_parametros",15, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 30: // lista_parametros ::= parametro 
             {
               LParam RESULT =null;
-		int paramleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int paramright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Param param = (Param)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int paramleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int paramright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Param param = (Param)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.un_param(param); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("lista_parametros",15, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("lista_parametros",15, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 31: // parametro ::= tipo0 IDENTIFICADOR 
             {
               Param RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Param)sem.param_simple(tipo, id.str()).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("parametro",16, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("parametro",16, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 32: // parametro ::= tipo0 REFERENCIA IDENTIFICADOR 
             {
               Param RESULT =null;
-		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int tipoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int tiporight = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Tipo tipo = (Tipo)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Param)sem.param_ref(tipo, id.str()).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("parametro",16, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("parametro",16, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 33: // instrucciones_opt ::= instrucciones 
             {
               Instrs_opt RESULT =null;
-		int instrsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instrs instrs = (Instrs)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instrs instrs = (Instrs)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.si_instrs(instrs); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instrucciones_opt",17, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instrucciones_opt",17, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 34: // instrucciones_opt ::= 
             {
               Instrs_opt RESULT =null;
 		 RESULT = sem.no_instrs(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instrucciones_opt",17, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instrucciones_opt",17, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 35: // instrucciones ::= instrucciones PYC instruccion 
             {
               Instrs RESULT =null;
-		int instrsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int instrsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Instrs instrs = (Instrs)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int instrsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Instrs instrs = (Instrs)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.l_instrs(instrs, instr); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instrucciones",18, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instrucciones",18, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 36: // instrucciones ::= instruccion 
             {
               Instrs RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.una_instr(instr); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instrucciones",18, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instrucciones",18, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 37: // instruccion ::= instruccion_eval 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 38: // instruccion ::= instruccion_if 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 39: // instruccion ::= instruccion_while 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 40: // instruccion ::= instruccion_read 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 41: // instruccion ::= instruccion_write 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 42: // instruccion ::= instruccion_nl 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 43: // instruccion ::= instruccion_new 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 44: // instruccion ::= instruccion_delete 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 45: // instruccion ::= instruccion_call 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 46: // instruccion ::= instruccion_compuesta 
             {
               Instr RESULT =null;
-		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int instrleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int instrright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Instr instr = (Instr)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = instr; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion",19, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 47: // instruccion_eval ::= EVALUA E0 
             {
               Instr RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.eva(exp); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_eval",20, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_eval",20, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 48: // instruccion_if ::= IF E0 bloque 
             {
               Instr RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.if_instr(exp, bq); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_if",21, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_if",21, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 49: // instruccion_if ::= IF E0 bloque ELSE bloque 
             {
               Instr RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).value;
-		int bq1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int bq1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Bloque bq1 = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int bq2left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int bq2right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Bloque bq2 = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).value;
+		int bq1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int bq1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Bloque bq1 = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int bq2left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int bq2right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Bloque bq2 = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.if_el(exp, bq1, bq2); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_if",21, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-4)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_if",21, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-4)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 50: // instruccion_while ::= WHILE E0 bloque 
             {
               Instr RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.wh(exp, bq); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_while",22, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_while",22, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 51: // instruccion_read ::= READ E0 
             {
               Instr RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.rd(exp); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_read",23, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_read",23, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 52: // instruccion_write ::= WRITE E0 
             {
               Instr RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.wr(exp); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_write",24, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_write",24, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 53: // instruccion_nl ::= NL 
             {
               Instr RESULT =null;
 		 RESULT = sem.nl(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_nl",25, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_nl",25, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 54: // instruccion_new ::= NEW E0 
             {
               Instr RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.nw(exp); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_new",26, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_new",26, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 55: // instruccion_delete ::= DELETE E0 
             {
               Instr RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.dl(exp); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_delete",27, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_delete",27, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 56: // instruccion_call ::= CALL IDENTIFICADOR PAP lista_expresiones_opt PCIERRE 
             {
               Instr RESULT =null;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).value;
-		int expsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int expsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Exps_opt exps = (Exps_opt)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).value;
+		int expsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int expsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Exps_opt exps = (Exps_opt)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		 RESULT = (Instr)sem.cl(id.str(), exps).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_call",28, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-4)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_call",28, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-4)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 57: // instruccion_compuesta ::= bloque 
             {
               Instr RESULT =null;
-		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int bqleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int bqright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Bloque bq = (Bloque)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.bq_instr(bq); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("instruccion_compuesta",29, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("instruccion_compuesta",29, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 58: // lista_expresiones_opt ::= lista_expresiones 
             {
               Exps_opt RESULT =null;
-		int expsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exps exps = (Exps)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exps exps = (Exps)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.si_exps(exps); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("lista_expresiones_opt",30, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("lista_expresiones_opt",30, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 59: // lista_expresiones_opt ::= 
             {
               Exps_opt RESULT =null;
 		 RESULT = sem.no_exps(); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("lista_expresiones_opt",30, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("lista_expresiones_opt",30, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 60: // lista_expresiones ::= lista_expresiones COMA E0 
             {
               Exps RESULT =null;
-		int expsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int expsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exps exps = (Exps)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expsleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int expsright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exps exps = (Exps)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.l_exps(exps, exp); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("lista_expresiones",31, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("lista_expresiones",31, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 61: // lista_expresiones ::= E0 
             {
               Exps RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.una_exp(exp); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("lista_expresiones",31, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("lista_expresiones",31, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 62: // E0 ::= E1 ASIGNACION E0 
             {
               Exp RESULT =null;
-		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.mkop("=", opnd0, opnd1); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E0",32, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E0",32, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 63: // E0 ::= E1 
             {
               Exp RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = exp; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E0",32, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E0",32, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 64: // E1 ::= E1 OP1 E2 
             {
               Exp RESULT =null;
-		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int opleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int opright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		String op = (String)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		String op = (String)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.mkop(op, opnd0, opnd1); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E1",33, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E1",33, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 65: // E1 ::= E2 
             {
               Exp RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = exp; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E1",33, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E1",33, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 66: // E2 ::= E2 SUMA E3 
             {
               Exp RESULT =null;
-		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.mkop("+", opnd0, opnd1); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E2",34, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E2",34, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 67: // E2 ::= E3 RESTA E3 
             {
               Exp RESULT =null;
-		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.mkop("-", opnd0, opnd1); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E2",34, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E2",34, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 68: // E2 ::= E3 
             {
               Exp RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = exp; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E2",34, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E2",34, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 69: // E3 ::= E4 AND E3 
             {
               Exp RESULT =null;
-		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.mkop("and", opnd0, opnd1); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E3",35, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E3",35, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 70: // E3 ::= E4 OR E4 
             {
               Exp RESULT =null;
-		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.mkop("or", opnd0, opnd1); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E3",35, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E3",35, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 71: // E3 ::= E4 
             {
               Exp RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = exp; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E3",35, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E3",35, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 72: // E4 ::= E4 OP4 E5 
             {
               Exp RESULT =null;
-		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int opleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int opright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		String op = (String)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opnd0left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int opnd0right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exp opnd0 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		String op = (String)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int opnd1left = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opnd1right = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd1 = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.mkop(op, opnd0, opnd1); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E4",36, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E4",36, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 73: // E4 ::= E5 
             {
               Exp RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = exp; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E4",36, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E4",36, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 74: // E5 ::= OP5 E5 
             {
               Exp RESULT =null;
-		int opleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int opright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		String op = (String)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
-		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int opright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		String op = (String)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
+		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = sem.mkop_pre(op, opnd); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E5",37, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E5",37, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 75: // E5 ::= E6 
             {
               Exp RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = exp; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E5",37, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E5",37, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 76: // E6 ::= E6 COR_APERTURA E0 COR_CIERRE 
             {
               Exp RESULT =null;
-		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).left;
-		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).right;
-		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)).value;
-		int posleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int posright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Exp pos = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).left;
+		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).right;
+		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)).value;
+		int posleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int posright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Exp pos = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		 RESULT = sem.indexacion(opnd, pos); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E6",38, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-3)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E6",38, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-3)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 77: // E6 ::= E6 ACCESO IDENTIFICADOR 
             {
               Exp RESULT =null;
-		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).left;
-		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).right;
-		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)).value;
-		int accesoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int accesoright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado acceso = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).left;
+		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).right;
+		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)).value;
+		int accesoleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int accesoright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado acceso = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Exp)sem.acceso(opnd, acceso.str()).ponFila(acceso.fila()).ponCol(acceso.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E6",38, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E6",38, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 78: // E6 ::= E6 PUNTERO 
             {
               Exp RESULT =null;
-		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		 RESULT = sem.indireccion(opnd); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E6",38, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E6",38, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 79: // E6 ::= E7 
             {
               Exp RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = exp; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E6",38, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E6",38, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 80: // E7 ::= PAP E0 PCIERRE 
             {
               Exp RESULT =null;
-		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).left;
-		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).right;
-		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-1)).value;
+		int expleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).left;
+		int expright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).right;
+		Exp exp = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-1)).value;
 		 RESULT = exp; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E7",39, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.elementAt(CUP$ConstructorASTs$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E7",39, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.elementAt(CUP$ConstructorASTsCUP$top-2)), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 81: // E7 ::= operando 
             {
               Exp RESULT =null;
-		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int opndleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int opndright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		Exp opnd = (Exp)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = opnd; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("E7",39, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("E7",39, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 82: // OP1 ::= MAYOR 
             {
               String RESULT =null;
 		 RESULT = ">"; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 83: // OP1 ::= MENOR 
             {
               String RESULT =null;
 		 RESULT = "<"; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 84: // OP1 ::= MAYOR_IGUAL 
             {
               String RESULT =null;
 		 RESULT = ">="; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 85: // OP1 ::= MENOR_IGUAL 
             {
               String RESULT =null;
 		 RESULT = "<="; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 86: // OP1 ::= IGUAL 
             {
               String RESULT =null;
 		 RESULT = "=="; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 87: // OP1 ::= DIFERENTE 
             {
               String RESULT =null;
 		 RESULT = "!="; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP1",41, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 88: // OP4 ::= POR 
             {
               String RESULT =null;
 		 RESULT = "*"; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP4",42, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP4",42, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 89: // OP4 ::= DIV 
             {
               String RESULT =null;
 		 RESULT = "/"; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP4",42, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP4",42, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 90: // OP4 ::= MODULO 
             {
               String RESULT =null;
 		 RESULT = "%"; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP4",42, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP4",42, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 91: // OP5 ::= RESTA 
             {
               String RESULT =null;
 		 RESULT = "-"; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP5",43, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP5",43, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 92: // OP5 ::= NOT 
             {
               String RESULT =null;
 		 RESULT = "not"; 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("OP5",43, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("OP5",43, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 93: // operando ::= LITERAL_REAL 
             {
               Exp RESULT =null;
-		int releft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int reright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado re = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int releft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int reright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado re = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Exp)sem.real(re.str()).ponFila(re.fila()).ponCol(re.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 94: // operando ::= LITERAL_ENTERO 
             {
               Exp RESULT =null;
-		int entleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int entright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado ent = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int entleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int entright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado ent = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Exp)sem.real(ent.str()).ponFila(ent.fila()).ponCol(ent.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 95: // operando ::= LITERAL_TRUE 
             {
               Exp RESULT =null;
-		int trleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int trright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado tr = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int trleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int trright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado tr = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Exp)sem.true_exp().ponFila(tr.fila()).ponCol(tr.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 96: // operando ::= LITERAL_FALSE 
             {
               Exp RESULT =null;
-		int flleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int flright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado fl = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int flleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int flright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado fl = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Exp)sem.false_exp().ponFila(fl.fila()).ponCol(fl.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 97: // operando ::= LITERAL_STRING 
             {
               Exp RESULT =null;
-		int stleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int stright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado st = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int stleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int stright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado st = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Exp)sem.string(st.str()).ponFila(st.fila()).ponCol(st.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 98: // operando ::= IDENTIFICADOR 
             {
               Exp RESULT =null;
-		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int idleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int idright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado id = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Exp)sem.iden(id.str()).ponFila(id.fila()).ponCol(id.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
           case 99: // operando ::= NULL 
             {
               Exp RESULT =null;
-		int nulleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).left;
-		int nulright = ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()).right;
-		StringLocalizado nul = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTs$stack.peek()).value;
+		int nulleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
+		int nulright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
+		StringLocalizado nul = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
 		 RESULT = (Exp)sem.nulo().ponFila(nul.fila()).ponCol(nul.col()); 
-              CUP$ConstructorASTs$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTs$stack.peek()), RESULT);
+              CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
-          return CUP$ConstructorASTs$result;
+          return CUP$ConstructorASTsCUP$result;
 
           /* . . . . . .*/
           default:
             throw new Exception(
-               "Invalid action number "+CUP$ConstructorASTs$act_num+"found in internal parse table");
+               "Invalid action number "+CUP$ConstructorASTsCUP$act_num+"found in internal parse table");
 
         }
     } /* end of method */
 
   /** Method splitting the generated action code into several parts. */
-  public final java_cup.runtime.Symbol CUP$ConstructorASTs$do_action(
-    int                        CUP$ConstructorASTs$act_num,
-    java_cup.runtime.lr_parser CUP$ConstructorASTs$parser,
-    java.util.Stack            CUP$ConstructorASTs$stack,
-    int                        CUP$ConstructorASTs$top)
+  public final java_cup.runtime.Symbol CUP$ConstructorASTsCUP$do_action(
+    int                        CUP$ConstructorASTsCUP$act_num,
+    java_cup.runtime.lr_parser CUP$ConstructorASTsCUP$parser,
+    java.util.Stack            CUP$ConstructorASTsCUP$stack,
+    int                        CUP$ConstructorASTsCUP$top)
     throws java.lang.Exception
     {
-              return CUP$ConstructorASTs$do_action_part00000000(
-                               CUP$ConstructorASTs$act_num,
-                               CUP$ConstructorASTs$parser,
-                               CUP$ConstructorASTs$stack,
-                               CUP$ConstructorASTs$top);
+              return CUP$ConstructorASTsCUP$do_action_part00000000(
+                               CUP$ConstructorASTsCUP$act_num,
+                               CUP$ConstructorASTsCUP$parser,
+                               CUP$ConstructorASTsCUP$stack,
+                               CUP$ConstructorASTsCUP$top);
     }
 }
 

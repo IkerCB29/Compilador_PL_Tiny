@@ -29,9 +29,14 @@ scan with {:
 :};
 
 parser code {:
-   public void syntax_error(Symbol unidadLexica) {
-     throw new SintaxisException((UnidadLexica)unidadLexica);
-   }
+  @Override
+  public void debug_message(String msg) {}
+  @Override
+  public void debug_shift(Symbol token) {}
+  @Override
+  public void syntax_error(Symbol unidadLexica) {
+    throw new SintaxisException((UnidadLexica)unidadLexica);
+  }
 :};
 
 init with {:

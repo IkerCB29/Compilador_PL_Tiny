@@ -1,36 +1,34 @@
-[clase: "{", fila: 1, col: 1, lexema: {]
-[clase: <Real>, fila: 3, col: 1, lexema: <real>]
-[clase: <Identificador>, fila: 3, col: 6, lexema: peso]
-[clase: ";", fila: 3, col: 10, lexema: ;]
-[clase: <Boolean>, fila: 4, col: 1, lexema: <bool>]
-[clase: <Identificador>, fila: 4, col: 6, lexema: pesado]
-[clase: "&&", fila: 5, col: 1, lexema: &&]
-[clase: "@", fila: 6, col: 1, lexema: @]
-[clase: <Identificador>, fila: 6, col: 3, lexema: peso]
-[clase: "=", fila: 6, col: 8, lexema: =]
-[clase: "(", fila: 6, col: 10, lexema: (]
-[clase: <LiteralReal>, fila: 6, col: 11, lexema: 45.0]
-[clase: "*", fila: 6, col: 16, lexema: *]
-[clase: <LiteralReal>, fila: 6, col: 18, lexema: 12e-56]
-[clase: ")", fila: 6, col: 24, lexema: )]
-[clase: "/", fila: 6, col: 26, lexema: /]
-[clase: <LiteralReal>, fila: 6, col: 28, lexema: -2.05]
-[clase: ";", fila: 6, col: 33, lexema: ;]
-[clase: "@", fila: 7, col: 1, lexema: @]
-[clase: <Identificador>, fila: 7, col: 3, lexema: pesado]
-[clase: "=", fila: 7, col: 10, lexema: =]
-[clase: "(", fila: 7, col: 12, lexema: (]
-[clase: <Identificador>, fila: 7, col: 13, lexema: peso]
-[clase: ">", fila: 7, col: 18, lexema: >]
-[clase: <LiteralReal>, fila: 7, col: 20, lexema: 10.0]
-[clase: ")", fila: 7, col: 24, lexema: )]
-[clase: <Or>, fila: 7, col: 26, lexema: <or>]
-[clase: "(", fila: 7, col: 29, lexema: (]
-[clase: <Identificador>, fila: 7, col: 30, lexema: peso]
-[clase: "/", fila: 7, col: 35, lexema: /]
-[clase: <LiteralEntero>, fila: 7, col: 37, lexema: 2]
-[clase: "<=", fila: 7, col: 39, lexema: <=]
-[clase: <LiteralReal>, fila: 8, col: 1, lexema: +0.0]
-[clase: ")", fila: 8, col: 5, lexema: )]
-[clase: "}", fila: 9, col: 1, lexema: }]
-[clase: <EOF>, fila: 9, col: 3, lexema: <EOF>]
+{
+<real>
+peso
+;
+<bool>
+pesado
+&&
+@
+peso
+=
+45.0
+*
+12e-56
+/
+-2.05
+;
+@
+pesado
+=
+(
+peso
+>
+10.0
+)
+<or>
+(
+peso
+/
+2
+<=
++0.0
+)
+}
+<EOF>

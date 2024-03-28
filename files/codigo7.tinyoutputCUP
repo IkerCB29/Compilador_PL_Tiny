@@ -1,12 +1,12 @@
-[clase: LLAVE_APERTURA, fila: 1, col: 1, lexema: {]
-[clase: REAL, fila: 3, col: 3, lexema: <real>]
-[clase: IDENTIFICADOR, fila: 3, col: 8, lexema: var1]
-[clase: PYC, fila: 3, col: 12, lexema: ;]
-[clase: BOOLEAN, fila: 3, col: 14, lexema: <bool>]
-[clase: IDENTIFICADOR, fila: 3, col: 19, lexema: var2]
-[clase: PYC, fila: 3, col: 23, lexema: ;]
-[clase: ENTERO, fila: 3, col: 25, lexema: <int>]
-[clase: IDENTIFICADOR, fila: 3, col: 29, lexema: var3]
-[clase: CAMBIO_SEC, fila: 5, col: 3, lexema: &&]
-[clase: LLAVE_CIERRE, fila: 6, col: 1, lexema: }]
-[clase: EOF, fila: 7, col: 1, lexema: <EOF>]
+{
+<real>
+var1
+;
+<bool>
+var2
+;
+<int>
+var3
+&&
+}
+<EOF>
