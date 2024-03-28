@@ -24,11 +24,11 @@ public class Controller {
                 impresionBonitaRecursiva.imprime(asin.analiza());
             }
             else if(outputOption == 1){
-                ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
-                asin.analiza().procesa(impresionBonitaVisitante);
+                asin.analiza().imprime(output);
             }
             else if(outputOption == 2){
-
+                ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
+                asin.analiza().procesa(impresionBonitaVisitante);
             }
             else throw new IndexOutOfBoundsException("Output option must be a value between 0 - 2");
         }
@@ -50,11 +50,11 @@ public class Controller {
                 impresionBonitaRecursiva.imprime((Prog) asin.debug_parse().value);
             }
             else if(outputOption == 1){
-                ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
-                ((Prog) asin.debug_parse().value).procesa(impresionBonitaVisitante);
+                ((Prog) asin.debug_parse().value).imprime(output);
             }
             else if(outputOption == 2){
-
+                ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
+                ((Prog) asin.debug_parse().value).procesa(impresionBonitaVisitante);
             }
             else throw new IndexOutOfBoundsException("Output option must be a value between 0 - 2");
 

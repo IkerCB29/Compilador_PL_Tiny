@@ -139,19 +139,19 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     public void procesa(T_dec dec) throws Exception {
         output.write("<type>\n");
         dec.tipo().procesa(this);
-        output.write((dec.iden() + "\n"));
+        output.write(dec.iden() + "\n");
     }
 
     @Override
     public void procesa(V_dec dec) throws Exception {
         dec.tipo().procesa(this);
-        output.write((dec.iden() + "\n"));
+        output.write(dec.iden() + "\n");
     }
 
     @Override
     public void procesa(P_dec dec) throws Exception {
         output.write("<proc>\n");
-        output.write((dec.iden() + "\n"));
+        output.write(dec.iden() + "\n");
         output.write("(\n");
         dec.lParamOpt().procesa(this);
         output.write(")\n");

@@ -1,12 +1,18 @@
 package model.sintaxis;
 
+import java.io.IOException;
 import model.sintaxis.impresionVisitante.Procesamiento;
+import view.Printer;
 
 public abstract class SintaxisAbstracta {
     private interface Editable{
         Nodo ponFila(int fila);
         Nodo ponCol(int col);
     }
+    private interface Printable{
+        void imprime(Printer output) throws IOException;
+    }
+
     public static abstract class Nodo implements Editable {
         public Nodo() {
             fila=col=-1;
@@ -34,18 +40,18 @@ public abstract class SintaxisAbstracta {
     /*
       Géneros
     */
-    public interface Decs_opt extends Editable {
+    public interface Decs_opt extends Editable, Printable {
         Decs decs();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Decs extends Editable {
+    public interface Decs extends Editable, Printable {
         Decs decs();
         Dec dec();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Dec extends Editable {
+    public interface Dec extends Editable, Printable {
         Tipo tipo();
         String iden();
         LParam_opt lParamOpt();
@@ -53,7 +59,7 @@ public abstract class SintaxisAbstracta {
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Tipo extends Editable {
+    public interface Tipo extends Editable, Printable {
         Tipo tipo();
         String iden();
         String capacidad();
@@ -61,47 +67,47 @@ public abstract class SintaxisAbstracta {
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Campos extends Editable {
+    public interface Campos extends Editable, Printable {
         Campos campos();
         Campo campo();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Campo extends Editable {
+    public interface Campo extends Editable, Printable {
         Tipo tipo();
         String iden();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface LParam_opt extends Editable {
+    public interface LParam_opt extends Editable, Printable {
         LParam lParam();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface LParam extends Editable {
+    public interface LParam extends Editable, Printable {
         LParam lParam();
         Param param();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Param extends Editable {
+    public interface Param extends Editable, Printable {
         Tipo tipo();
         String iden();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Instrs_opt extends Editable {
+    public interface Instrs_opt extends Editable, Printable {
         Instrs instrs();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Instrs extends Editable {
+    public interface Instrs extends Editable, Printable {
         Instrs instrs();
         Instr instr();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Instr extends Editable {
+    public interface Instr extends Editable, Printable {
         Exp exp();
         Bloque bloque();
         Bloque bloqueElse();
@@ -110,18 +116,18 @@ public abstract class SintaxisAbstracta {
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Exps_opt extends Editable {
+    public interface Exps_opt extends Editable, Printable {
         Exps exps();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Exps extends Editable {
+    public interface Exps extends Editable, Printable {
         Exps exps();
         Exp exp();
         void procesa(Procesamiento p) throws Exception;
     }
 
-    public interface Exp extends Editable {
+    public interface Exp extends Editable, Printable {
         String iden();
         String valor();
         Exp opnd0();
@@ -143,6 +149,10 @@ public abstract class SintaxisAbstracta {
             return "prog("+bq+")";
         }
         public Bloque bloque() { return bq; }
+        public void imprime(Printer output) throws IOException {
+            bq.imprime(output);
+            output.write("<EOF>\n");
+        }
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -159,6 +169,12 @@ public abstract class SintaxisAbstracta {
         }
         public Decs_opt decsOpt() { return decs; }
         public Instrs_opt instrsOpt() { return instrs; }
+        public void imprime(Printer output) throws IOException {
+            output.write("{\n");
+            decs.imprime(output);
+            instrs.imprime(output);
+            output.write("}\n");
+        }
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -174,6 +190,11 @@ public abstract class SintaxisAbstracta {
         @Override
         public Decs decs() { return decs; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            decs.imprime(output);
+            output.write("&&\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -186,6 +207,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Decs decs() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {}
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -206,6 +229,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public Dec dec() { return dec; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            decs.imprime(output);
+            output.write(";\n");
+            dec.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -222,6 +251,10 @@ public abstract class SintaxisAbstracta {
         public Decs decs() { throw new UnsupportedOperationException(); }
         @Override
         public Dec dec() { return dec; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            dec.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -246,6 +279,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public Bloque bloque() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<type>\n");
+            tipo.imprime(output);
+            output.write(iden + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -268,6 +307,11 @@ public abstract class SintaxisAbstracta {
         public LParam_opt lParamOpt() { throw new UnsupportedOperationException(); }
         @Override
         public Bloque bloque() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            tipo.imprime(output);
+            output.write(iden + "\n");
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -294,6 +338,15 @@ public abstract class SintaxisAbstracta {
         @Override
         public Bloque bloque() { return bloque; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<proc>\n");
+            output.write(iden + "\n");
+            output.write("(\n");
+            param.imprime(output);
+            output.write(")\n");
+            bloque.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -317,6 +370,13 @@ public abstract class SintaxisAbstracta {
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            tipo.imprime(output);
+            output.write("[\n");
+            output.write(capacidad + "\n");
+            output.write("]\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -338,6 +398,11 @@ public abstract class SintaxisAbstracta {
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("^\n");
+            tipo.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -356,6 +421,10 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<int>\n");
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -376,6 +445,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<real>\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -395,6 +468,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<bool>\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -413,6 +490,10 @@ public abstract class SintaxisAbstracta {
         public String capacidad() { throw new UnsupportedOperationException(); }
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<string>\n");
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -435,6 +516,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public Campos campos() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write(iden + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -456,6 +541,13 @@ public abstract class SintaxisAbstracta {
         @Override
         public Campos campos() { return campos; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<struct>\n");
+            output.write("{\n");
+            campos.imprime(output);
+            output.write("}\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -475,6 +567,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public Campo campo() { return campo; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            campos.imprime(output);
+            output.write(",\n");
+            campo.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -491,6 +589,10 @@ public abstract class SintaxisAbstracta {
         public Campos campos() { throw new UnsupportedOperationException(); }
         @Override
         public Campo campo() { return campo; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            campo.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -511,6 +613,11 @@ public abstract class SintaxisAbstracta {
         @Override
         public String iden() { return iden; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            tipo.imprime(output);
+            output.write(iden + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -526,6 +633,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public LParam lParam() { return lParam; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            lParam.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -538,6 +649,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public LParam lParam() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {}
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -558,6 +671,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public Param param() { return param; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            lParam.imprime(output);
+            output.write(",\n");
+            param.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -574,6 +693,10 @@ public abstract class SintaxisAbstracta {
         public LParam lParam() { throw new UnsupportedOperationException(); }
         @Override
         public Param param() { return param; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            param.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -594,6 +717,11 @@ public abstract class SintaxisAbstracta {
         @Override
         public String iden() { return iden; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            tipo.imprime(output);
+            output.write(iden + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -613,6 +741,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public String iden() { return iden; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            tipo.imprime(output);
+            output.write("&\n");
+            output.write(iden + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -628,6 +762,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public Instrs instrs() { return instrs; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            instrs.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -640,6 +778,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Instrs instrs() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {}
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -660,6 +800,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public Instr instr() { return instr; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            instrs.imprime(output);
+            output.write(";\n");
+            instr.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -676,6 +822,10 @@ public abstract class SintaxisAbstracta {
         public Instrs instrs() { throw new UnsupportedOperationException(); }
         @Override
         public Instr instr() { return instr; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            instr.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -699,6 +849,11 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("@\n");
+            exp.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -724,6 +879,12 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<if>\n");
+            exp.imprime(output);
+            bloque.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -752,6 +913,14 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<if>\n");
+            exp.imprime(output);
+            bloqueIf.imprime(output);
+            output.write("<else>\n");
+            bloqueElse.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -777,6 +946,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<while>\n");
+            exp.imprime(output);
+            bloque.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -799,6 +974,11 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<read>\n");
+            exp.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -823,6 +1003,11 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<write>\n");
+            exp.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -845,6 +1030,11 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<new>\n");
+            exp.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -869,6 +1059,11 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<delete>\n");
+            exp.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -889,6 +1084,10 @@ public abstract class SintaxisAbstracta {
         public String iden() { throw new UnsupportedOperationException(); }
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<nl>\n");
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -915,6 +1114,14 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exps_opt expsOpt() { return exps; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            output.write("<call>\n");
+            output.write(iden + "\n");
+            output.write("(\n");
+            exps.imprime(output);
+            output.write(")\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -938,6 +1145,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exps_opt expsOpt() { throw new UnsupportedOperationException(); }
         @Override
+        public void imprime(Printer output) throws IOException {
+            bloque.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -953,6 +1164,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exps exps() { return exps; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            exps.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -965,6 +1180,8 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public Exps exps() { throw new UnsupportedOperationException(); }
+        @Override
+        public void imprime(Printer output) throws IOException {}
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -985,6 +1202,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exp exp() { return exp; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            exps.imprime(output);
+            output.write(",\n");
+            exp.imprime(output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1001,6 +1224,10 @@ public abstract class SintaxisAbstracta {
         public Exps exps() { throw new UnsupportedOperationException(); }
         @Override
         public Exp exp() { return exp; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            exp.imprime(output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1049,8 +1276,11 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 0; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "=", opnd1, 1, 0, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
-
     }
 
     public static class My extends ExpBin {
@@ -1062,6 +1292,10 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public int prioridad() {  return 1; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, ">", opnd1, 1, 2, output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1076,6 +1310,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 1; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "<", opnd1, 1, 2, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1088,6 +1326,10 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public int prioridad() {  return 1; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, ">=", opnd1, 1, 2, output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1102,6 +1344,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 1; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "<=", opnd1, 1, 2, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1114,6 +1360,10 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public int prioridad() {  return 1; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "==", opnd1, 1, 2, output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1128,6 +1378,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 1; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "!=", opnd1, 1, 2, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1141,6 +1395,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 2; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "+", opnd1, 2, 3, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
     public static class Resta extends ExpBin {
@@ -1152,6 +1410,10 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public int prioridad() {  return 2; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "-", opnd1, 3, 3, output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1166,6 +1428,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 3; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "<and>", opnd1, 4, 3, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1178,6 +1444,10 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public int prioridad() {  return 3; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "<or>", opnd1, 4, 4, output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1192,6 +1462,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 4; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "*", opnd1, 4, 5, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
     public static class Div extends ExpBin {
@@ -1203,6 +1477,10 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public int prioridad() {  return 4; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "/", opnd1, 4, 5, output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1217,6 +1495,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 4; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpBin(opnd0, "%", opnd1, 4, 5, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1230,6 +1512,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 5; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpPre(opnd, "-", 5, output);
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1242,6 +1528,10 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public int prioridad() {  return 5; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeExpPre(opnd, "<not>", 5, output);
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1268,6 +1558,13 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 6; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeOpnd(opnd, 6, output);
+            output.write("[\n");
+            imprimeOpnd(pos, 0, output);
+            output.write("]\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1293,6 +1590,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 6; }
         @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeOpnd(opnd, 6, output);
+            output.write(".\n");
+            output.write(acceso + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1315,6 +1618,11 @@ public abstract class SintaxisAbstracta {
         public Exp opnd1() { throw new UnsupportedOperationException(); }
         @Override
         public int prioridad() {  return 6; }
+        @Override
+        public void imprime(Printer output) throws IOException {
+            imprimeOpnd(opnd, 6, output);
+            output.write("^\n");
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1339,6 +1647,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 7; }
         @Override
+        public void imprime(Printer output) throws IOException{
+            output.write(num + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1362,6 +1674,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 7; }
         @Override
+        public void imprime(Printer output) throws IOException{
+            output.write(num + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1383,6 +1699,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 7; }
         @Override
+        public void imprime(Printer output) throws IOException{
+            output.write("<true>\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1403,6 +1723,10 @@ public abstract class SintaxisAbstracta {
         public Exp opnd1() { throw new UnsupportedOperationException(); }
         @Override
         public int prioridad() {  return 7; }
+        @Override
+        public void imprime(Printer output) throws IOException{
+            output.write("<false>\n");
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1427,6 +1751,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 7; }
         @Override
+        public void imprime(Printer output) throws IOException{
+            output.write(string + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1450,6 +1778,10 @@ public abstract class SintaxisAbstracta {
         @Override
         public int prioridad() {  return 7; }
         @Override
+        public void imprime(Printer output) throws IOException{
+            output.write(id + "\n");
+        }
+        @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
 
@@ -1470,6 +1802,10 @@ public abstract class SintaxisAbstracta {
         public Exp opnd1() { throw new UnsupportedOperationException(); }
         @Override
         public int prioridad() {  return 7; }
+        @Override
+        public void imprime(Printer output) throws IOException{
+            output.write("<null>\n");
+        }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -1682,5 +2018,26 @@ public abstract class SintaxisAbstracta {
     }
     public Exp nulo() {
         return new Null_exp();
+    }
+
+    private static void imprimeExpPre(Exp opnd, String op, int np, Printer output) throws IOException {
+        output.write((op + "\n"));
+        imprimeOpnd(opnd, np, output);
+    }
+
+    private static void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1, Printer output) throws IOException {
+        imprimeOpnd(opnd0, np0, output);
+        output.write((op + "\n"));
+        imprimeOpnd(opnd1, np1, output);
+    }
+
+    private static void imprimeOpnd(Exp opnd, int minPrior, Printer output) throws IOException {
+        if (opnd.prioridad() < minPrior){
+            output.write("(\n");
+        }
+        opnd.imprime(output);
+        if (opnd.prioridad() < minPrior){
+            output.write(")\n");
+        }
     }
 }
