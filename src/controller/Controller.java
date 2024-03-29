@@ -15,22 +15,24 @@ import model.sintaxis.impresionVisitante.ImpresionBonitaVisitante;
 import view.Printer;
 
 public class Controller {
-    public void analisisSintacticoCC(Reader input, Printer output, int outputOption) throws Exception {
+    public void analisisSintacticoCC(Reader input, Printer output, String outputOption) throws Exception {
         try{
             ConstructorASTsCC asin = new ConstructorASTsCC(input);
             asin.disable_tracing();
-            if(outputOption == 0) {
-                ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
-                impresionBonitaRecursiva.imprime(asin.analiza());
+            switch (outputOption) {
+                case "rec":
+                    ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
+                    impresionBonitaRecursiva.imprime(asin.analiza());
+                    break;
+                case "int":
+                    asin.analiza().imprime(output);
+                    break;
+                case "vis":
+                    ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
+                    asin.analiza().procesa(impresionBonitaVisitante);
+                    break;
+                default: throw new Exception("Invalid parameters");
             }
-            else if(outputOption == 1){
-                asin.analiza().imprime(output);
-            }
-            else if(outputOption == 2){
-                ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
-                asin.analiza().procesa(impresionBonitaVisitante);
-            }
-            else throw new IndexOutOfBoundsException("Output option must be a value between 0 - 2");
         }
         catch(TokenMgrError e) {
             output.writeLexicoException();
@@ -41,22 +43,24 @@ public class Controller {
         output.close();
     }
 
-    public void analisisSintacticoCUP(Reader input, Printer output, int outputOption) throws Exception {
+    public void analisisSintacticoCUP(Reader input, Printer output, String outputOption) throws Exception {
         try {
             AnalizadorLexico alex = new AnalizadorLexico(input);
             ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);
-            if(outputOption == 0) {
-                ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
-                impresionBonitaRecursiva.imprime((Prog) asin.debug_parse().value);
+            switch (outputOption) {
+                case "rec":
+                    ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
+                    impresionBonitaRecursiva.imprime((Prog) asin.debug_parse().value);
+                    break;
+                case "int":
+                    ((Prog) asin.debug_parse().value).imprime(output);
+                    break;
+                case "vis":
+                    ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
+                    ((Prog) asin.debug_parse().value).procesa(impresionBonitaVisitante);
+                    break;
+                default: throw new Exception("Invalid parameters");
             }
-            else if(outputOption == 1){
-                ((Prog) asin.debug_parse().value).imprime(output);
-            }
-            else if(outputOption == 2){
-                ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
-                ((Prog) asin.debug_parse().value).procesa(impresionBonitaVisitante);
-            }
-            else throw new IndexOutOfBoundsException("Output option must be a value between 0 - 2");
 
         }
         catch (LexicoException e){
