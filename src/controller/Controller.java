@@ -5,6 +5,8 @@ import java.io.*;
 
 import exceptions.LexicoException;
 import model.lexico.AnalizadorLexico;
+import model.sintaxis.AnalizadorSintacticoCC;
+import model.sintaxis.AnalizadorSintacticoCUP;
 import model.sintaxis.ConstructorASTsCC;
 import model.sintaxis.ConstructorASTsCUP;
 import model.sintaxis.ParseException;
@@ -15,6 +17,29 @@ import model.sintaxis.impresionVisitante.ImpresionBonitaVisitante;
 import view.Printer;
 
 public class Controller {
+    public void analisisSintacticoCC(Reader input, Printer output) throws Exception {
+        try {
+            ConstructorASTsCC asin = new AnalizadorSintacticoCC(input, output);
+            asin.disable_tracing();
+            Prog prog = asin.analiza();
+            output.write("IMPRESION RECURSIVA\n");
+            ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
+            impresionBonitaRecursiva.imprime(prog);
+            output.write("IMPRESION INTERPRETE\n");
+            prog.imprime(output);
+            output.write("IMPRESION VISITANTE\n");
+            ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
+            prog.procesa(impresionBonitaVisitante);
+        }
+        catch(TokenMgrError e) {
+            output.write("ERROR_LEXICO\n");
+        }
+        catch(ParseException e) {
+            output.write("ERROR_SINTACTICO\n");
+        }
+        output.close();
+    }
+
     public void analisisSintacticoCC(Reader input, Printer output, String outputOption) throws Exception {
         try{
             ConstructorASTsCC asin = new ConstructorASTsCC(input);
@@ -35,10 +60,33 @@ public class Controller {
             }
         }
         catch(TokenMgrError e) {
-            output.writeLexicoException();
+            output.write("ERROR_LEXICO\n");
         }
         catch(ParseException e) {
-            output.writeSintaxisException();
+            output.write("ERROR_SINTACTICO\n");
+        }
+        output.close();
+    }
+
+    public void analisisSintacticoCUP(Reader input, Printer output) throws Exception {
+        try {
+            AnalizadorLexico alex = new AnalizadorLexico(input);
+            ConstructorASTsCUP asin = new AnalizadorSintacticoCUP(alex, output);
+            Prog prog = (Prog) asin.debug_parse().value;
+            output.write("IMPRESION RECURSIVA\n");
+            ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
+            impresionBonitaRecursiva.imprime(prog);
+            output.write("IMPRESION INTERPRETE\n");
+            prog.imprime(output);
+            output.write("IMPRESION VISITANTE\n");
+            ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
+            prog.procesa(impresionBonitaVisitante);
+        }
+        catch (LexicoException e){
+            output.write("ERROR_LEXICO\n");
+        }
+        catch (SintaxisException e){
+            output.write("ERROR_SINTACTICO\n");
         }
         output.close();
     }
@@ -64,10 +112,10 @@ public class Controller {
 
         }
         catch (LexicoException e){
-            output.writeLexicoException();
+            output.write("ERROR_LEXICO\n");
         }
         catch (SintaxisException e){
-            output.writeSintaxisException();
+            output.write("ERROR_SINTACTICO\n");
         }
         output.close();
     }

@@ -9,18 +9,7 @@ import view.FilePrinter;
 
 public class Tester {
 	private final static String[] FILES = {
-			"files/codigo1.tiny",
-			"files/codigo2.tiny",
-			"files/codigo3.tiny",
-			"files/codigo4.tiny",
-			"files/codigo5.tiny",
-			"files/codigo6.tiny",
-			"files/codigo7.tiny",
-			"files/codigo8.tiny",
-			"files/codigo9.tiny",
-			"files/codigo10.tiny",
-			"files/codigo11.tiny",
-			"files/codigo12.tiny"
+		"files/samplea1.in"
 	};
 
 	public static void main(String[] args) {
@@ -29,12 +18,14 @@ public class Tester {
 		for(String file : FILES) {
 			try {
 				Reader input = new BufferedReader(new FileReader(file));
-				c.analisisSintacticoCC(input, new FilePrinter(file + "outputCC"), "rec");
-				input.close();
-
-				input = new BufferedReader(new FileReader(file));
-				c.analisisSintacticoCUP(input, new FilePrinter(file + "outputCUP"), "rec");
-				input.close();
+				char type = (char) input.read();
+				if(type == 'a'){
+					c.analisisSintacticoCC(input, new FilePrinter("files/tester.out"));
+				}
+				else if(type == 'd'){
+					c.analisisSintacticoCUP(input, new FilePrinter("files/tester.out"));
+				}
+				else throw new RuntimeException("Tipo invalido");
 			}
 			catch (Exception e) {
 				e.printStackTrace();

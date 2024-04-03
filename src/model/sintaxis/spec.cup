@@ -48,11 +48,12 @@ action code {:
 :}
 
 
-terminal      ENTERO, REAL, BOOLEAN, STRING, SUMA, RESTA, POR, DIV, MODULO, AND, OR, NOT, MENOR, MAYOR, MENOR_IGUAL, MAYOR_IGUAL,
-              IGUAL, DIFERENTE, ASIGNACION, PYC, PAP, PCIERRE, LLAVE_APERTURA, LLAVE_CIERRE, COR_APERTURA, COR_CIERRE,
+terminal      ENTERO, REAL, BOOLEAN, STRING, PYC, PAP, PCIERRE, LLAVE_APERTURA, LLAVE_CIERRE, COR_CIERRE,
               COMA, ACCESO, EVALUA, CAMBIO_SEC, PROC, IF, ELSE, WHILE, STRUCT, NEW, DELETE, READ, WRITE, NL,
-              TYPE, CALL, REFERENCIA, PUNTERO;
-terminal StringLocalizado   IDENTIFICADOR, LITERAL_ENTERO, LITERAL_REAL, LITERAL_TRUE, LITERAL_FALSE, LITERAL_STRING, NULL;
+              TYPE, CALL, REFERENCIA;
+terminal StringLocalizado   IDENTIFICADOR, LITERAL_ENTERO, LITERAL_REAL, LITERAL_TRUE, LITERAL_FALSE, LITERAL_STRING,
+                            NULL, COR_APERTURA, PUNTERO, SUMA, RESTA, POR, DIV, MODULO, AND, OR, NOT, MENOR, MAYOR,
+                            MENOR_IGUAL, MAYOR_IGUAL, IGUAL, DIFERENTE, ASIGNACION;
 
 
 non terminal Prog programa;
@@ -73,7 +74,7 @@ non terminal Instr instruccion, instruccion_eval, instruccion_if, instruccion_wh
 non terminal Exps_opt lista_expresiones_opt;
 non terminal Exps lista_expresiones;
 non terminal Exp E0, E1, E2, E3, E4, E5, E6, E7, operando;
-non terminal String OP1, OP4, OP5;
+non terminal StringLocalizado OP1, OP4, OP5;
 
 
 programa ::= bloque: bq
@@ -205,68 +206,68 @@ lista_expresiones ::= lista_expresiones: exps COMA E0: exp
 lista_expresiones ::= E0: exp
    {: RESULT = sem.una_exp(exp); :};
 
-E0 ::= E1: opnd0 ASIGNACION E0: opnd1
-   {: RESULT = sem.mkop("=", opnd0, opnd1); :};
+E0 ::= E1: opnd0 ASIGNACION: op E0: opnd1
+   {: RESULT = (Exp)sem.mkop("=", opnd0, opnd1).ponFila(op.fila()).ponCol(op.col()); :};
 E0 ::= E1: exp
  {: RESULT = exp; :};
 E1 ::= E1: opnd0 OP1: op E2: opnd1
-   {: RESULT = sem.mkop(op, opnd0, opnd1); :};
+   {: RESULT = (Exp)sem.mkop(op.str(), opnd0, opnd1).ponFila(op.fila()).ponCol(op.col()); :};
 E1 ::= E2: exp
  {: RESULT = exp; :};
-E2 ::= E2: opnd0 SUMA E3: opnd1
-   {: RESULT = sem.mkop("+", opnd0, opnd1); :};
-E2 ::= E3: opnd0 RESTA E3: opnd1
-   {: RESULT = sem.mkop("-", opnd0, opnd1); :};
+E2 ::= E2: opnd0 SUMA: op E3: opnd1
+   {: RESULT = (Exp)sem.mkop("+", opnd0, opnd1).ponFila(op.fila()).ponCol(op.col()); :};
+E2 ::= E3: opnd0 RESTA: op E3: opnd1
+   {: RESULT = (Exp)sem.mkop("-", opnd0, opnd1).ponFila(op.fila()).ponCol(op.col()); :};
 E2 ::= E3: exp
  {: RESULT = exp; :};
-E3 ::= E4: opnd0 AND E3: opnd1
-   {: RESULT = sem.mkop("and", opnd0, opnd1); :};
-E3 ::= E4: opnd0 OR E4: opnd1
-   {: RESULT = sem.mkop("or", opnd0, opnd1); :};
+E3 ::= E4: opnd0 AND: op E3: opnd1
+   {: RESULT = (Exp)sem.mkop("and", opnd0, opnd1).ponFila(op.fila()).ponCol(op.col()); :};
+E3 ::= E4: opnd0 OR: op E4: opnd1
+   {: RESULT = (Exp)sem.mkop("or", opnd0, opnd1).ponFila(op.fila()).ponCol(op.col()); :};
 E3 ::= E4: exp
  {: RESULT = exp; :};
 E4 ::= E4: opnd0 OP4: op E5: opnd1
-   {: RESULT = sem.mkop(op, opnd0, opnd1); :};
+   {: RESULT = (Exp)sem.mkop(op.str(), opnd0, opnd1).ponFila(op.fila()).ponCol(op.col());;:};
 E4 ::= E5: exp
  {: RESULT = exp; :};
 E5 ::= OP5: op E5: opnd
-   {: RESULT = sem.mkop_pre(op, opnd); :};
+   {: RESULT = (Exp)sem.mkop_pre(op.str(), opnd).ponFila(op.fila()).ponCol(op.col()); :};
 E5 ::= E6: exp
  {: RESULT = exp; :};
-E6 ::= E6: opnd COR_APERTURA E0: pos COR_CIERRE
-   {: RESULT = sem.indexacion(opnd, pos); :};
+E6 ::= E6: opnd COR_APERTURA: cAp E0: pos COR_CIERRE
+   {: RESULT = (Exp)sem.indexacion(opnd, pos).ponFila(cAp.fila()).ponCol(cAp.col()); :};
 E6 ::= E6: opnd ACCESO IDENTIFICADOR: acceso
    {: RESULT = (Exp)sem.acceso(opnd, acceso.str()).ponFila(acceso.fila()).ponCol(acceso.col()); :};
-E6 ::= E6: opnd PUNTERO
-   {: RESULT = sem.indireccion(opnd); :};
+E6 ::= E6: opnd PUNTERO: punt
+   {: RESULT = (Exp)sem.indireccion(opnd).ponFila(punt.fila()).ponCol(punt.col()); :};
 E6 ::= E7: exp
  {: RESULT = exp; :};
 E7 ::= PAP E0: exp PCIERRE
  {: RESULT = exp; :};
 E7 ::= operando: opnd
  {: RESULT = opnd; :};
-OP1 ::= MAYOR
- {: RESULT = ">"; :};
-OP1 ::= MENOR
- {: RESULT = "<"; :};
-OP1 ::= MAYOR_IGUAL
- {: RESULT = ">="; :};
-OP1 ::= MENOR_IGUAL
- {: RESULT = "<="; :};
-OP1 ::= IGUAL
- {: RESULT = "=="; :};
-OP1 ::= DIFERENTE
- {: RESULT = "!="; :};
-OP4 ::= POR
- {: RESULT = "*"; :};
-OP4 ::= DIV
- {: RESULT = "/"; :};
-OP4 ::= MODULO
- {: RESULT = "%"; :};
-OP5 ::= RESTA
- {: RESULT = "-"; :};
-OP5 ::= NOT
- {: RESULT = "not"; :};
+OP1 ::= MAYOR: op
+ {: RESULT = op; :};
+OP1 ::= MENOR: op
+ {: RESULT = op; :};
+OP1 ::= MAYOR_IGUAL: op
+ {: RESULT = op; :};
+OP1 ::= MENOR_IGUAL: op
+ {: RESULT = op; :};
+OP1 ::= IGUAL: op
+ {: RESULT = op; :};
+OP1 ::= DIFERENTE: op
+ {: RESULT = op; :};
+OP4 ::= POR: op
+ {: RESULT = op; :};
+OP4 ::= DIV: op
+ {: RESULT = op; :};
+OP4 ::= MODULO: op
+ {: RESULT = op; :};
+OP5 ::= RESTA: op
+ {: RESULT = op; :};
+OP5 ::= NOT: op
+ {: RESULT = new StringLocalizado("not", op.fila(), op.col()); :};
 operando ::= LITERAL_REAL: re
    {: RESULT = (Exp)sem.real(re.str()).ponFila(re.fila()).ponCol(re.col()); :};
 operando ::= LITERAL_ENTERO: ent

@@ -15,15 +15,6 @@ public class FilePrinter implements Printer{
         output.write(message);
     }
 
-    public void writeLexicoException() throws IOException {
-        output.write("ERROR_LEXICO\n");
-    }
-
-    @Override
-    public void writeSintaxisException() throws IOException{
-        output.write("ERROR_SINTACTICO\n");
-    }
-
     @Override
     public void close() throws IOException {
         output.close();

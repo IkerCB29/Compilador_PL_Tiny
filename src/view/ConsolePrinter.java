@@ -4,19 +4,7 @@ import java.io.IOException;
 
 public class ConsolePrinter implements Printer{
     @Override
-    public void write(String message) throws IOException {
-        System.out.print(message);
-    }
-
-    public void writeLexicoException() {
-        System.out.println("ERROR_LEXICO");
-    }
-
-    @Override
-    public void writeSintaxisException() {
-        System.out.println("ERROR_SINTACTICO");
-    }
-
+    public void write(String message) { System.out.print(message); }
     @Override
     public void close() {}
 }

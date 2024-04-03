@@ -8,59 +8,59 @@ package model.sintaxis;
 /** CUP generated class containing symbol constants. */
 public class ClaseLexica {
   /* terminals */
-  public static final int LITERAL_ENTERO = 47;
-  public static final int POR = 8;
-  public static final int PCIERRE = 23;
-  public static final int LITERAL_REAL = 48;
+  public static final int LITERAL_ENTERO = 30;
+  public static final int POR = 40;
+  public static final int PCIERRE = 8;
+  public static final int LITERAL_REAL = 31;
   public static final int ENTERO = 2;
-  public static final int DIFERENTE = 19;
-  public static final int RESTA = 7;
-  public static final int COR_CIERRE = 27;
-  public static final int REFERENCIA = 44;
-  public static final int WRITE = 40;
-  public static final int DELETE = 38;
-  public static final int IDENTIFICADOR = 46;
-  public static final int NOT = 13;
-  public static final int AND = 11;
-  public static final int IGUAL = 18;
-  public static final int TYPE = 42;
-  public static final int OR = 12;
-  public static final int CALL = 43;
-  public static final int DIV = 9;
-  public static final int SUMA = 6;
-  public static final int IF = 33;
+  public static final int DIFERENTE = 51;
+  public static final int RESTA = 39;
+  public static final int COR_CIERRE = 11;
+  public static final int REFERENCIA = 28;
+  public static final int DELETE = 22;
+  public static final int WRITE = 24;
+  public static final int NOT = 45;
+  public static final int AND = 43;
+  public static final int IDENTIFICADOR = 29;
+  public static final int IGUAL = 50;
+  public static final int TYPE = 26;
+  public static final int OR = 44;
+  public static final int CALL = 27;
+  public static final int DIV = 41;
+  public static final int SUMA = 38;
+  public static final int IF = 17;
   public static final int EOF = 0;
   public static final int BOOLEAN = 4;
-  public static final int EVALUA = 30;
-  public static final int NEW = 37;
+  public static final int EVALUA = 14;
+  public static final int NEW = 21;
   public static final int error = 1;
-  public static final int COMA = 28;
-  public static final int MODULO = 10;
-  public static final int NULL = 52;
-  public static final int MENOR = 14;
-  public static final int PUNTERO = 45;
-  public static final int ASIGNACION = 20;
+  public static final int COMA = 12;
+  public static final int MODULO = 42;
+  public static final int MENOR = 46;
+  public static final int NULL = 35;
+  public static final int PUNTERO = 37;
+  public static final int ASIGNACION = 52;
+  public static final int MAYOR = 47;
   public static final int REAL = 3;
-  public static final int MAYOR = 15;
-  public static final int PAP = 22;
-  public static final int ELSE = 34;
-  public static final int NL = 41;
-  public static final int READ = 39;
-  public static final int LLAVE_APERTURA = 24;
-  public static final int LITERAL_STRING = 51;
-  public static final int LITERAL_FALSE = 50;
-  public static final int COR_APERTURA = 26;
-  public static final int WHILE = 35;
-  public static final int ACCESO = 29;
-  public static final int MAYOR_IGUAL = 17;
-  public static final int LLAVE_CIERRE = 25;
-  public static final int PROC = 32;
+  public static final int PAP = 7;
+  public static final int ELSE = 18;
+  public static final int NL = 25;
+  public static final int LLAVE_APERTURA = 9;
+  public static final int READ = 23;
+  public static final int COR_APERTURA = 36;
+  public static final int LITERAL_STRING = 34;
+  public static final int LITERAL_FALSE = 33;
+  public static final int WHILE = 19;
+  public static final int MAYOR_IGUAL = 49;
+  public static final int ACCESO = 13;
+  public static final int LLAVE_CIERRE = 10;
+  public static final int PROC = 16;
   public static final int STRING = 5;
-  public static final int MENOR_IGUAL = 16;
-  public static final int STRUCT = 36;
-  public static final int PYC = 21;
-  public static final int LITERAL_TRUE = 49;
-  public static final int CAMBIO_SEC = 31;
+  public static final int MENOR_IGUAL = 48;
+  public static final int STRUCT = 20;
+  public static final int PYC = 6;
+  public static final int LITERAL_TRUE = 32;
+  public static final int CAMBIO_SEC = 15;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -68,27 +68,11 @@ public class ClaseLexica {
   "REAL",
   "BOOLEAN",
   "STRING",
-  "SUMA",
-  "RESTA",
-  "POR",
-  "DIV",
-  "MODULO",
-  "AND",
-  "OR",
-  "NOT",
-  "MENOR",
-  "MAYOR",
-  "MENOR_IGUAL",
-  "MAYOR_IGUAL",
-  "IGUAL",
-  "DIFERENTE",
-  "ASIGNACION",
   "PYC",
   "PAP",
   "PCIERRE",
   "LLAVE_APERTURA",
   "LLAVE_CIERRE",
-  "COR_APERTURA",
   "COR_CIERRE",
   "COMA",
   "ACCESO",
@@ -107,14 +91,30 @@ public class ClaseLexica {
   "TYPE",
   "CALL",
   "REFERENCIA",
-  "PUNTERO",
   "IDENTIFICADOR",
   "LITERAL_ENTERO",
   "LITERAL_REAL",
   "LITERAL_TRUE",
   "LITERAL_FALSE",
   "LITERAL_STRING",
-  "NULL"
+  "NULL",
+  "COR_APERTURA",
+  "PUNTERO",
+  "SUMA",
+  "RESTA",
+  "POR",
+  "DIV",
+  "MODULO",
+  "AND",
+  "OR",
+  "NOT",
+  "MENOR",
+  "MAYOR",
+  "MENOR_IGUAL",
+  "MAYOR_IGUAL",
+  "IGUAL",
+  "DIFERENTE",
+  "ASIGNACION"
   };
 }
 

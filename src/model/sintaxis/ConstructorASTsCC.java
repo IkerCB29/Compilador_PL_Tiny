@@ -852,12 +852,12 @@ Exp exp; Exp rexp;
   final public Exp RE0(Exp exph) throws ParseException {
     trace_call("RE0");
     try {
-Exp exp;
+Token op; Exp exp;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case 49:{
-        jj_consume_token(49);
+        op = jj_consume_token(49);
         exp = E0();
-{if ("" != null) return sem.mkop("=", exph, exp);}
+{if ("" != null) return (Exp)sem.mkop("=", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
         break;
         }
       default:
@@ -886,7 +886,7 @@ Exp exp, rexp;
   final public Exp RE1(Exp exph) throws ParseException {
     trace_call("RE1");
     try {
-String op; Exp exp, rexp;
+Token op; Exp exp, rexp;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case 52:
       case 53:
@@ -896,7 +896,7 @@ String op; Exp exp, rexp;
       case 57:{
         op = OP1();
         exp = E2();
-        rexp = RE1(sem.mkop(op, exph, exp));
+        rexp = RE1((Exp)sem.mkop(op.image, exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn));
 {if ("" != null) return rexp;}
         break;
         }
@@ -927,12 +927,12 @@ Exp exp, rexp1, rexp2;
   final public Exp R1E2(Exp exph) throws ParseException {
     trace_call("R1E2");
     try {
-Exp exp, rexp;
+Token op; Exp exp, rexp;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case 50:{
-        jj_consume_token(50);
+        op = jj_consume_token(50);
         exp = E3();
-        rexp = R1E2(sem.mkop("+", exph, exp));
+        rexp = R1E2((Exp)sem.mkop("+", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn));
 {if ("" != null) return rexp;}
         break;
         }
@@ -949,12 +949,12 @@ Exp exp, rexp;
   final public Exp R2E2(Exp exph) throws ParseException {
     trace_call("R2E2");
     try {
-Exp exp;
+Token op; Exp exp;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case 51:{
-        jj_consume_token(51);
+        op = jj_consume_token(51);
         exp = E3();
-{if ("" != null) return sem.mkop("-", exph, exp);}
+{if ("" != null) return (Exp)sem.mkop("-", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
         break;
         }
       default:
@@ -983,18 +983,18 @@ Exp exp, rexp;
   final public Exp RE3(Exp exph) throws ParseException {
     trace_call("RE3");
     try {
-Exp exp;
+Token op; Exp exp;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case And:{
-        jj_consume_token(And);
+        op = jj_consume_token(And);
         exp = E3();
-{if ("" != null) return sem.mkop("and", exph, exp);}
+{if ("" != null) return (Exp)sem.mkop("and", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
         break;
         }
       case Or:{
-        jj_consume_token(Or);
+        op = jj_consume_token(Or);
         exp = E4();
-{if ("" != null) return sem.mkop("or", exph, exp);}
+{if ("" != null) return (Exp)sem.mkop("or", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
         break;
         }
       default:
@@ -1023,14 +1023,14 @@ Exp exp, rexp;
   final public Exp RE4(Exp exph) throws ParseException {
     trace_call("RE4");
     try {
-String op; Exp exp, rexp;
+Token op; Exp exp, rexp;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case 58:
       case 59:
       case 60:{
         op = OP4();
         exp = E5();
-        rexp = RE4(sem.mkop(op, exph, exp));
+        rexp = RE4((Exp)sem.mkop(op.image, exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn));
 {if ("" != null) return rexp;}
         break;
         }
@@ -1047,13 +1047,18 @@ String op; Exp exp, rexp;
   final public Exp E5() throws ParseException {
     trace_call("E5");
     try {
-String op; Exp exp;
+Token op; Exp exp;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case Not:
       case 51:{
-        op = OP5();
+        op = jj_consume_token(51);
         exp = E5();
-{if ("" != null) return sem.mkop_pre(op, exp);}
+{if ("" != null) return (Exp)sem.mkop_pre("-", exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
+        break;
+        }
+      case Not:{
+        op = jj_consume_token(Not);
+        exp = E5();
+{if ("" != null) return (Exp)sem.mkop_pre("not", exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
         break;
         }
       case LiteralTrue:
@@ -1095,26 +1100,26 @@ Exp exp, rexp;
   final public Exp RE6(Exp exph) throws ParseException {
     trace_call("RE6");
     try {
-Token acc; Exp exp, rexp;
+Token aper, acc, puntero; Exp exp, rexp;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case CorcheteApertura:{
-        jj_consume_token(CorcheteApertura);
+        aper = jj_consume_token(CorcheteApertura);
         exp = E0();
         jj_consume_token(CorcheteCierro);
-        rexp = RE6(sem.indexacion(exph, exp));
+        rexp = RE6((Exp)sem.indexacion(exph, exp).ponFila(aper.beginLine).ponCol(aper.beginColumn));
 {if ("" != null) return rexp;}
         break;
         }
       case Acceso:{
         jj_consume_token(Acceso);
         acc = jj_consume_token(Identificador);
-        rexp = RE6(sem.acceso(exph, acc.image));
+        rexp = RE6((Exp)sem.acceso(exph, acc.image).ponFila(acc.beginLine).ponCol(acc.beginColumn));
 {if ("" != null) return rexp;}
         break;
         }
       case Puntero:{
-        jj_consume_token(Puntero);
-        rexp = RE6(sem.indireccion(exph));
+        puntero = jj_consume_token(Puntero);
+        rexp = RE6((Exp)sem.indireccion(exph).ponFila(puntero.beginLine).ponCol(puntero.beginColumn));
 {if ("" != null) return rexp;}
         break;
         }
@@ -1162,39 +1167,39 @@ Exp exp;
     }
 }
 
-  final public String OP1() throws ParseException {
+  final public Token OP1() throws ParseException {
     trace_call("OP1");
     try {
-
+Token op;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case 52:{
-        jj_consume_token(52);
-{if ("" != null) return ">";}
+        op = jj_consume_token(52);
+{if ("" != null) return op;}
         break;
         }
       case 53:{
-        jj_consume_token(53);
-{if ("" != null) return "<";}
+        op = jj_consume_token(53);
+{if ("" != null) return op;}
         break;
         }
       case 54:{
-        jj_consume_token(54);
-{if ("" != null) return ">=";}
+        op = jj_consume_token(54);
+{if ("" != null) return op;}
         break;
         }
       case 55:{
-        jj_consume_token(55);
-{if ("" != null) return "<=";}
+        op = jj_consume_token(55);
+{if ("" != null) return op;}
         break;
         }
       case 56:{
-        jj_consume_token(56);
-{if ("" != null) return "==";}
+        op = jj_consume_token(56);
+{if ("" != null) return op;}
         break;
         }
       case 57:{
-        jj_consume_token(57);
-{if ("" != null) return "!=";}
+        op = jj_consume_token(57);
+{if ("" != null) return op;}
         break;
         }
       default:
@@ -1208,24 +1213,24 @@ Exp exp;
     }
 }
 
-  final public String OP4() throws ParseException {
+  final public Token OP4() throws ParseException {
     trace_call("OP4");
     try {
-
+Token op;
       switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
       case 58:{
-        jj_consume_token(58);
-{if ("" != null) return "*";}
+        op = jj_consume_token(58);
+{if ("" != null) return op;}
         break;
         }
       case 59:{
-        jj_consume_token(59);
-{if ("" != null) return "/";}
+        op = jj_consume_token(59);
+{if ("" != null) return op;}
         break;
         }
       case 60:{
-        jj_consume_token(60);
-{if ("" != null) return "%";}
+        op = jj_consume_token(60);
+{if ("" != null) return op;}
         break;
         }
       default:
@@ -1236,32 +1241,6 @@ Exp exp;
     throw new Error("Missing return statement in function");
     } finally {
       trace_return("OP4");
-    }
-}
-
-  final public String OP5() throws ParseException {
-    trace_call("OP5");
-    try {
-Token op;
-      switch ((jj_ntk==-1)?jj_ntk_f():jj_ntk) {
-      case 51:{
-        jj_consume_token(51);
-{if ("" != null) return "-";}
-        break;
-        }
-      case Not:{
-        op = jj_consume_token(Not);
-{if ("" != null) return "not";}
-        break;
-        }
-      default:
-        jj_la1[27] = jj_gen;
-        jj_consume_token(-1);
-        throw new ParseException();
-      }
-    throw new Error("Missing return statement in function");
-    } finally {
-      trace_return("OP5");
     }
 }
 
@@ -1306,7 +1285,7 @@ Token opnd;
         break;
         }
       default:
-        jj_la1[28] = jj_gen;
+        jj_la1[27] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -1325,7 +1304,7 @@ Token opnd;
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[29];
+  final private int[] jj_la1 = new int[28];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -1333,10 +1312,10 @@ Token opnd;
 	   jj_la1_init_1();
 	}
 	private static void jj_la1_init_0() {
-	   jj_la1_0 = new int[] {0x50440f00,0x0,0x50440f00,0x0,0x40400f00,0x40400f00,0x0,0x40400f00,0x0,0x40000000,0x2fa80000,0x0,0x2fa80000,0x100000,0xc0033000,0x0,0x0,0x0,0x0,0x0,0xc000,0x0,0xc0033000,0x0,0xc0023000,0x0,0x0,0x10000,0xc0023000,};
+	   jj_la1_0 = new int[] {0x50440f00,0x0,0x50440f00,0x0,0x40400f00,0x40400f00,0x0,0x40400f00,0x0,0x40000000,0x2fa80000,0x0,0x2fa80000,0x100000,0xc0033000,0x0,0x0,0x0,0x0,0x0,0xc000,0x0,0xc0033000,0x0,0xc0023000,0x0,0x0,0xc0023000,};
 	}
 	private static void jj_la1_init_1() {
-	   jj_la1_1 = new int[] {0x8,0x20,0x8,0x100,0x8,0x0,0x1000,0x8,0x1000,0x10,0x4400,0x20,0x4400,0x0,0x80043,0x1000,0x20000,0x3f00000,0x40000,0x80000,0x0,0x1c000000,0x80043,0x10c,0x43,0x3f00000,0x1c000000,0x80000,0x3,};
+	   jj_la1_1 = new int[] {0x8,0x20,0x8,0x100,0x8,0x0,0x1000,0x8,0x1000,0x10,0x4400,0x20,0x4400,0x0,0x80043,0x1000,0x20000,0x3f00000,0x40000,0x80000,0x0,0x1c000000,0x80043,0x10c,0x43,0x3f00000,0x1c000000,0x3,};
 	}
 
   {
@@ -1353,7 +1332,7 @@ Token opnd;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1367,7 +1346,7 @@ Token opnd;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -1377,7 +1356,7 @@ Token opnd;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1395,7 +1374,7 @@ Token opnd;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -1404,7 +1383,7 @@ Token opnd;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -1413,7 +1392,7 @@ Token opnd;
 	 token = new Token();
 	 jj_ntk = -1;
 	 jj_gen = 0;
-	 for (int i = 0; i < 29; i++) jj_la1[i] = -1;
+	 for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -1471,7 +1450,7 @@ Token opnd;
 	   la1tokens[jj_kind] = true;
 	   jj_kind = -1;
 	 }
-	 for (int i = 0; i < 29; i++) {
+	 for (int i = 0; i < 28; i++) {
 	   if (jj_la1[i] == jj_gen) {
 		 for (int j = 0; j < 32; j++) {
 		   if ((jj_la1_0[i] & (1<<j)) != 0) {

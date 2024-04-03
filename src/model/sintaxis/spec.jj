@@ -417,10 +417,10 @@ Exp E0():
         {return rexp;}
     }
 Exp RE0(Exp exph):
-    {Exp exp;}
+    {Token op; Exp exp;}
     {
-      "=" exp = E0()
-        {return sem.mkop("=", exph, exp);}
+      op = "=" exp = E0()
+        {return (Exp)sem.mkop("=", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
       |
         {return exph;}
     }
@@ -431,9 +431,9 @@ Exp E1():
         {return rexp;}
     }
 Exp RE1(Exp exph):
-    {String op; Exp exp, rexp;}
+    {Token op; Exp exp, rexp;}
     {
-      op = OP1() exp = E2() rexp = RE1(sem.mkop(op, exph, exp))
+      op = OP1() exp = E2() rexp = RE1((Exp)sem.mkop(op.image, exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn))
         {return rexp;}
       |
         {return exph;}
@@ -445,18 +445,18 @@ Exp E2():
         {return rexp1;}
     }
 Exp R1E2(Exp exph):
-    {Exp exp, rexp;}
+    {Token op; Exp exp, rexp;}
     {
-      "+" exp = E3() rexp = R1E2(sem.mkop("+", exph, exp))
+      op = "+" exp = E3() rexp = R1E2((Exp)sem.mkop("+", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn))
         {return rexp;}
       |
         {return exph;}
     }
 Exp R2E2(Exp exph):
-    {Exp exp;}
+    {Token op; Exp exp;}
     {
-      "-" exp = E3()
-        {return sem.mkop("-", exph, exp);}
+      op = "-" exp = E3()
+        {return (Exp)sem.mkop("-", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
       |
         {return exph;}
     }
@@ -467,13 +467,13 @@ Exp E3():
         {return rexp;}
     }
 Exp RE3(Exp exph):
-    {Exp exp;}
+    {Token op; Exp exp;}
     {
-      <And> exp = E3()
-        {return sem.mkop("and", exph, exp);}
+      op = <And> exp = E3()
+        {return (Exp)sem.mkop("and", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
       |
-      <Or> exp = E4()
-        {return sem.mkop("or", exph, exp);}
+      op = <Or> exp = E4()
+        {return (Exp)sem.mkop("or", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
       |
         {return exph;}
     }
@@ -484,18 +484,21 @@ Exp E4():
         {return rexp;}
     }
 Exp RE4(Exp exph):
-    {String op; Exp exp, rexp;}
+    {Token op; Exp exp, rexp;}
     {
-      op = OP4() exp = E5() rexp = RE4(sem.mkop(op, exph, exp))
+      op = OP4() exp = E5() rexp = RE4((Exp)sem.mkop(op.image, exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn))
         {return rexp;}
       |
         {return exph;}
     }
 Exp E5():
-    {String op; Exp exp;}
+    {Token op; Exp exp;}
     {
-      op = OP5() exp = E5()
-        {return sem.mkop_pre(op, exp);}
+      op = "-" exp = E5()
+        {return (Exp)sem.mkop_pre("-", exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
+      |
+      op = <Not> exp = E5()
+        {return (Exp)sem.mkop_pre("not", exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
       |
       exp = E6()
         {return exp;}
@@ -507,15 +510,15 @@ Exp E6():
         {return rexp;}
     }
 Exp RE6(Exp exph):
-    {Token acc; Exp exp, rexp;}
+    {Token aper, acc, puntero; Exp exp, rexp;}
     {
-      <CorcheteApertura> exp =E0() <CorcheteCierro> rexp = RE6(sem.indexacion(exph, exp))
+      aper = <CorcheteApertura> exp =E0() <CorcheteCierro> rexp = RE6((Exp)sem.indexacion(exph, exp).ponFila(aper.beginLine).ponCol(aper.beginColumn))
         {return rexp;}
       |
-      <Acceso> acc = <Identificador> rexp = RE6(sem.acceso(exph, acc.image))
+      <Acceso> acc = <Identificador> rexp = RE6((Exp)sem.acceso(exph, acc.image).ponFila(acc.beginLine).ponCol(acc.beginColumn))
         {return rexp;}
       |
-      <Puntero> rexp = RE6(sem.indireccion(exph))
+      puntero = <Puntero> rexp = RE6((Exp)sem.indireccion(exph).ponFila(puntero.beginLine).ponCol(puntero.beginColumn))
         {return rexp;}
       |
         {return exph;}
@@ -529,47 +532,38 @@ Exp E7():
       exp = operando()
         {return exp;}
     }
-String OP1():
-    {}
-    {
-      ">"
-        {return ">";}
-      |
-      "<"
-        {return "<";}
-      |
-      ">="
-        {return ">=";}
-      |
-      "<="
-        {return "<=";}
-      |
-      "=="
-        {return "==";}
-      |
-      "!="
-        {return "!=";}
-    }
-String OP4():
-    {}
-    {
-      "*"
-        {return "*";}
-      |
-      "/"
-        {return "/";}
-      |
-      "%"
-        {return "%";}
-    }
-String OP5():
+Token OP1():
     {Token op;}
     {
-      "-"
-        {return "-";}
+      op = ">"
+        {return op;}
       |
-      op = <Not>
-        {return "not";}
+      op = "<"
+        {return op;}
+      |
+      op = ">="
+        {return op;}
+      |
+      op = "<="
+        {return op;}
+      |
+      op = "=="
+        {return op;}
+      |
+      op = "!="
+        {return op;}
+    }
+Token OP4():
+    {Token op;}
+    {
+      op = "*"
+        {return op;}
+      |
+      op = "/"
+        {return op;}
+      |
+      op = "%"
+        {return op;}
     }
 Exp operando():
     {Token opnd;}

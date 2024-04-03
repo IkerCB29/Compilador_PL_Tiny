@@ -12,7 +12,6 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
 
     public void imprime(Prog prog) throws IOException {
         imprime(prog.bloque());
-        output.write("<EOF>\n");
     }
 
     private void imprime(Bloque bq) throws IOException {
@@ -44,15 +43,15 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
         if(claseDe(dec, T_dec.class)){
             output.write("<type>\n");
             imprime(dec.tipo());
-            output.write((dec.iden() + "\n"));
+            output.write(dec.iden() + "$f:" + dec.leeFila() + ",c:" + dec.leeCol() + "$\n");
         }
         else if(claseDe(dec, V_dec.class)){
             imprime(dec.tipo());
-            output.write((dec.iden() + "\n"));
+            output.write(dec.iden() + "$f:" + dec.leeFila() + ",c:" + dec.leeCol() + "$\n");
         }
         else{
             output.write("<proc>\n");
-            output.write((dec.iden() + "\n"));
+            output.write(dec.iden() + "$f:" + dec.leeFila() + ",c:" + dec.leeCol() + "$\n");
             output.write("(\n");
             imprime(dec.lParamOpt());
             output.write(")\n");
@@ -65,7 +64,7 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
             imprime(tipo.tipo());
             output.write("[\n");
             output.write((tipo.capacidad() + "\n"));
-            output.write("]\n");
+            output.write("]"+"$f:" + tipo.leeFila() + ",c:" + tipo.leeCol() + "$\n");
         }
         else if(claseDe(tipo, P_tipo.class)){
             output.write("^\n");
@@ -84,7 +83,7 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
             output.write("<string>\n");
         }
         else if(claseDe(tipo, Id_tipo.class)){
-            output.write((tipo.iden() + "\n"));
+            output.write(tipo.iden() + "$f:" + tipo.leeFila() + ",c:" + tipo.leeCol() + "$\n");
         }
         else {
             output.write("<struct>\n");
@@ -107,7 +106,7 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
 
     private void imprime(Campo campo) throws IOException{
         imprime(campo.tipo());
-        output.write((campo.iden() + "\n"));
+        output.write(campo.iden() + "$f:" + campo.leeFila() + ",c:" + campo.leeCol() + "$\n");
     }
 
     private void imprime(LParam_opt lParamOpt) throws IOException{
@@ -130,12 +129,12 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
     private void imprime(Param param) throws IOException{
         if(claseDe(param, Param_simple.class)){
             imprime(param.tipo());
-            output.write((param.iden() + "\n"));
+            output.write(param.iden() + "$f:" + param.leeFila() + ",c:" + param.leeCol() + "$\n");
         }
         else{
             imprime(param.tipo());
             output.write("&\n");
-            output.write((param.iden() + "\n"));
+            output.write(param.iden() + "$f:" + param.leeFila() + ",c:" + param.leeCol() + "$\n");
         }
     }
 
@@ -199,7 +198,7 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
         }
         else if(claseDe(instr, Cl.class)){
             output.write("<call>\n");
-            output.write((instr.iden() + "\n"));
+            output.write(instr.iden() + "$f:" + instr.leeFila() + ",c:" + instr.leeCol() + "$\n");
             output.write("(\n");
             imprime(instr.expsOpt());
             output.write(")\n");
@@ -228,93 +227,93 @@ public class ImpresionBonitaRecursiva extends SintaxisAbstracta {
 
     private void imprime(Exp exp) throws IOException {
         if(claseDe(exp, Asig.class)){
-            imprimeExpBin(exp.opnd0(), "=", exp.opnd1(), 1, 0);
+            imprimeExpBin(exp.opnd0(), "=", exp.opnd1(), 1, 0, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, My.class)){
-            imprimeExpBin(exp.opnd0(), ">", exp.opnd1(), 1, 2);
+            imprimeExpBin(exp.opnd0(), ">", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Mn.class)){
-            imprimeExpBin(exp.opnd0(), "<", exp.opnd1(), 1, 2);
+            imprimeExpBin(exp.opnd0(), "<", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Myig.class)){
-            imprimeExpBin(exp.opnd0(), ">=", exp.opnd1(), 1, 2);
+            imprimeExpBin(exp.opnd0(), ">=", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Mnig.class)){
-            imprimeExpBin(exp.opnd0(), "<=", exp.opnd1(), 1, 2);
+            imprimeExpBin(exp.opnd0(), "<=", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Ig.class)){
-            imprimeExpBin(exp.opnd0(), "==", exp.opnd1(), 1, 2);
+            imprimeExpBin(exp.opnd0(), "==", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Dif.class)){
-            imprimeExpBin(exp.opnd0(), "!=", exp.opnd1(), 1, 2);
+            imprimeExpBin(exp.opnd0(), "!=", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Suma.class)){
-            imprimeExpBin(exp.opnd0(), "+", exp.opnd1(), 2, 3);
+            imprimeExpBin(exp.opnd0(), "+", exp.opnd1(), 2, 3, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Resta.class)){
-            imprimeExpBin(exp.opnd0(), "-", exp.opnd1(), 3, 3);
+            imprimeExpBin(exp.opnd0(), "-", exp.opnd1(), 3, 3, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, And.class)){
-            imprimeExpBin(exp.opnd0(), "<and>", exp.opnd1(), 4, 3);
+            imprimeExpBin(exp.opnd0(), "<and>", exp.opnd1(), 4, 3, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Or.class)){
-            imprimeExpBin(exp.opnd0(), "<or>", exp.opnd1(), 4, 4);
+            imprimeExpBin(exp.opnd0(), "<or>", exp.opnd1(), 4, 4, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Mul.class)){
-            imprimeExpBin(exp.opnd0(), "*", exp.opnd1(), 4, 5);
+            imprimeExpBin(exp.opnd0(), "*", exp.opnd1(), 4, 5, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Div.class)){
-            imprimeExpBin(exp.opnd0(), "/", exp.opnd1(), 4, 5);
+            imprimeExpBin(exp.opnd0(), "/", exp.opnd1(), 4, 5, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Mod.class)){
-            imprimeExpBin(exp.opnd0(), "%", exp.opnd1(), 4, 5);
+            imprimeExpBin(exp.opnd0(), "%", exp.opnd1(), 4, 5, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Menos_unario.class)){
-            imprimeExpPre(exp.opnd0(), "-", 5);
+            imprimeExpPre(exp.opnd0(), "-", 5, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Not.class)){
-            imprimeExpPre(exp.opnd0(), "<not>", 5);
+            imprimeExpPre(exp.opnd0(), "<not>", 5, exp.leeFila(), exp.leeCol());
         }
         else if(claseDe(exp, Indexacion.class)){
             imprimeOpnd(exp.opnd0(), 6);
-            output.write("[\n");
+            output.write("["+"$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
             imprimeOpnd(exp.opnd1(), 0);
             output.write("]\n");
         }
         else if(claseDe(exp, Acceso.class)){
             imprimeOpnd(exp.opnd0(), 6);
             output.write(".\n");
-            output.write((exp.iden() + "\n"));
+            output.write(exp.iden() + "$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
         }
         else if(claseDe(exp, Indireccion.class)){
             imprimeOpnd(exp.opnd0(), 6);
-            output.write("^\n");
+            output.write("^"+"$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
         }
         else if(claseDe(exp, Iden.class)){
-            output.write((exp.iden() + "\n"));
+            output.write(exp.iden() + "$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
         }
         else if(claseDe(exp, True.class)){
-            output.write("<true>\n");
+            output.write("<true>$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
         }
         else if(claseDe(exp, False.class)){
-            output.write("<false>\n");
+            output.write("<false>$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
         }
         else if(claseDe(exp, Null_exp.class)){
-            output.write("<null>\n");
+            output.write("<null>$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
         }
         else{
-            output.write((exp.valor() + "\n"));
+            output.write(exp.valor() + "$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
         }
     }
 
-    private void imprimeExpPre(Exp opnd, String op, int np) throws IOException {
-        output.write((op + "\n"));
+    private void imprimeExpPre(Exp opnd, String op, int np, int fila, int columna) throws IOException {
+        output.write(op + "$f:" + fila + ",c:" + columna + "$\n");
         imprimeOpnd(opnd, np);
     }
 
-    private void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1) throws IOException {
+    private void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1, int fila, int columna) throws IOException {
         imprimeOpnd(opnd0, np0);
-        output.write((op + "\n"));
+        output.write(op + "$f:" + fila + ",c:" + columna + "$\n");
         imprimeOpnd(opnd1, np1);
     }
 

@@ -8,6 +8,8 @@ public abstract class SintaxisAbstracta {
     private interface Editable{
         Nodo ponFila(int fila);
         Nodo ponCol(int col);
+        int leeFila();
+        int leeCol();
     }
     private interface Printable{
         void imprime(Printer output) throws IOException;
@@ -29,9 +31,11 @@ public abstract class SintaxisAbstracta {
             this.col = col;
             return this;
         }
+        @Override
         public int leeFila() {
             return fila;
         }
+        @Override
         public int leeCol() {
             return col;
         }
@@ -151,7 +155,6 @@ public abstract class SintaxisAbstracta {
         public Bloque bloque() { return bq; }
         public void imprime(Printer output) throws IOException {
             bq.imprime(output);
-            output.write("<EOF>\n");
         }
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
     }
@@ -282,7 +285,7 @@ public abstract class SintaxisAbstracta {
         public void imprime(Printer output) throws IOException {
             output.write("<type>\n");
             tipo.imprime(output);
-            output.write(iden + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -310,7 +313,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {
             tipo.imprime(output);
-            output.write(iden + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -340,7 +343,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {
             output.write("<proc>\n");
-            output.write(iden + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
             output.write("(\n");
             param.imprime(output);
             output.write(")\n");
@@ -374,7 +377,7 @@ public abstract class SintaxisAbstracta {
             tipo.imprime(output);
             output.write("[\n");
             output.write(capacidad + "\n");
-            output.write("]\n");
+            output.write("]"+"$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -517,7 +520,7 @@ public abstract class SintaxisAbstracta {
         public Campos campos() { throw new UnsupportedOperationException(); }
         @Override
         public void imprime(Printer output) throws IOException {
-            output.write(iden + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -615,7 +618,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {
             tipo.imprime(output);
-            output.write(iden + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -719,7 +722,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {
             tipo.imprime(output);
-            output.write(iden + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -744,7 +747,7 @@ public abstract class SintaxisAbstracta {
         public void imprime(Printer output) throws IOException {
             tipo.imprime(output);
             output.write("&\n");
-            output.write(iden + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1116,7 +1119,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {
             output.write("<call>\n");
-            output.write(iden + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
             output.write("(\n");
             exps.imprime(output);
             output.write(")\n");
@@ -1277,7 +1280,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 0; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "=", opnd1, 1, 0, output);
+            imprimeExpBin(opnd0, "=", opnd1, 1, 0, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1294,7 +1297,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 1; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, ">", opnd1, 1, 2, output);
+            imprimeExpBin(opnd0, ">", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1311,7 +1314,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 1; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "<", opnd1, 1, 2, output);
+            imprimeExpBin(opnd0, "<", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1328,7 +1331,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 1; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, ">=", opnd1, 1, 2, output);
+            imprimeExpBin(opnd0, ">=", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1345,7 +1348,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 1; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "<=", opnd1, 1, 2, output);
+            imprimeExpBin(opnd0, "<=", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1362,7 +1365,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 1; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "==", opnd1, 1, 2, output);
+            imprimeExpBin(opnd0, "==", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1379,7 +1382,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 1; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "!=", opnd1, 1, 2, output);
+            imprimeExpBin(opnd0, "!=", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1396,7 +1399,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 2; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "+", opnd1, 2, 3, output);
+            imprimeExpBin(opnd0, "+", opnd1, 2, 3, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1412,7 +1415,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 2; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "-", opnd1, 3, 3, output);
+            imprimeExpBin(opnd0, "-", opnd1, 3, 3, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1429,7 +1432,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 3; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "<and>", opnd1, 4, 3, output);
+            imprimeExpBin(opnd0, "<and>", opnd1, 4, 3, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1446,7 +1449,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 3; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "<or>", opnd1, 4, 4, output);
+            imprimeExpBin(opnd0, "<or>", opnd1, 4, 4, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1463,7 +1466,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 4; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "*", opnd1, 4, 5, output);
+            imprimeExpBin(opnd0, "*", opnd1, 4, 5, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1479,7 +1482,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 4; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "/", opnd1, 4, 5, output);
+            imprimeExpBin(opnd0, "/", opnd1, 4, 5, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1496,7 +1499,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 4; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpBin(opnd0, "%", opnd1, 4, 5, output);
+            imprimeExpBin(opnd0, "%", opnd1, 4, 5, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1513,7 +1516,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 5; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpPre(opnd, "-", 5, output);
+            imprimeExpPre(opnd, "-", 5, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1530,7 +1533,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 5; }
         @Override
         public void imprime(Printer output) throws IOException {
-            imprimeExpPre(opnd, "<not>", 5, output);
+            imprimeExpPre(opnd, "<not>", 5, leeFila(), leeCol(), output);
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1560,7 +1563,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {
             imprimeOpnd(opnd, 6, output);
-            output.write("[\n");
+            output.write("["+"$f:" + leeFila() + ",c:" + leeCol() + "$\n");
             imprimeOpnd(pos, 0, output);
             output.write("]\n");
         }
@@ -1593,7 +1596,7 @@ public abstract class SintaxisAbstracta {
         public void imprime(Printer output) throws IOException {
             imprimeOpnd(opnd, 6, output);
             output.write(".\n");
-            output.write(acceso + "\n");
+            output.write(acceso + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1621,7 +1624,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {
             imprimeOpnd(opnd, 6, output);
-            output.write("^\n");
+            output.write("^"+"$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1648,7 +1651,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 7; }
         @Override
         public void imprime(Printer output) throws IOException{
-            output.write(num + "\n");
+            output.write(valor() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1675,7 +1678,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 7; }
         @Override
         public void imprime(Printer output) throws IOException{
-            output.write(num + "\n");
+            output.write(valor() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1700,7 +1703,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 7; }
         @Override
         public void imprime(Printer output) throws IOException{
-            output.write("<true>\n");
+            output.write("<true>$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1725,7 +1728,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 7; }
         @Override
         public void imprime(Printer output) throws IOException{
-            output.write("<false>\n");
+            output.write("<false>$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1752,7 +1755,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 7; }
         @Override
         public void imprime(Printer output) throws IOException{
-            output.write(string + "\n");
+            output.write(valor() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1779,7 +1782,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 7; }
         @Override
         public void imprime(Printer output) throws IOException{
-            output.write(id + "\n");
+            output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -1804,7 +1807,7 @@ public abstract class SintaxisAbstracta {
         public int prioridad() {  return 7; }
         @Override
         public void imprime(Printer output) throws IOException{
-            output.write("<null>\n");
+            output.write("<null>$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
         public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
@@ -2020,14 +2023,14 @@ public abstract class SintaxisAbstracta {
         return new Null_exp();
     }
 
-    private static void imprimeExpPre(Exp opnd, String op, int np, Printer output) throws IOException {
-        output.write((op + "\n"));
+    private static void imprimeExpPre(Exp opnd, String op, int np, int fila, int columna, Printer output) throws IOException {
+        output.write(op + "$f:" + fila + ",c:" + columna + "$\n");
         imprimeOpnd(opnd, np, output);
     }
 
-    private static void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1, Printer output) throws IOException {
+    private static void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1, int fila, int columna, Printer output) throws IOException {
         imprimeOpnd(opnd0, np0, output);
-        output.write((op + "\n"));
+        output.write(op + "$f:" + fila + ",c:" + columna + "$\n");
         imprimeOpnd(opnd1, np1, output);
     }
 
