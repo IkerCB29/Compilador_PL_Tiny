@@ -19,6 +19,7 @@ import view.Printer;
 public class Controller {
     public void analisisSintacticoCC(Reader input, Printer output) throws Exception {
         try {
+            output.write("CONSTRUCCION AST DESCENDENTE\n");
             ConstructorASTsCC asin = new AnalizadorSintacticoCC(input, output);
             asin.disable_tracing();
             Prog prog = asin.analiza();
@@ -70,6 +71,7 @@ public class Controller {
 
     public void analisisSintacticoCUP(Reader input, Printer output) throws Exception {
         try {
+            output.write("CONSTRUCCION AST ASCENDENTE\n");
             AnalizadorLexico alex = new AnalizadorLexico(input);
             ConstructorASTsCUP asin = new AnalizadorSintacticoCUP(alex, output);
             Prog prog = (Prog) asin.debug_parse().value;
