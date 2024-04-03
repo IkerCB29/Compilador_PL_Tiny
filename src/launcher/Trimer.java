@@ -22,8 +22,7 @@ public class Trimer {
         for(String file : FILES) {
             try {
                 StringBuilder stringBuilder = new StringBuilder();
-                File myObj = new File(file);
-                Scanner myReader = new Scanner(myObj);
+                Scanner myReader = new Scanner(new File(file));
                 while (myReader.hasNextLine()) {
                     String data = myReader.nextLine();
                     data = data.trim();
