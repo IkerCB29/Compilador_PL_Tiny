@@ -1,6 +1,6 @@
 package model.sintaxis.impresionVisitante;
 
-import java.io.OutputStream;
+import java.io.IOException;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
 import model.sintaxis.SintaxisAbstracta.And;
@@ -80,18 +80,18 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     public ImpresionBonitaVisitante(Printer output){
         this.output = output;
     }
-    private void imprimeExpPre(Exp opnd, String op, int np, int fila, int columna) throws Exception {
+    private void imprimeExpPre(Exp opnd, String op, int np, int fila, int columna) throws IOException {
         output.write(op + "$f:" + fila + ",c:" + columna + "$\n");
         imprimeOpnd(opnd, np);
     }
 
-    private void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1, int fila, int columna) throws Exception {
+    private void imprimeExpBin(Exp opnd0, String op, Exp opnd1, int np0, int np1, int fila, int columna) throws IOException {
         imprimeOpnd(opnd0, np0);
         output.write(op + "$f:" + fila + ",c:" + columna + "$\n");
         imprimeOpnd(opnd1, np1);
     }
 
-    private void imprimeOpnd(Exp opnd, int minPrior) throws Exception {
+    private void imprimeOpnd(Exp opnd, int minPrior) throws IOException {
         if (opnd.prioridad() < minPrior){
             output.write("(\n");
         }
@@ -101,12 +101,12 @@ public class ImpresionBonitaVisitante implements Procesamiento{
         }
     }
     @Override
-    public void procesa(Prog prog) throws Exception {
+    public void procesa(Prog prog) throws IOException {
         prog.bloque().procesa(this);
     }
 
     @Override
-    public void procesa(Bloque bloque) throws Exception  {
+    public void procesa(Bloque bloque) throws IOException  {
         output.write("{\n");
         bloque.decsOpt().procesa(this);
         bloque.instrsOpt().procesa(this);
@@ -114,41 +114,41 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     }
 
     @Override
-    public void procesa(Si_decs decs) throws Exception {
+    public void procesa(Si_decs decs) throws IOException {
         decs.decs().procesa(this);
         output.write("&&\n");
     }
 
     @Override
-    public void procesa(No_decs decs) throws Exception {}
+    public void procesa(No_decs decs) throws IOException {}
 
     @Override
-    public void procesa(L_decs decs) throws Exception {
+    public void procesa(L_decs decs) throws IOException {
         decs.decs().procesa(this);
         output.write(";\n");
         decs.dec().procesa(this);
     }
 
     @Override
-    public void procesa(Una_dec decs) throws Exception {
+    public void procesa(Una_dec decs) throws IOException {
         decs.dec().procesa(this);
     }
 
     @Override
-    public void procesa(T_dec dec) throws Exception {
+    public void procesa(T_dec dec) throws IOException {
         output.write("<type>\n");
         dec.tipo().procesa(this);
         output.write(dec.iden() + "$f:" + dec.leeFila() + ",c:" + dec.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(V_dec dec) throws Exception {
+    public void procesa(V_dec dec) throws IOException {
         dec.tipo().procesa(this);
         output.write(dec.iden() + "$f:" + dec.leeFila() + ",c:" + dec.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(P_dec dec) throws Exception {
+    public void procesa(P_dec dec) throws IOException {
         output.write("<proc>\n");
         output.write(dec.iden() + "$f:" + dec.leeFila() + ",c:" + dec.leeCol() + "$\n");
         output.write("(\n");
@@ -158,7 +158,7 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     }
 
     @Override
-    public void procesa(A_tipo tipo) throws Exception {
+    public void procesa(A_tipo tipo) throws IOException {
         tipo.tipo().procesa(this);
         output.write("[\n");
         output.write((tipo.capacidad() + "\n"));
@@ -166,38 +166,38 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     }
 
     @Override
-    public void procesa(P_tipo tipo) throws Exception {
+    public void procesa(P_tipo tipo) throws IOException {
         output.write("^\n");
         tipo.tipo().procesa(this);
     }
 
     @Override
-    public void procesa(In_tipo tipo) throws Exception {
+    public void procesa(In_tipo tipo) throws IOException {
         output.write("<int>\n");
     }
 
     @Override
-    public void procesa(R_tipo tipo) throws Exception {
+    public void procesa(R_tipo tipo) throws IOException {
         output.write("<real>\n");
     }
 
     @Override
-    public void procesa(B_tipo tipo) throws Exception {
+    public void procesa(B_tipo tipo) throws IOException {
         output.write("<bool>\n");
     }
 
     @Override
-    public void procesa(String_tipo tipo) throws Exception {
+    public void procesa(String_tipo tipo) throws IOException {
         output.write("<string>\n");
     }
 
     @Override
-    public void procesa(Id_tipo tipo) throws Exception {
+    public void procesa(Id_tipo tipo) throws IOException {
         output.write(tipo.iden() + "$f:" + tipo.leeFila() + ",c:" + tipo.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Struct_tipo tipo) throws Exception {
+    public void procesa(Struct_tipo tipo) throws IOException {
         output.write("<struct>\n");
         output.write("{\n");
         tipo.campos().procesa(this);
@@ -205,91 +205,91 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     }
 
     @Override
-    public void procesa(L_campos campos) throws Exception {
+    public void procesa(L_campos campos) throws IOException {
         campos.campos().procesa(this);
         output.write(",\n");
         campos.campo().procesa(this);
     }
 
     @Override
-    public void procesa(Un_campo campos) throws Exception {
+    public void procesa(Un_campo campos) throws IOException {
         campos.campo().procesa(this);
     }
 
     @Override
-    public void procesa(Camp campo) throws Exception {
+    public void procesa(Camp campo) throws IOException {
         campo.tipo().procesa(this);
         output.write(campo.iden() + "$f:" + campo.leeFila() + ",c:" + campo.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Si_param lParam) throws Exception {
+    public void procesa(Si_param lParam) throws IOException {
         lParam.lParam().procesa(this);
     }
 
     @Override
-    public void procesa(No_param lParam) throws Exception {}
+    public void procesa(No_param lParam) throws IOException {}
 
     @Override
-    public void procesa(L_param lParam) throws Exception {
+    public void procesa(L_param lParam) throws IOException {
         lParam.lParam().procesa(this);
         output.write(",\n");
         lParam.param().procesa(this);
     }
 
     @Override
-    public void procesa(Un_param lParam) throws Exception {
+    public void procesa(Un_param lParam) throws IOException {
         lParam.param().procesa(this);
     }
 
     @Override
-    public void procesa(Param_simple param) throws Exception {
+    public void procesa(Param_simple param) throws IOException {
         param.tipo().procesa(this);
         output.write(param.iden() + "$f:" + param.leeFila() + ",c:" + param.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Param_ref param) throws Exception {
+    public void procesa(Param_ref param) throws IOException {
         param.tipo().procesa(this);
         output.write("&\n");
         output.write(param.iden() + "$f:" + param.leeFila() + ",c:" + param.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Si_instrs instrs) throws Exception {
+    public void procesa(Si_instrs instrs) throws IOException {
         instrs.instrs().procesa(this);
     }
 
     @Override
-    public void procesa(No_instrs instrs) throws Exception {}
+    public void procesa(No_instrs instrs) throws IOException {}
 
     @Override
-    public void procesa(L_instrs instrs) throws Exception {
+    public void procesa(L_instrs instrs) throws IOException {
         instrs.instrs().procesa(this);
         output.write(";\n");
         instrs.instr().procesa(this);
     }
 
     @Override
-    public void procesa(Una_instr instrs) throws Exception {
+    public void procesa(Una_instr instrs) throws IOException {
         instrs.instr().procesa(this);
     }
 
     @Override
-    public void procesa(Eva instr) throws Exception {
+    public void procesa(Eva instr) throws IOException {
         output.write("@\n");
         instr.exp().procesa(this);
     }
 
     @Override
-    public void procesa(If_instr instr) throws Exception {
+    public void procesa(If_instr instr) throws IOException {
         output.write("<if>\n");
         instr.exp().procesa(this);
         instr.bloque().procesa(this);
     }
 
     @Override
-    public void procesa(If_el instr) throws Exception {
+    public void procesa(If_el instr) throws IOException {
         output.write("<if>\n");
         instr.exp().procesa(this);
         instr.bloque().procesa(this);
@@ -298,43 +298,43 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     }
 
     @Override
-    public void procesa(Wh instr) throws Exception {
+    public void procesa(Wh instr) throws IOException {
         output.write("<while>\n");
         instr.exp().procesa(this);
         instr.bloque().procesa(this);
     }
 
     @Override
-    public void procesa(Rd instr) throws Exception {
+    public void procesa(Rd instr) throws IOException {
         output.write("<read>\n");
         instr.exp().procesa(this);
     }
 
     @Override
-    public void procesa(Wr instr) throws Exception {
+    public void procesa(Wr instr) throws IOException {
         output.write("<write>\n");
         instr.exp().procesa(this);
     }
 
     @Override
-    public void procesa(Nw instr) throws Exception {
+    public void procesa(Nw instr) throws IOException {
         output.write("<new>\n");
         instr.exp().procesa(this);
     }
 
     @Override
-    public void procesa(Dl instr) throws Exception {
+    public void procesa(Dl instr) throws IOException {
         output.write("<delete>\n");
         instr.exp().procesa(this);
     }
 
     @Override
-    public void procesa(Nl_instr instr) throws Exception {
+    public void procesa(Nl_instr instr) throws IOException {
         output.write("<nl>\n");
     }
 
     @Override
-    public void procesa(Cl instr) throws Exception {
+    public void procesa(Cl instr) throws IOException {
         output.write("<call>\n");
         output.write(instr.iden() + "$f:" + instr.leeFila() + ",c:" + instr.leeCol() + "$\n");
         output.write("(\n");
@@ -343,112 +343,112 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     }
 
     @Override
-    public void procesa(Bq_instr instr) throws Exception {
+    public void procesa(Bq_instr instr) throws IOException {
         instr.bloque().procesa(this);
     }
 
     @Override
-    public void procesa(Si_exps exps) throws Exception {
+    public void procesa(Si_exps exps) throws IOException {
         exps.exps().procesa(this);
     }
 
     @Override
-    public void procesa(No_exps exps) throws Exception {}
+    public void procesa(No_exps exps) throws IOException {}
 
     @Override
-    public void procesa(L_exps exps) throws Exception {
+    public void procesa(L_exps exps) throws IOException {
         exps.exps().procesa(this);
         output.write(",\n");
         exps.exp().procesa(this);
     }
 
     @Override
-    public void procesa(Una_exp exps) throws Exception {
+    public void procesa(Una_exp exps) throws IOException {
         exps.exp().procesa(this);
     }
 
     @Override
-    public void procesa(Asig exp) throws Exception {
+    public void procesa(Asig exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "=", exp.opnd1(), 1, 0, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(My exp) throws Exception {
+    public void procesa(My exp) throws IOException {
         imprimeExpBin(exp.opnd0(), ">", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Mn exp) throws Exception {
+    public void procesa(Mn exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "<", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Myig exp) throws Exception {
+    public void procesa(Myig exp) throws IOException {
         imprimeExpBin(exp.opnd0(), ">=", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Mnig exp) throws Exception {
+    public void procesa(Mnig exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "<=", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Ig exp) throws Exception {
+    public void procesa(Ig exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "==", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Dif exp) throws Exception {
+    public void procesa(Dif exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "!=", exp.opnd1(), 1, 2, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Suma exp) throws Exception {
+    public void procesa(Suma exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "+", exp.opnd1(), 2, 3, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Resta exp) throws Exception {
+    public void procesa(Resta exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "-", exp.opnd1(), 3, 3, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(And exp) throws Exception {
+    public void procesa(And exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "<and>", exp.opnd1(), 4, 3, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Or exp) throws Exception {
+    public void procesa(Or exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "<or>", exp.opnd1(), 4, 4, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Mul exp) throws Exception {
+    public void procesa(Mul exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "*", exp.opnd1(), 4, 5, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Div exp) throws Exception {
+    public void procesa(Div exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "/", exp.opnd1(), 4, 5, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Mod exp) throws Exception {
+    public void procesa(Mod exp) throws IOException {
         imprimeExpBin(exp.opnd0(), "%", exp.opnd1(), 4, 5, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Menos_unario exp) throws Exception {
+    public void procesa(Menos_unario exp) throws IOException {
         imprimeExpPre(exp.opnd0(), "-", 5, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Not exp) throws Exception {
+    public void procesa(Not exp) throws IOException {
         imprimeExpPre(exp.opnd0(), "<not>", 5, exp.leeFila(), exp.leeCol());
     }
 
     @Override
-    public void procesa(Indexacion exp) throws Exception {
+    public void procesa(Indexacion exp) throws IOException {
         imprimeOpnd(exp.opnd0(), 6);
         output.write("["+"$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
         imprimeOpnd(exp.opnd1(), 0);
@@ -456,50 +456,50 @@ public class ImpresionBonitaVisitante implements Procesamiento{
     }
 
     @Override
-    public void procesa(Acceso exp) throws Exception {
+    public void procesa(Acceso exp) throws IOException {
         imprimeOpnd(exp.opnd0(), 6);
         output.write(".\n");
         output.write(exp.iden() + "$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Indireccion exp) throws Exception {
+    public void procesa(Indireccion exp) throws IOException {
         imprimeOpnd(exp.opnd0(), 6);
         output.write("^"+"$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Entero exp) throws Exception {
+    public void procesa(Entero exp) throws IOException {
         output.write(exp.valor() + "$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Real exp) throws Exception {
+    public void procesa(Real exp) throws IOException {
         output.write(exp.valor() + "$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(True exp) throws Exception {
+    public void procesa(True exp) throws IOException {
         output.write("<true>$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(False exp) throws Exception {
+    public void procesa(False exp) throws IOException {
         output.write("<false>$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(String_exp exp) throws Exception {
+    public void procesa(String_exp exp) throws IOException {
         output.write(exp.valor() + "$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Iden exp) throws Exception {
+    public void procesa(Iden exp) throws IOException {
         output.write(exp.iden() + "$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 
     @Override
-    public void procesa(Null_exp exp) throws Exception {
+    public void procesa(Null_exp exp) throws IOException {
         output.write("<null>$f:" + exp.leeFila() + ",c:" + exp.leeCol() + "$\n");
     }
 }

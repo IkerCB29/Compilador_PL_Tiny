@@ -46,13 +46,13 @@ public abstract class SintaxisAbstracta {
     */
     public interface Decs_opt extends Editable, Printable {
         Decs decs();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Decs extends Editable, Printable {
         Decs decs();
         Dec dec();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Dec extends Editable, Printable {
@@ -60,7 +60,7 @@ public abstract class SintaxisAbstracta {
         String iden();
         LParam_opt lParamOpt();
         Bloque bloque();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Tipo extends Editable, Printable {
@@ -68,47 +68,47 @@ public abstract class SintaxisAbstracta {
         String iden();
         String capacidad();
         Campos campos();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Campos extends Editable, Printable {
         Campos campos();
         Campo campo();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Campo extends Editable, Printable {
         Tipo tipo();
         String iden();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface LParam_opt extends Editable, Printable {
         LParam lParam();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface LParam extends Editable, Printable {
         LParam lParam();
         Param param();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Param extends Editable, Printable {
         Tipo tipo();
         String iden();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Instrs_opt extends Editable, Printable {
         Instrs instrs();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Instrs extends Editable, Printable {
         Instrs instrs();
         Instr instr();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Instr extends Editable, Printable {
@@ -117,18 +117,18 @@ public abstract class SintaxisAbstracta {
         Bloque bloqueElse();
         String iden();
         Exps_opt expsOpt();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Exps_opt extends Editable, Printable {
         Exps exps();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Exps extends Editable, Printable {
         Exps exps();
         Exp exp();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     public interface Exp extends Editable, Printable {
@@ -137,7 +137,7 @@ public abstract class SintaxisAbstracta {
         Exp opnd0();
         Exp opnd1();
         int prioridad();
-        void procesa(Procesamiento p) throws Exception;
+        void procesa(Procesamiento p) throws IOException;
     }
 
     /*
@@ -156,7 +156,7 @@ public abstract class SintaxisAbstracta {
         public void imprime(Printer output) throws IOException {
             bq.imprime(output);
         }
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Bloque extends Nodo {
@@ -178,7 +178,7 @@ public abstract class SintaxisAbstracta {
             instrs.imprime(output);
             output.write("}\n");
         }
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Si_decs extends Nodo implements Decs_opt {
@@ -198,7 +198,7 @@ public abstract class SintaxisAbstracta {
             output.write("&&\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class No_decs extends Nodo implements Decs_opt {
@@ -213,7 +213,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {}
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class L_decs extends Nodo implements Decs {
@@ -238,7 +238,7 @@ public abstract class SintaxisAbstracta {
             dec.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Una_dec extends Nodo implements Decs {
@@ -259,7 +259,7 @@ public abstract class SintaxisAbstracta {
             dec.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class T_dec extends Nodo implements Dec {
@@ -288,7 +288,7 @@ public abstract class SintaxisAbstracta {
             output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class V_dec extends Nodo implements Dec {
@@ -316,7 +316,7 @@ public abstract class SintaxisAbstracta {
             output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class P_dec extends Nodo implements Dec {
@@ -350,7 +350,7 @@ public abstract class SintaxisAbstracta {
             bloque.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class A_tipo extends Nodo implements Tipo {
@@ -380,7 +380,7 @@ public abstract class SintaxisAbstracta {
             output.write("]"+"$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class P_tipo extends Nodo implements Tipo {
@@ -406,7 +406,7 @@ public abstract class SintaxisAbstracta {
             tipo.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class In_tipo extends Nodo implements Tipo {
@@ -429,7 +429,7 @@ public abstract class SintaxisAbstracta {
             output.write("<int>\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class R_tipo extends Nodo implements Tipo {
@@ -452,7 +452,7 @@ public abstract class SintaxisAbstracta {
             output.write("<real>\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class B_tipo extends Nodo implements Tipo {
@@ -475,7 +475,7 @@ public abstract class SintaxisAbstracta {
             output.write("<bool>\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class String_tipo extends Nodo implements Tipo {
@@ -498,7 +498,7 @@ public abstract class SintaxisAbstracta {
             output.write("<string>\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Id_tipo extends Nodo implements Tipo {
@@ -523,7 +523,7 @@ public abstract class SintaxisAbstracta {
             output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Struct_tipo extends Nodo implements Tipo {
@@ -551,7 +551,7 @@ public abstract class SintaxisAbstracta {
             output.write("}\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class L_campos extends Nodo implements Campos {
@@ -576,7 +576,7 @@ public abstract class SintaxisAbstracta {
             campo.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Un_campo extends Nodo implements Campos {
@@ -597,7 +597,7 @@ public abstract class SintaxisAbstracta {
             campo.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Camp extends Nodo implements Campo {
@@ -621,7 +621,7 @@ public abstract class SintaxisAbstracta {
             output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Si_param extends Nodo implements LParam_opt {
@@ -640,7 +640,7 @@ public abstract class SintaxisAbstracta {
             lParam.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class No_param extends Nodo implements LParam_opt {
@@ -655,7 +655,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {}
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class L_param extends Nodo implements LParam {
@@ -680,7 +680,7 @@ public abstract class SintaxisAbstracta {
             param.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Un_param extends Nodo implements LParam {
@@ -701,7 +701,7 @@ public abstract class SintaxisAbstracta {
             param.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Param_simple extends Nodo implements Param{
@@ -725,7 +725,7 @@ public abstract class SintaxisAbstracta {
             output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Param_ref extends Nodo implements  Param{
@@ -750,7 +750,7 @@ public abstract class SintaxisAbstracta {
             output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Si_instrs extends Nodo implements Instrs_opt {
@@ -769,7 +769,7 @@ public abstract class SintaxisAbstracta {
             instrs.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class No_instrs extends Nodo implements Instrs_opt {
@@ -784,7 +784,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {}
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class L_instrs extends Nodo implements Instrs {
@@ -809,7 +809,7 @@ public abstract class SintaxisAbstracta {
             instr.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Una_instr extends Nodo implements Instrs {
@@ -830,7 +830,7 @@ public abstract class SintaxisAbstracta {
             instr.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Eva extends Nodo implements Instr {
@@ -858,7 +858,7 @@ public abstract class SintaxisAbstracta {
             exp.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class If_instr extends Nodo implements Instr {
@@ -889,7 +889,7 @@ public abstract class SintaxisAbstracta {
             bloque.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class If_el extends Nodo implements Instr {
@@ -924,7 +924,7 @@ public abstract class SintaxisAbstracta {
             bloqueElse.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Wh extends Nodo implements Instr {
@@ -955,7 +955,7 @@ public abstract class SintaxisAbstracta {
             bloque.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Rd extends Nodo implements Instr {
@@ -983,7 +983,7 @@ public abstract class SintaxisAbstracta {
             exp.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Wr extends Nodo implements Instr {
@@ -1011,7 +1011,7 @@ public abstract class SintaxisAbstracta {
             exp.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Nw extends Nodo implements Instr {
@@ -1039,7 +1039,7 @@ public abstract class SintaxisAbstracta {
             exp.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Dl extends Nodo implements Instr {
@@ -1067,7 +1067,7 @@ public abstract class SintaxisAbstracta {
             exp.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Nl_instr extends Nodo implements Instr {
@@ -1092,7 +1092,7 @@ public abstract class SintaxisAbstracta {
             output.write("<nl>\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Cl extends Nodo implements Instr {
@@ -1125,7 +1125,7 @@ public abstract class SintaxisAbstracta {
             output.write(")\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Bq_instr extends Nodo implements Instr {
@@ -1152,7 +1152,7 @@ public abstract class SintaxisAbstracta {
             bloque.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Si_exps extends Nodo implements Exps_opt {
@@ -1171,7 +1171,7 @@ public abstract class SintaxisAbstracta {
             exps.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class No_exps extends Nodo implements Exps_opt {
@@ -1186,7 +1186,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public void imprime(Printer output) throws IOException {}
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class L_exps extends Nodo implements Exps {
@@ -1211,7 +1211,7 @@ public abstract class SintaxisAbstracta {
             exp.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Una_exp extends Nodo implements Exps {
@@ -1232,7 +1232,7 @@ public abstract class SintaxisAbstracta {
             exp.imprime(output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     private static abstract class ExpBin extends Nodo implements Exp {
@@ -1283,7 +1283,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "=", opnd1, 1, 0, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class My extends ExpBin {
@@ -1300,7 +1300,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, ">", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Mn extends ExpBin {
@@ -1317,7 +1317,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "<", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Myig extends ExpBin {
@@ -1334,7 +1334,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, ">=", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Mnig extends ExpBin {
@@ -1351,7 +1351,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "<=", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Ig extends ExpBin {
@@ -1368,7 +1368,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "==", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Dif extends ExpBin {
@@ -1385,7 +1385,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "!=", opnd1, 1, 2, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Suma extends ExpBin {
@@ -1402,7 +1402,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "+", opnd1, 2, 3, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
     public static class Resta extends ExpBin {
         public Resta(Exp opnd0, Exp opnd1) {
@@ -1418,7 +1418,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "-", opnd1, 3, 3, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class And extends ExpBin {
@@ -1435,7 +1435,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "<and>", opnd1, 4, 3, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Or extends ExpBin {
@@ -1452,7 +1452,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "<or>", opnd1, 4, 4, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Mul extends ExpBin {
@@ -1469,7 +1469,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "*", opnd1, 4, 5, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
     public static class Div extends ExpBin {
         public Div(Exp opnd0, Exp opnd1) {
@@ -1485,7 +1485,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "/", opnd1, 4, 5, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Mod extends ExpBin {
@@ -1502,7 +1502,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpBin(opnd0, "%", opnd1, 4, 5, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Menos_unario extends ExpPre {
@@ -1519,7 +1519,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpPre(opnd, "-", 5, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Not extends ExpPre {
@@ -1536,7 +1536,7 @@ public abstract class SintaxisAbstracta {
             imprimeExpPre(opnd, "<not>", 5, leeFila(), leeCol(), output);
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Indexacion extends Nodo implements Exp {
@@ -1568,7 +1568,7 @@ public abstract class SintaxisAbstracta {
             output.write("]\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Acceso extends Nodo implements Exp {
@@ -1599,7 +1599,7 @@ public abstract class SintaxisAbstracta {
             output.write(acceso + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Indireccion extends Nodo implements Exp {
@@ -1627,7 +1627,7 @@ public abstract class SintaxisAbstracta {
             output.write("^"+"$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Real extends Nodo implements Exp {
@@ -1654,7 +1654,7 @@ public abstract class SintaxisAbstracta {
             output.write(valor() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Entero extends Nodo implements Exp {
@@ -1681,7 +1681,7 @@ public abstract class SintaxisAbstracta {
             output.write(valor() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class True extends Nodo implements Exp {
@@ -1706,7 +1706,7 @@ public abstract class SintaxisAbstracta {
             output.write("<true>$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class False extends Nodo implements Exp {
@@ -1731,7 +1731,7 @@ public abstract class SintaxisAbstracta {
             output.write("<false>$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class String_exp extends Nodo implements Exp {
@@ -1758,7 +1758,7 @@ public abstract class SintaxisAbstracta {
             output.write(valor() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Iden extends Nodo implements Exp {
@@ -1785,7 +1785,7 @@ public abstract class SintaxisAbstracta {
             output.write(iden() + "$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public static class Null_exp extends Nodo implements Exp {
@@ -1810,16 +1810,14 @@ public abstract class SintaxisAbstracta {
             output.write("<null>$f:" + leeFila() + ",c:" + leeCol() + "$\n");
         }
         @Override
-        public void procesa(Procesamiento p) throws Exception{ p.procesa(this); }
+        public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
     public Prog prog(Bloque bloque){ return new Prog(bloque); }
     public Bloque bloque(Decs_opt decs, Instrs_opt instrs){
         return new Bloque(decs, instrs);
     }
-    public Decs_opt si_decs(Decs decs){
-        return new Si_decs(decs);
-    }
+    public Decs_opt si_decs(Decs decs){ return new Si_decs(decs); }
     public Decs_opt no_decs(){
         return new No_decs();
     }

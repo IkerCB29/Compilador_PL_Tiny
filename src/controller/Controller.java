@@ -57,7 +57,7 @@ public class Controller {
                     ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
                     asin.analiza().procesa(impresionBonitaVisitante);
                     break;
-                default: throw new Exception("Invalid parameters");
+                default: throw new RuntimeException("Invalid parameters");
             }
         }
         catch(TokenMgrError e) {
