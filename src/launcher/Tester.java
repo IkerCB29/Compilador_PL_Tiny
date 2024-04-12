@@ -29,6 +29,8 @@ public class Tester {
         list.add(new Pair<>("files/sample4d.in", "files/sample4d.out"));
         list.add(new Pair<>("files/sample5a.in", "files/sample5a.out"));
         list.add(new Pair<>("files/sample5d.in", "files/sample5d.out"));
+        list.add(new Pair<>("files/sample6a.in", "files/sample6a.out"));
+        list.add(new Pair<>("files/sample6d.in", "files/sample6d.out"));
         return list;
     };
 
