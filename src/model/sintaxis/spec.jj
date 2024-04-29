@@ -512,7 +512,7 @@ Exp E6():
 Exp RE6(Exp exph):
     {Token aper, acc, puntero; Exp exp, rexp;}
     {
-      aper = <CorcheteApertura> exp =E0() <CorcheteCierro> rexp = RE6((Exp)sem.indexacion(exph, exp).ponFila(aper.beginLine).ponCol(aper.beginColumn))
+      aper = <CorcheteApertura> exp = E0() <CorcheteCierro> rexp = RE6((Exp)sem.indexacion(exph, exp).ponFila(aper.beginLine).ponCol(aper.beginColumn))
         {return rexp;}
       |
       <Acceso> acc = <Identificador> rexp = RE6((Exp)sem.acceso(exph, acc.image).ponFila(acc.beginLine).ponCol(acc.beginColumn))
