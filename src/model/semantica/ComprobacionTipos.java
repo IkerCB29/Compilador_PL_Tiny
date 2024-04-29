@@ -4,6 +4,8 @@ import exceptions.TipadoInvalidoExcepcion;
 import java.io.IOException;
 import model.Procesamiento;
 import model.sintaxis.SintaxisAbstracta.Exp;
+import model.sintaxis.SintaxisAbstracta.Exps;
+import model.sintaxis.SintaxisAbstracta.LParam;
 import model.sintaxis.SintaxisAbstracta.Tipo;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
@@ -294,47 +296,95 @@ public class ComprobacionTipos implements Procesamiento {
 
     @Override
     public void procesa(Nw instr) throws IOException {
-
+        instr.exp().procesa(this);
+        if(!claseDe(ref(instr.exp().getTipo()), P_tipo.class))
+            throw new TipadoInvalidoExcepcion(ref(instr.exp().getTipo()).getClass(), P_tipo.class);
+        instr.setTipo(true);
     }
 
     @Override
     public void procesa(Dl instr) throws IOException {
-
+        instr.exp().procesa(this);
+        if(!claseDe(ref(instr.exp().getTipo()), P_tipo.class))
+            throw new TipadoInvalidoExcepcion(ref(instr.exp().getTipo()).getClass(), P_tipo.class);
+        instr.setTipo(true);
     }
 
     @Override
     public void procesa(Nl_instr instr) throws IOException {
-
+        instr.setTipo(true);
     }
 
     @Override
     public void procesa(Cl instr) throws IOException {
+        P_dec pDec = (P_dec) instr.getVinculo();
+        if(claseDe(pDec.lParamOpt(), Si_param.class) && claseDe(instr.expsOpt(), Si_exps.class)){
+            instr.setTipo(compruebaParametros(pDec.lParamOpt().lParam(), instr.expsOpt().exps()));
+        }
+        else if (claseDe(pDec.lParamOpt(), No_param.class) && claseDe(instr.expsOpt(), No_exps.class)){
+            instr.setTipo(true);
+        }
+        else if(claseDe(pDec.lParamOpt(), Si_param.class))
+            throw new RuntimeException("Se esperaban parámetros pero no se ha pasado ni uno");
+        else
+            throw new RuntimeException("No esperaban parámetros pero se ha pasado alguno");
+    }
 
+    private boolean compruebaParametros(LParam lParam, Exps exps) throws IOException {
+        exps.exp().procesa(this);
+        if(claseDe(lParam, L_param.class) && claseDe(exps, L_exps.class)){
+            if(claseDe(lParam.param(), Param_simple.class) && compatible(lParam.param().tipo(), exps.exp().getTipo())){
+                return compruebaParametros(lParam.lParam(), exps.exps());
+            }
+            else if(esDesignador(exps.exp()) && compatible(lParam.param().tipo(), exps.exp().getTipo())){
+                return compruebaParametros(lParam.lParam(), exps.exps());
+            }
+            throw new RuntimeException("Se esperaba un designador");
+        }
+        else if(claseDe(lParam, Un_param.class) && claseDe(exps, Una_exp.class)){
+            if(claseDe(lParam.param(), Param_simple.class) && compatible(lParam.param().tipo(), exps.exp().getTipo())){
+                return true;
+            }
+            else if(esDesignador(exps.exp()) && compatible(lParam.param().tipo(), exps.exp().getTipo())){
+                return true;
+            }
+            throw new RuntimeException("Se esperaba un designador");
+        }
+        else throw new RuntimeException("El número de argumentos no coincide con el número de parámetros");
     }
 
     @Override
     public void procesa(Bq_instr instr) throws IOException {
-
+        instr.bloque().procesa(this);
+        instr.setTipo(instr.bloque().getTipo());
     }
 
     @Override
     public void procesa(Si_exps exps) throws IOException {
-
+        exps.exps().procesa(this);
+        exps.setTipo(exps.exps().getTipo());
     }
 
     @Override
     public void procesa(No_exps exps) throws IOException {
-
+        exps.setTipo(true);
     }
 
     @Override
     public void procesa(L_exps exps) throws IOException {
-
+        exps.exps().procesa(this);
+        exps.exp().procesa(this);
+        exps.setTipo(
+            exps.exps().getTipo() && exps.exp().getTipo() != null
+        );
     }
 
     @Override
     public void procesa(Una_exp exps) throws IOException {
-
+        exps.exp().procesa(this);
+        exps.setTipo(
+            exps.exp().getTipo() != null
+        );
     }
 
     @Override
@@ -464,7 +514,7 @@ public class ComprobacionTipos implements Procesamiento {
 
     @Override
     public void procesa(Null_exp exp) throws IOException {
-
+        exp.setTipo(new P_tipo(null));
     }
 
     private Tipo ref(Tipo t){
@@ -477,6 +527,10 @@ public class ComprobacionTipos implements Procesamiento {
     private boolean esDesignador(Exp exp){
         return claseDe(exp, Iden.class) || claseDe(exp, Acceso.class) || claseDe(exp, Indexacion.class) ||
             claseDe(exp, Asig.class);
+    }
+
+    private boolean compatible(Tipo a, Tipo b){
+        return false;
     }
 
     private boolean claseDe(Object o, Class c) {

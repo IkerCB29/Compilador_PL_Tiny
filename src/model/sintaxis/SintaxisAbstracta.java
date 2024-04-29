@@ -47,7 +47,7 @@ public abstract class SintaxisAbstracta {
       Géneros
     */
     public static abstract class Decs_opt extends Nodo {
-        private boolean tipo;
+        private boolean tipo = false;
         public abstract Decs decs();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
@@ -56,7 +56,7 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Decs extends Nodo {
-        private boolean tipo;
+        private boolean tipo = false;
         public abstract Decs decs();
         public abstract Dec dec();
         public abstract void imprime(Printer output) throws IOException;
@@ -66,7 +66,7 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Dec extends Nodo {
-        private boolean tipo;
+        private boolean tipo = false;
         public abstract Tipo tipo();
         public abstract String iden();
         public abstract LParam_opt lParamOpt();
@@ -121,7 +121,7 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Instrs_opt extends Nodo {
-        private boolean tipo;
+        private boolean tipo = false;
         public abstract Instrs instrs();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
@@ -130,7 +130,7 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Instrs extends Nodo {
-        private boolean tipo;
+        private boolean tipo = false;
         public abstract Instrs instrs();
         public abstract Instr instr();
         public abstract void imprime(Printer output) throws IOException;
@@ -140,7 +140,7 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Instr extends Nodo {
-        private boolean tipo;
+        private boolean tipo = false;
         public abstract Exp exp();
         public abstract Bloque bloque();
         public abstract Bloque bloqueElse();
@@ -153,7 +153,7 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Exps_opt extends Nodo {
-        private boolean tipo;
+        private boolean tipo = false;
         public abstract Exps exps();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
@@ -162,7 +162,7 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Exps extends Nodo {
-        private boolean tipo;
+        private boolean tipo = false;
         public abstract Exps exps();
         public abstract Exp exp();
         public abstract void imprime(Printer output) throws IOException;
@@ -172,7 +172,8 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Exp extends Nodo {
-        private Tipo tipo;
+        private Tipo tipo = null;
+
         public abstract String iden();
         public abstract String valor();
         public abstract Exp opnd0();
