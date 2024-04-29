@@ -1,7 +1,10 @@
 package model.semantica;
 
+import exceptions.TipadoInvalidoExcepcion;
 import java.io.IOException;
 import model.Procesamiento;
+import model.sintaxis.SintaxisAbstracta.Exp;
+import model.sintaxis.SintaxisAbstracta.Tipo;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
 import model.sintaxis.SintaxisAbstracta.And;
@@ -75,184 +78,221 @@ import model.sintaxis.SintaxisAbstracta.Wh;
 import model.sintaxis.SintaxisAbstracta.Wr;
 
 public class ComprobacionTipos implements Procesamiento {
-
     @Override
     public void procesa(Prog prog) throws IOException {
+        prog.bloque().procesa(this);
+        prog.setTipo(prog.bloque().getTipo());
     }
 
     @Override
     public void procesa(Bloque bloque) throws IOException {
-
+        bloque.decsOpt().procesa(this);
+        bloque.instrsOpt().procesa(this);
+        bloque.setTipo(
+            bloque.decsOpt().getTipo() && bloque.instrsOpt().getTipo()
+        );
     }
 
     @Override
     public void procesa(Si_decs decs) throws IOException {
-
+        decs.decs().procesa(this);
+        decs.setTipo(decs.decs().getTipo());
     }
 
     @Override
     public void procesa(No_decs decs) throws IOException {
-
+        decs.setTipo(true);
     }
 
     @Override
     public void procesa(L_decs decs) throws IOException {
-
+        decs.decs().procesa(this);
+        decs.dec().procesa(this);
+        decs.setTipo(
+            decs.decs().getTipo() && decs.dec().getTipo()
+        );
     }
 
     @Override
     public void procesa(Una_dec decs) throws IOException {
-
+        decs.dec().procesa(this);
+        decs.setTipo(decs.dec().getTipo());
     }
 
     @Override
     public void procesa(T_dec dec) throws IOException {
-
+        dec.setTipo(true);
     }
 
     @Override
     public void procesa(V_dec dec) throws IOException {
-
+        dec.setTipo(true);
     }
 
     @Override
     public void procesa(P_dec dec) throws IOException {
-
+        dec.bloque().procesa(this);
+        dec.setTipo(dec.bloque().getTipo());
     }
 
     @Override
-    public void procesa(A_tipo tipo) throws IOException {
-
-    }
+    public void procesa(A_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(P_tipo tipo) throws IOException {
-
-    }
+    public void procesa(P_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(In_tipo tipo) throws IOException {
-
-    }
+    public void procesa(In_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(R_tipo tipo) throws IOException {
-
-    }
+    public void procesa(R_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(B_tipo tipo) throws IOException {
-
-    }
+    public void procesa(B_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(String_tipo tipo) throws IOException {
-
-    }
+    public void procesa(String_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(Id_tipo tipo) throws IOException {
-
-    }
+    public void procesa(Id_tipo tipo) throws IOException { }
 
     @Override
-    public void procesa(Struct_tipo tipo) throws IOException {
-
-    }
+    public void procesa(Struct_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(L_campos campos) throws IOException {
-
-    }
+    public void procesa(L_campos campos) throws IOException {}
 
     @Override
-    public void procesa(Un_campo campos) throws IOException {
-
-    }
+    public void procesa(Un_campo campos) throws IOException {}
 
     @Override
-    public void procesa(Camp campo) throws IOException {
-
-    }
+    public void procesa(Camp campo) throws IOException {}
 
     @Override
-    public void procesa(Si_param lParam) throws IOException {
-
-    }
+    public void procesa(Si_param lParam) throws IOException {}
 
     @Override
-    public void procesa(No_param lParam) throws IOException {
-
-    }
+    public void procesa(No_param lParam) throws IOException {}
 
     @Override
-    public void procesa(L_param lParam) throws IOException {
-
-    }
+    public void procesa(L_param lParam) throws IOException {}
 
     @Override
-    public void procesa(Un_param lParam) throws IOException {
-
-    }
+    public void procesa(Un_param lParam) throws IOException { }
 
     @Override
-    public void procesa(Param_simple param) throws IOException {
-
-    }
+    public void procesa(Param_simple param) throws IOException {}
 
     @Override
-    public void procesa(Param_ref param) throws IOException {
-
-    }
+    public void procesa(Param_ref param) throws IOException {}
 
     @Override
     public void procesa(Si_instrs instrs) throws IOException {
-
+        instrs.instrs().procesa(this);
+        instrs.setTipo(instrs.instrs().getTipo());
     }
 
     @Override
     public void procesa(No_instrs instrs) throws IOException {
-
+        instrs.setTipo(true);
     }
 
     @Override
     public void procesa(L_instrs instrs) throws IOException {
-
+        instrs.instr().procesa(this);
+        instrs.instr().procesa(this);
+        instrs.setTipo(
+            instrs.instrs().getTipo() && instrs.instr().getTipo()
+        );
     }
 
     @Override
     public void procesa(Una_instr instrs) throws IOException {
-
+        instrs.instr().procesa(this);
+        instrs.setTipo(instrs.instr().getTipo());
     }
 
     @Override
     public void procesa(Eva instr) throws IOException {
-
+        instr.exp().procesa(this);
+        instr.setTipo(true);
     }
 
     @Override
     public void procesa(If_instr instr) throws IOException {
-
+        instr.exp().procesa(this);
+        if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
+            throw new TipadoInvalidoExcepcion(ref(instr.exp().getTipo()).getClass(), B_tipo.class);
+        }
+        instr.bloque().procesa(this);
+        instr.setTipo(instr.bloque().getTipo());
     }
 
     @Override
     public void procesa(If_el instr) throws IOException {
-
+        instr.exp().procesa(this);
+        if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
+            throw new TipadoInvalidoExcepcion(ref(instr.exp().getTipo()).getClass(), B_tipo.class);
+        }
+        instr.bloque().procesa(this);
+        instr.bloqueElse().procesa(this);
+        instr.setTipo(
+            instr.bloque().getTipo() && instr.bloqueElse().getTipo()
+        );
     }
 
     @Override
     public void procesa(Wh instr) throws IOException {
-
+        instr.exp().procesa(this);
+        if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
+            throw new TipadoInvalidoExcepcion(ref(instr.exp().getTipo()).getClass(), B_tipo.class);
+        }
+        instr.bloque().procesa(this);
+        instr.setTipo(instr.bloque().getTipo());
     }
 
     @Override
     public void procesa(Rd instr) throws IOException {
-
+        instr.exp().procesa(this);
+        if(!esDesignador(instr.exp())){
+            throw new RuntimeException("Se esperaba un designador");
+        }
+        if(claseDe(ref(instr.exp().getTipo()), In_tipo.class)){
+            instr.setTipo(true);
+        }
+        else if(claseDe(ref(instr.exp().getTipo()), R_tipo.class)){
+            instr.setTipo(true);
+        }
+        else if(claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
+            instr.setTipo(true);
+        }
+        else if(claseDe(ref(instr.exp().getTipo()), String_tipo.class)){
+            instr.setTipo(true);
+        }
+        else throw new TipadoInvalidoExcepcion(ref(instr.exp().getTipo()).getClass(), In_tipo.class, R_tipo.class,
+            B_tipo.class, String_tipo.class);
     }
 
     @Override
     public void procesa(Wr instr) throws IOException {
-
+        instr.exp().procesa(this);
+        if(!esDesignador(instr.exp())){
+            throw new RuntimeException("Se esperaba un designador");
+        }
+        if(claseDe(ref(instr.exp().getTipo()), In_tipo.class)){
+            instr.setTipo(true);
+        }
+        else if(claseDe(ref(instr.exp().getTipo()), R_tipo.class)){
+            instr.setTipo(true);
+        }
+        else if(claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
+            instr.setTipo(true);
+        }
+        else if(claseDe(ref(instr.exp().getTipo()), String_tipo.class)){
+            instr.setTipo(true);
+        }
+        else throw new TipadoInvalidoExcepcion(ref(instr.exp().getTipo()).getClass(), In_tipo.class, R_tipo.class,
+            B_tipo.class, String_tipo.class);
     }
 
     @Override
@@ -428,5 +468,21 @@ public class ComprobacionTipos implements Procesamiento {
     @Override
     public void procesa(Null_exp exp) throws IOException {
 
+    }
+
+    private Tipo ref(Tipo t){
+        if(claseDe(t, Id_tipo.class)){
+            return ref(t.tipo());
+        }
+        else return t;
+    }
+
+    private boolean esDesignador(Exp exp){
+        return claseDe(exp, Iden.class) || claseDe(exp, Acceso.class) || claseDe(exp, Indexacion.class) ||
+            claseDe(exp, Asig.class);
+    }
+
+    private boolean claseDe(Object o, Class c) {
+        return o.getClass() == c;
     }
 }

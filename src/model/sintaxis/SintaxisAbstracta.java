@@ -6,17 +6,11 @@ import model.Procesamiento;
 import view.Printer;
 
 public abstract class SintaxisAbstracta {
-    private interface Editable{
-        Nodo ponFila(int fila);
-        Nodo ponCol(int col);
-        int leeFila();
-        int leeCol();
-    }
     private interface Printable{
         void imprime(Printer output) throws IOException;
     }
 
-    public static abstract class Nodo implements Editable {
+    public static abstract class Nodo {
         public Nodo() {
             fila=col=-1;
         }
@@ -24,21 +18,20 @@ public abstract class SintaxisAbstracta {
         private int col;
         private Nodo vinculo;
 
-        @Override
         public Nodo ponFila(int fila) {
             this.fila = fila;
             return this;
         }
-        @Override
+
         public Nodo ponCol(int col) {
             this.col = col;
             return this;
         }
-        @Override
+
         public int leeFila() {
             return fila;
         }
-        @Override
+
         public int leeCol() {
             return col;
         }
@@ -53,106 +46,149 @@ public abstract class SintaxisAbstracta {
     /*
       Géneros
     */
-    public interface Decs_opt extends Editable, Printable {
-        Decs decs();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Decs_opt extends Nodo {
+        private boolean tipo;
+        public abstract Decs decs();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public interface Decs extends Editable, Printable {
-        Decs decs();
-        Dec dec();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Decs extends Nodo {
+        private boolean tipo;
+        public abstract Decs decs();
+        public abstract Dec dec();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public interface Dec extends Editable, Printable {
-        Tipo tipo();
-        String iden();
-        LParam_opt lParamOpt();
-        Bloque bloque();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Dec extends Nodo {
+        private boolean tipo;
+        public abstract Tipo tipo();
+        public abstract String iden();
+        public abstract LParam_opt lParamOpt();
+        public  abstract Bloque bloque();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public interface Tipo extends Editable, Printable {
-        Tipo tipo();
-        String iden();
-        String capacidad();
-        Campos campos();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Tipo extends Nodo {
+        public abstract Tipo tipo();
+        public abstract String iden();
+        public abstract String capacidad();
+        public abstract Campos campos();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
     }
 
-    public interface Campos extends Editable, Printable {
-        Campos campos();
-        Campo campo();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Campos extends Nodo {
+        public abstract Campos campos();
+        public abstract Campo campo();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
     }
 
-    public interface Campo extends Editable, Printable {
-        Tipo tipo();
-        String iden();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Campo extends Nodo {
+        public abstract Tipo tipo();
+        public abstract String iden();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
     }
 
-    public interface LParam_opt extends Editable, Printable {
-        LParam lParam();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class LParam_opt extends Nodo {
+        public abstract LParam lParam();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
     }
 
-    public interface LParam extends Editable, Printable {
-        LParam lParam();
-        Param param();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class LParam extends Nodo {
+        public abstract LParam lParam();
+        public abstract Param param();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
     }
 
-    public interface Param extends Editable, Printable {
-        Tipo tipo();
-        String iden();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Param extends Nodo {
+        public abstract Tipo tipo();
+        public abstract String iden();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
     }
 
-    public interface Instrs_opt extends Editable, Printable {
-        Instrs instrs();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Instrs_opt extends Nodo {
+        private boolean tipo;
+        public abstract Instrs instrs();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public interface Instrs extends Editable, Printable {
-        Instrs instrs();
-        Instr instr();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Instrs extends Nodo {
+        private boolean tipo;
+        public abstract Instrs instrs();
+        public abstract Instr instr();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public interface Instr extends Editable, Printable {
-        Exp exp();
-        Bloque bloque();
-        Bloque bloqueElse();
-        String iden();
-        Exps_opt expsOpt();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Instr extends Nodo {
+        private boolean tipo;
+        public abstract Exp exp();
+        public abstract Bloque bloque();
+        public abstract Bloque bloqueElse();
+        public abstract String iden();
+        public abstract Exps_opt expsOpt();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public interface Exps_opt extends Editable, Printable {
-        Exps exps();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Exps_opt extends Nodo {
+        private boolean tipo;
+        public abstract Exps exps();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public interface Exps extends Editable, Printable {
-        Exps exps();
-        Exp exp();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Exps extends Nodo {
+        private boolean tipo;
+        public abstract Exps exps();
+        public abstract Exp exp();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public interface Exp extends Editable, Printable {
-        String iden();
-        String valor();
-        Exp opnd0();
-        Exp opnd1();
-        int prioridad();
-        void procesa(Procesamiento p) throws IOException;
+    public static abstract class Exp extends Nodo {
+        private Tipo tipo;
+        public abstract String iden();
+        public abstract String valor();
+        public abstract Exp opnd0();
+        public abstract Exp opnd1();
+        public abstract int prioridad();
+        public abstract void imprime(Printer output) throws IOException;
+        public abstract void procesa(Procesamiento p) throws IOException;
+        public void setTipo(Tipo tipo){ this.tipo = tipo; }
+        public Tipo getTipo() { return tipo; }
     }
 
     /*
       Constructores
     */
     public static class Prog extends Nodo {
+        private boolean tipo;
         private final Bloque bq;
         public Prog(Bloque bloque) {
             super();
@@ -166,9 +202,12 @@ public abstract class SintaxisAbstracta {
             bq.imprime(output);
         }
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
     public static class Bloque extends Nodo {
+        private boolean tipo;
         private final Decs_opt decs;
         private final Instrs_opt instrs;
         public Bloque(Decs_opt decs, Instrs_opt instrs) {
@@ -188,9 +227,11 @@ public abstract class SintaxisAbstracta {
             output.write("}\n");
         }
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
+        public void setTipo(boolean tipo){ this.tipo = tipo; }
+        public boolean getTipo() { return tipo; }
     }
 
-    public static class Si_decs extends Nodo implements Decs_opt {
+    public static class Si_decs extends Decs_opt {
         private final Decs decs;
         public Si_decs(Decs decs) {
             super();
@@ -210,7 +251,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class No_decs extends Nodo implements Decs_opt {
+    public static class No_decs extends Decs_opt {
         public No_decs() {
             super();
         }
@@ -225,7 +266,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class L_decs extends Nodo implements Decs {
+    public static class L_decs extends Decs {
         private final Decs decs;
         private final Dec dec;
         public L_decs(Decs decs, Dec dec) {
@@ -250,7 +291,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Una_dec extends Nodo implements Decs {
+    public static class Una_dec extends Decs {
         private final Dec dec;
         public Una_dec(Dec dec) {
             super();
@@ -271,7 +312,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class T_dec extends Nodo implements Dec {
+    public static class T_dec extends Dec {
         private final Tipo tipo;
         private final String iden;
         public T_dec(Tipo tipo, String iden) {
@@ -300,7 +341,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class V_dec extends Nodo implements Dec {
+    public static class V_dec extends Dec {
         private final Tipo tipo;
         private final String iden;
         public V_dec(Tipo tipo, String iden) {
@@ -328,7 +369,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class P_dec extends Nodo implements Dec {
+    public static class P_dec extends Dec {
         private final String iden;
         private final LParam_opt param;
         private final Bloque bloque;
@@ -362,7 +403,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class A_tipo extends Nodo implements Tipo {
+    public static class A_tipo extends Tipo {
         private final Tipo tipo;
         private final String capacidad;
         public A_tipo(Tipo tipo, String capacidad) {
@@ -392,7 +433,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class P_tipo extends Nodo implements Tipo {
+    public static class P_tipo extends Tipo {
         private final Tipo tipo;
         public P_tipo(Tipo tipo) {
             super();
@@ -418,7 +459,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class In_tipo extends Nodo implements Tipo {
+    public static class In_tipo extends Tipo {
         public In_tipo() {
             super();
         }
@@ -441,7 +482,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class R_tipo extends Nodo implements Tipo {
+    public static class R_tipo extends Tipo {
         public R_tipo() {
             super();
         }
@@ -464,7 +505,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class B_tipo extends Nodo implements Tipo {
+    public static class B_tipo extends Tipo {
         public B_tipo() {
             super();
         }
@@ -487,7 +528,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class String_tipo extends Nodo implements Tipo {
+    public static class String_tipo extends Tipo {
         public String_tipo() {
             super();
         }
@@ -510,7 +551,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Id_tipo extends Nodo implements Tipo {
+    public static class Id_tipo extends Tipo {
         private final String iden;
         public Id_tipo(String iden) {
             super();
@@ -535,7 +576,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Struct_tipo extends Nodo implements Tipo {
+    public static class Struct_tipo extends Tipo {
         private final Campos campos;
         private Map<String, Tipo> mCampos;
         public Struct_tipo(Campos campos) {
@@ -572,7 +613,7 @@ public abstract class SintaxisAbstracta {
         }
     }
 
-    public static class L_campos extends Nodo implements Campos {
+    public static class L_campos extends Campos {
         private final Campos campos;
         private final Campo campo;
         public L_campos(Campos campos, Campo campo) {
@@ -597,7 +638,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Un_campo extends Nodo implements Campos {
+    public static class Un_campo extends Campos {
         private final Campo campo;
         public Un_campo(Campo campo) {
             super();
@@ -618,7 +659,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Camp extends Nodo implements Campo {
+    public static class Camp extends Campo {
         private final Tipo tipo;
         private final String iden;
         public Camp(Tipo tipo, String iden) {
@@ -642,7 +683,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Si_param extends Nodo implements LParam_opt {
+    public static class Si_param extends LParam_opt {
         private final LParam lParam;
         public Si_param(LParam lParam) {
             super();
@@ -661,7 +702,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class No_param extends Nodo implements LParam_opt {
+    public static class No_param extends LParam_opt {
         public No_param() {
             super();
         }
@@ -676,7 +717,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class L_param extends Nodo implements LParam {
+    public static class L_param extends LParam {
         private final LParam lParam;
         private final Param param;
         public L_param(LParam lParam, Param param) {
@@ -701,7 +742,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Un_param extends Nodo implements LParam {
+    public static class Un_param extends LParam {
         private final Param param;
         public Un_param(Param param) {
             super();
@@ -722,7 +763,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Param_simple extends Nodo implements Param{
+    public static class Param_simple extends Param{
         private final Tipo tipo;
         private final String iden;
         public Param_simple(Tipo tipo, String iden) {
@@ -746,7 +787,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Param_ref extends Nodo implements  Param{
+    public static class Param_ref extends Param{
         private final Tipo tipo;
         private final String iden;
         public Param_ref(Tipo tipo, String iden) {
@@ -771,7 +812,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Si_instrs extends Nodo implements Instrs_opt {
+    public static class Si_instrs extends Instrs_opt {
         private final Instrs instrs;
         public Si_instrs(Instrs instrs) {
             super();
@@ -790,7 +831,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class No_instrs extends Nodo implements Instrs_opt {
+    public static class No_instrs extends Instrs_opt {
         public No_instrs() {
             super();
         }
@@ -805,7 +846,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class L_instrs extends Nodo implements Instrs {
+    public static class L_instrs extends Instrs {
         private final Instrs instrs;
         private final Instr instr;
         public L_instrs(Instrs instrs, Instr instr) {
@@ -830,7 +871,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Una_instr extends Nodo implements Instrs {
+    public static class Una_instr extends Instrs {
         private final Instr instr;
         public Una_instr(Instr instr) {
             super();
@@ -851,7 +892,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Eva extends Nodo implements Instr {
+    public static class Eva extends Instr {
         private final Exp exp;
         public Eva(Exp exp) {
             super();
@@ -879,7 +920,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class If_instr extends Nodo implements Instr {
+    public static class If_instr extends Instr {
         private final Exp exp;
         private final Bloque bloque;
         public If_instr(Exp exp, Bloque bloque) {
@@ -910,7 +951,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class If_el extends Nodo implements Instr {
+    public static class If_el extends Instr {
         private final Exp exp;
         private final Bloque bloqueIf;
         private final Bloque bloqueElse;
@@ -945,7 +986,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Wh extends Nodo implements Instr {
+    public static class Wh extends Instr {
         private final Exp exp;
         private final Bloque bloque;
         public Wh(Exp exp, Bloque bloque) {
@@ -976,7 +1017,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Rd extends Nodo implements Instr {
+    public static class Rd extends Instr {
         private final Exp exp;
         public Rd(Exp exp) {
             super();
@@ -1004,7 +1045,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Wr extends Nodo implements Instr {
+    public static class Wr extends Instr {
         private final Exp exp;
         public Wr(Exp exp) {
             super();
@@ -1032,7 +1073,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Nw extends Nodo implements Instr {
+    public static class Nw extends Instr {
         private final Exp exp;
         public Nw(Exp exp) {
             super();
@@ -1060,7 +1101,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Dl extends Nodo implements Instr {
+    public static class Dl extends Instr {
         private final Exp exp;
         public Dl(Exp exp) {
             super();
@@ -1088,7 +1129,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Nl_instr extends Nodo implements Instr {
+    public static class Nl_instr extends Instr {
         public Nl_instr() {
             super();
         }
@@ -1113,7 +1154,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Cl extends Nodo implements Instr {
+    public static class Cl extends Instr {
         private final String iden;
         private final Exps_opt exps;
         public Cl(String iden, Exps_opt exps) {
@@ -1146,7 +1187,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Bq_instr extends Nodo implements Instr {
+    public static class Bq_instr extends Instr {
         private final Bloque bloque;
         public Bq_instr(Bloque bloque) {
             super();
@@ -1173,7 +1214,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Si_exps extends Nodo implements Exps_opt {
+    public static class Si_exps extends Exps_opt {
         private final Exps exps;
         public Si_exps(Exps exps) {
             super();
@@ -1192,7 +1233,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class No_exps extends Nodo implements Exps_opt {
+    public static class No_exps extends Exps_opt {
         public No_exps() {
             super();
         }
@@ -1207,7 +1248,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class L_exps extends Nodo implements Exps {
+    public static class L_exps extends Exps {
         private final Exps exps;
         private final Exp exp;
         public L_exps(Exps exps, Exp exp) {
@@ -1232,7 +1273,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Una_exp extends Nodo implements Exps {
+    public static class Una_exp extends Exps {
         private final Exp exp;
         public Una_exp(Exp exp) {
             super();
@@ -1253,7 +1294,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    private static abstract class ExpBin extends Nodo implements Exp {
+    private static abstract class ExpBin extends Exp {
         protected Exp opnd0;
         protected Exp opnd1;
         public ExpBin(Exp opnd0, Exp opnd1) {
@@ -1271,7 +1312,7 @@ public abstract class SintaxisAbstracta {
         public Exp opnd1() { return opnd1;}
     }
 
-    private static abstract class ExpPre extends Nodo implements Exp {
+    private static abstract class ExpPre extends Exp {
         protected Exp opnd;
         public ExpPre(Exp opnd) {
             super();
@@ -1557,7 +1598,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Indexacion extends Nodo implements Exp {
+    public static class Indexacion extends Exp {
         private final Exp opnd;
         private final Exp pos;
         public Indexacion(Exp opnd, Exp pos) {
@@ -1589,7 +1630,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Acceso extends Nodo implements Exp {
+    public static class Acceso extends Exp {
         private final Exp opnd;
         private final String acceso;
         public Acceso(Exp opnd, String acceso) {
@@ -1609,7 +1650,7 @@ public abstract class SintaxisAbstracta {
         @Override
         public Exp opnd1() { throw new UnsupportedOperationException(); }
         @Override
-        public int prioridad() {  return 6; }
+        public int prioridad() { return 6; }
         @Override
         public void imprime(Printer output) throws IOException {
             imprimeOpnd(opnd, 6, output);
@@ -1620,7 +1661,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Indireccion extends Nodo implements Exp {
+    public static class Indireccion extends Exp {
         private final Exp opnd;
         public Indireccion(Exp opnd) {
             super();
@@ -1648,7 +1689,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Real extends Nodo implements Exp {
+    public static class Real extends Exp {
         private final String num;
         public Real(String num) {
             super();
@@ -1675,7 +1716,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Entero extends Nodo implements Exp {
+    public static class Entero extends Exp {
         private final String num;
         public Entero(String num) {
             super();
@@ -1702,7 +1743,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class True extends Nodo implements Exp {
+    public static class True extends Exp {
         public True() {
             super();
         }
@@ -1727,7 +1768,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class False extends Nodo implements Exp {
+    public static class False extends Exp {
         public False() {
             super();
         }
@@ -1752,7 +1793,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class String_exp extends Nodo implements Exp {
+    public static class String_exp extends Exp {
         private final String string;
         public String_exp(String string) {
             super();
@@ -1779,7 +1820,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Iden extends Nodo implements Exp {
+    public static class Iden extends Exp {
         private final String id;
         public Iden(String id) {
             super();
@@ -1806,7 +1847,7 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
-    public static class Null_exp extends Nodo implements Exp {
+    public static class Null_exp extends Exp {
         public Null_exp() {
             super();
         }
