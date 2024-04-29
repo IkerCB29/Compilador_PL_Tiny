@@ -276,9 +276,6 @@ public class ComprobacionTipos implements Procesamiento {
     @Override
     public void procesa(Wr instr) throws IOException {
         instr.exp().procesa(this);
-        if(!esDesignador(instr.exp())){
-            throw new RuntimeException("Se esperaba un designador");
-        }
         if(claseDe(ref(instr.exp().getTipo()), In_tipo.class)){
             instr.setTipo(true);
         }
