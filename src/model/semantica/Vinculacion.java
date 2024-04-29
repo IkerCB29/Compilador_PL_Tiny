@@ -113,7 +113,10 @@ public class Vinculacion implements Procesamiento {
         }
 
         public Nodo get(String id){
-            return mapa.get(id);
+            if(!mapa.containsKey(id)){
+                return puntero.get(id);
+            }
+            else return mapa.get(id);
         }
     }
 
