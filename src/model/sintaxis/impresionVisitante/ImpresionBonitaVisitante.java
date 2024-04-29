@@ -1,6 +1,8 @@
 package model.sintaxis.impresionVisitante;
 
 import java.io.IOException;
+
+import model.Procesamiento;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
 import model.sintaxis.SintaxisAbstracta.And;
@@ -75,7 +77,7 @@ import model.sintaxis.SintaxisAbstracta.Wh;
 import model.sintaxis.SintaxisAbstracta.Wr;
 import view.Printer;
 
-public class ImpresionBonitaVisitante implements Procesamiento{
+public class ImpresionBonitaVisitante implements Procesamiento {
     private final Printer output;
     public ImpresionBonitaVisitante(Printer output){
         this.output = output;

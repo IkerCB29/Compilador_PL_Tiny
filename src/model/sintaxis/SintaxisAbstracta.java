@@ -1,7 +1,7 @@
 package model.sintaxis;
 
 import java.io.IOException;
-import model.sintaxis.impresionVisitante.Procesamiento;
+import model.Procesamiento;
 import view.Printer;
 
 public abstract class SintaxisAbstracta {

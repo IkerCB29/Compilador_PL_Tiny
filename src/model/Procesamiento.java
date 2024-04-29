@@ -1,4 +1,4 @@
-package model.sintaxis.impresionVisitante;
+package model;
 
 import java.io.IOException;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
