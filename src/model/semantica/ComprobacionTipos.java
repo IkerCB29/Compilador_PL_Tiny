@@ -7,7 +7,6 @@ import model.sintaxis.SintaxisAbstracta.Campos;
 import model.sintaxis.SintaxisAbstracta.Exp;
 import model.sintaxis.SintaxisAbstracta.Exps;
 import model.sintaxis.SintaxisAbstracta.LParam;
-import model.sintaxis.SintaxisAbstracta.Nodo;
 import model.sintaxis.SintaxisAbstracta.Tipo;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
@@ -610,27 +609,52 @@ public class ComprobacionTipos implements Procesamiento {
 
     @Override
     public void procesa(Menos_unario exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)) {
+            exp.setTipo(exp.opnd0().getTipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), In_tipo.class, R_tipo.class);
     }
 
     @Override
     public void procesa(Not exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class)) {
+            exp.setTipo(exp.opnd0().getTipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), B_tipo.class);
     }
 
     @Override
     public void procesa(Indexacion exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(!claseDe(ref(exp.opnd0().getTipo()), A_tipo.class)) {
+            throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), A_tipo.class);
+        }
+        if(!claseDe(ref(exp.opnd0().getTipo()), In_tipo.class)){
+            throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), In_tipo.class);
+        }
+        exp.setTipo(exp.opnd0().getTipo().tipo());
     }
 
     @Override
     public void procesa(Acceso exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        if(!claseDe(ref(exp.opnd0().getTipo()), Struct_tipo.class)) {
+            throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), Struct_tipo.class);
+        }
+        Struct_tipo struct = (Struct_tipo) exp.opnd0().getTipo();
+        exp.setTipo(struct.getTipoDe(exp.iden()));
     }
 
     @Override
     public void procesa(Indireccion exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class)){
+            exp.setTipo(exp.opnd0().getTipo().tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), P_tipo.class);
     }
 
     @Override
@@ -681,7 +705,8 @@ public class ComprobacionTipos implements Procesamiento {
 
     private Tipo ref(Tipo t){
         if(claseDe(t, Id_tipo.class)){
-            return ref(t.tipo());
+            T_dec tDec = (T_dec) t.getVinculo();
+            return ref(tDec.tipo());
         }
         else return t;
     }

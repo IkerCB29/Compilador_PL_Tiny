@@ -323,7 +323,7 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public String toString() {
-            return "t_decs("+tipo+","+iden+")";
+            return "t_dec("+tipo+","+iden+")";
         }
         public Tipo tipo() { return tipo; }
         @Override
@@ -605,8 +605,8 @@ public abstract class SintaxisAbstracta {
         @Override
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
 
-        public Map<String, Tipo> getMapaCampos() {
-            return mCampos;
+        public Tipo getTipoDe(String iden) {
+            return mCampos.get(iden);
         }
 
         public void setMapaCampos(Map<String, Tipo> mCampos) {
