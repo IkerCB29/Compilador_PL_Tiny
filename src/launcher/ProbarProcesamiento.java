@@ -4,6 +4,7 @@ import controller.Controller;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.Reader;
+import view.ConsolePrinter;
 import view.FilePrinter;
 
 public class ProbarProcesamiento {
@@ -11,7 +12,7 @@ public class ProbarProcesamiento {
         try {
             Controller c = new Controller();
             Reader input = new BufferedReader(new FileReader("files/sample7a.in"));
-            c.procesamiento(input, new FilePrinter("files/sample7a.out_test"));
+            c.procesamiento(input, new ConsolePrinter());
         }
         catch (Exception e){
             e.printStackTrace();
