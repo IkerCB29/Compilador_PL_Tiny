@@ -287,6 +287,7 @@ public class Vinculacion implements Procesamiento {
     @Override
     public void procesa(P_tipo tipo) throws IOException {
         if(claseDe(tipo.tipo(), Id_tipo.class)){
+            tipo.setVinculo(ts.vinculoDe(tipo.tipo().iden()));
             if(!claseDe(tipo.getVinculo(), T_dec.class))
                 throw new VinculoInvalidoExcepcion();
         }
