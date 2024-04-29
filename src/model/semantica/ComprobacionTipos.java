@@ -3,9 +3,11 @@ package model.semantica;
 import exceptions.TipadoInvalidoExcepcion;
 import java.io.IOException;
 import model.Procesamiento;
+import model.sintaxis.SintaxisAbstracta.Campos;
 import model.sintaxis.SintaxisAbstracta.Exp;
 import model.sintaxis.SintaxisAbstracta.Exps;
 import model.sintaxis.SintaxisAbstracta.LParam;
+import model.sintaxis.SintaxisAbstracta.Nodo;
 import model.sintaxis.SintaxisAbstracta.Tipo;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
@@ -333,22 +335,20 @@ public class ComprobacionTipos implements Procesamiento {
     private boolean compruebaParametros(LParam lParam, Exps exps) throws IOException {
         exps.exp().procesa(this);
         if(claseDe(lParam, L_param.class) && claseDe(exps, L_exps.class)){
-            if(claseDe(lParam.param(), Param_simple.class) && compatible(lParam.param().tipo(), exps.exp().getTipo())){
-                return compruebaParametros(lParam.lParam(), exps.exps());
+            if (!claseDe(lParam.param(), Param_simple.class) && !esDesignador(exps.exp())) {
+                throw new RuntimeException("Se esperaba un designador");
             }
-            else if(esDesignador(exps.exp()) && compatible(lParam.param().tipo(), exps.exp().getTipo())){
-                return compruebaParametros(lParam.lParam(), exps.exps());
-            }
-            throw new RuntimeException("Se esperaba un designador");
+            if(!compatible(lParam.param().tipo(), exps.exp().getTipo()))
+                throw new TipadoInvalidoExcepcion(exps.exp().getTipo().getClass(), lParam.param().tipo().getClass());
+            return compruebaParametros(lParam.lParam(), exps.exps());
         }
         else if(claseDe(lParam, Un_param.class) && claseDe(exps, Una_exp.class)){
-            if(claseDe(lParam.param(), Param_simple.class) && compatible(lParam.param().tipo(), exps.exp().getTipo())){
-                return true;
+            if (!claseDe(lParam.param(), Param_simple.class) && !esDesignador(exps.exp())) {
+                throw new RuntimeException("Se esperaba un designador");
             }
-            else if(esDesignador(exps.exp()) && compatible(lParam.param().tipo(), exps.exp().getTipo())){
-                return true;
-            }
-            throw new RuntimeException("Se esperaba un designador");
+            if(!compatible(lParam.param().tipo(), exps.exp().getTipo()))
+                throw new TipadoInvalidoExcepcion(exps.exp().getTipo().getClass(), lParam.param().tipo().getClass());
+            return true;
         }
         else throw new RuntimeException("El número de argumentos no coincide con el número de parámetros");
     }
@@ -389,72 +389,223 @@ public class ComprobacionTipos implements Procesamiento {
 
     @Override
     public void procesa(Asig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(!esDesignador(exp.opnd0()))
+            throw new RuntimeException("Se esperaba un designador");
+        if(!compatible(exp.opnd0().getTipo(), exp.opnd1().getTipo()))
+            throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        exp.setTipo(exp.opnd0().getTipo());
     }
 
     @Override
     public void procesa(My exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)){
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new B_tipo());
+            }
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), String_tipo.class) &&
+            claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Mn exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)) {
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new B_tipo());
+            }
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), String_tipo.class) &&
+            claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Myig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)) {
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new B_tipo());
+            }
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), String_tipo.class) &&
+            claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Mnig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)) {
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new B_tipo());
+            }
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), String_tipo.class) &&
+            claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Ig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)) {
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new B_tipo());
+            }
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), String_tipo.class) &&
+            claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), P_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Dif exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)) {
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new B_tipo());
+            }
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), String_tipo.class) &&
+            claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), P_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Suma exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)) {
+            exp.setTipo(new In_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)){
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new R_tipo());
+            }
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Resta exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)) {
+            exp.setTipo(new In_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)){
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new R_tipo());
+            }
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(And exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Or exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Mul exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)) {
+            exp.setTipo(new In_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)){
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new R_tipo());
+            }
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Div exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)) {
+            exp.setTipo(new In_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)){
+            if(claseDe(ref(exp.opnd1().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd1().getTipo()), R_tipo.class)) {
+                exp.setTipo(new R_tipo());
+            }
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
     public void procesa(Mod exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)) {
+            exp.setTipo(new In_tipo());
+        }
+        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
     @Override
@@ -484,32 +635,43 @@ public class ComprobacionTipos implements Procesamiento {
 
     @Override
     public void procesa(Entero exp) throws IOException {
-
+        exp.setTipo(new In_tipo());
     }
 
     @Override
     public void procesa(Real exp) throws IOException {
-
+        exp.setTipo(new R_tipo());
     }
 
     @Override
     public void procesa(True exp) throws IOException {
-
+        exp.setTipo(new B_tipo());
     }
 
     @Override
     public void procesa(False exp) throws IOException {
-
+        exp.setTipo(new B_tipo());
     }
 
     @Override
     public void procesa(String_exp exp) throws IOException {
-
+        exp.setTipo(new String_tipo());
     }
 
     @Override
     public void procesa(Iden exp) throws IOException {
-
+        if(claseDe(exp.getVinculo(), V_dec.class)){
+            V_dec vDec = (V_dec) exp.getVinculo();
+            exp.setTipo(vDec.tipo());
+        }
+        else if(claseDe(exp.getVinculo(), Param_simple.class)){
+            Param_simple vDec = (Param_simple) exp.getVinculo();
+            exp.setTipo(vDec.tipo());
+        }
+        else{
+            Param_ref vDec = (Param_ref) exp.getVinculo();
+            exp.setTipo(vDec.tipo());
+        }
     }
 
     @Override
@@ -530,7 +692,29 @@ public class ComprobacionTipos implements Procesamiento {
     }
 
     private boolean compatible(Tipo a, Tipo b){
-        return false;
+        if(claseDe(ref(a), In_tipo.class) && claseDe(ref(b), In_tipo.class)) return true;
+        else if(claseDe(ref(a), R_tipo.class) && claseDe(ref(b), In_tipo.class)) return true;
+        else if(claseDe(ref(a), R_tipo.class) && claseDe(ref(b), R_tipo.class)) return true;
+        else if(claseDe(ref(a), B_tipo.class) && claseDe(ref(b), B_tipo.class)) return true;
+        else if(claseDe(ref(a), String_tipo.class) && claseDe(ref(b), String_tipo.class)) return true;
+        else if(claseDe(ref(a), Struct_tipo.class) && claseDe(ref(b), Struct_tipo.class)) {
+            return compruebaCampos(a.campos(), b.campos());
+        }
+        else if(claseDe(ref(a), P_tipo.class) && claseDe(ref(b), P_tipo.class)){
+            if(b.tipo() == null) return true;
+            else return compatible(a.tipo(), b.tipo());
+        }
+        else return false;
+    }
+
+    private boolean compruebaCampos(Campos c0, Campos c1){
+        if(claseDe(c0, L_campos.class) && claseDe(c1, L_campos.class)){
+            return compruebaCampos(c0.campos(), c1.campos()) && compatible(c0.campo().tipo(), c1.campo().tipo());
+        }
+        else if(claseDe(c0, Un_campo.class) && claseDe(c1, Un_campo.class)) {
+            return compatible(c0.campo().tipo(), c1.campo().tipo());
+        }
+        else throw new RuntimeException("Los campos de las estructuras no coinciden");
     }
 
     private boolean claseDe(Object o, Class c) {

@@ -5,6 +5,7 @@ import java.io.*;
 
 import exceptions.LexicoException;
 import model.lexico.AnalizadorLexico;
+import model.semantica.ComprobacionTipos;
 import model.semantica.Vinculacion;
 import model.sintaxis.AnalizadorSintacticoCC;
 import model.sintaxis.AnalizadorSintacticoCUP;
@@ -127,9 +128,11 @@ public class Controller {
         try {
             AnalizadorLexico alex = new AnalizadorLexico(input);
             ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);
-            Vinculacion v = new Vinculacion();
             Prog prog = ((Prog) asin.debug_parse().value);
+            Vinculacion v = new Vinculacion();
             prog.procesa(v);
+            ComprobacionTipos cT = new ComprobacionTipos();
+            prog.procesa(cT);
             return;
         }
         catch (LexicoException e){

@@ -1,5 +1,7 @@
 {
-  ^^tipo a;
-  type int tipo
+  int a;
+  type int b;
+  b c
   &&
+  @ a = c
 }
