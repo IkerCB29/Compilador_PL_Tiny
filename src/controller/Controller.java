@@ -5,6 +5,7 @@ import java.io.*;
 
 import exceptions.LexicoException;
 import model.lexico.AnalizadorLexico;
+import model.semantica.Vinculacion;
 import model.sintaxis.AnalizadorSintacticoCC;
 import model.sintaxis.AnalizadorSintacticoCUP;
 import model.sintaxis.ConstructorASTsCC;
@@ -112,6 +113,22 @@ public class Controller {
                 default: throw new Exception("Invalid parameters");
             }
 
+        }
+        catch (LexicoException e){
+            output.write("ERROR_LEXICO\n");
+        }
+        catch (SintaxisException e){
+            output.write("ERROR_SINTACTICO\n");
+        }
+        output.close();
+    }
+
+    public void procesamiento(Reader input, Printer output) throws Exception {
+        try {
+            AnalizadorLexico alex = new AnalizadorLexico(input);
+            ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);
+            Vinculacion v = new Vinculacion();
+            ((Prog) asin.debug_parse().value).procesa(v);
         }
         catch (LexicoException e){
             output.write("ERROR_LEXICO\n");
