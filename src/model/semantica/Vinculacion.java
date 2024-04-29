@@ -1,6 +1,13 @@
 package model.semantica;
 
+import exceptions.ElementoRepetidoExcepcion;
+import exceptions.SizeInvalidoExcepcion;
+import exceptions.VinculoInvalidoExcepcion;
 import model.Procesamiento;
+import model.sintaxis.SintaxisAbstracta.Campo;
+import model.sintaxis.SintaxisAbstracta.Campos;
+import model.sintaxis.SintaxisAbstracta.Dec;
+import model.sintaxis.SintaxisAbstracta.Decs;
 import model.sintaxis.SintaxisAbstracta.Nodo;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
@@ -16,7 +23,6 @@ import model.sintaxis.SintaxisAbstracta.Div;
 import model.sintaxis.SintaxisAbstracta.Dl;
 import model.sintaxis.SintaxisAbstracta.Entero;
 import model.sintaxis.SintaxisAbstracta.Eva;
-import model.sintaxis.SintaxisAbstracta.Exp;
 import model.sintaxis.SintaxisAbstracta.False;
 import model.sintaxis.SintaxisAbstracta.Id_tipo;
 import model.sintaxis.SintaxisAbstracta.Iden;
@@ -65,6 +71,7 @@ import model.sintaxis.SintaxisAbstracta.String_tipo;
 import model.sintaxis.SintaxisAbstracta.Struct_tipo;
 import model.sintaxis.SintaxisAbstracta.Suma;
 import model.sintaxis.SintaxisAbstracta.T_dec;
+import model.sintaxis.SintaxisAbstracta.Tipo;
 import model.sintaxis.SintaxisAbstracta.True;
 import model.sintaxis.SintaxisAbstracta.Un_campo;
 import model.sintaxis.SintaxisAbstracta.Un_param;
@@ -141,6 +148,8 @@ public class Vinculacion implements Procesamiento {
     }
 
     private TablaSimbolos ts;
+    private Map<String, Tipo> mCampos;
+
     @Override
     public void procesa(Prog prog) throws IOException {
         ts = new TablaSimbolos();
@@ -156,344 +165,452 @@ public class Vinculacion implements Procesamiento {
 
     @Override
     public void procesa(Si_decs decs) throws IOException {
+        preprocesa(decs.decs());
         decs.decs().procesa(this);
     }
 
     @Override
     public void procesa(No_decs decs) throws IOException {}
 
+    public void preprocesa(Decs decs) throws IOException {
+        if(claseDe(decs, L_decs.class)){
+            preprocesa(decs.decs());
+            preprocesa(decs.dec());
+        }
+        else{
+            preprocesa(decs.dec());
+        }
+    }
+
+    public void preprocesa(Dec dec) throws IOException {
+        if(claseDe(dec, T_dec.class)){
+            preprocesa(dec.tipo());
+            if(ts.contiene(dec.iden())){
+                throw new ElementoRepetidoExcepcion(dec.iden());
+            }
+            ts.inserta(dec.iden(), (T_dec) dec);
+        }
+        else if(claseDe(dec, V_dec.class)){
+            preprocesa(dec.tipo());
+            if(ts.contiene(dec.iden())){
+                throw new ElementoRepetidoExcepcion(dec.iden());
+            }
+            ts.inserta(dec.iden(), (V_dec) dec);
+        }
+        else{
+            if(ts.contiene(dec.iden())){
+                throw new ElementoRepetidoExcepcion(dec.iden());
+            }
+            ts.inserta(dec.iden(), (P_dec) dec);
+            ts.abreAmbito();
+            ts.inserta(dec.iden(), (P_dec) dec);
+            dec.lParamOpt().procesa(this);
+            dec.bloque().procesa(this);
+            ts.cierraAmbito();
+        }
+    }
+
+    public void preprocesa(Tipo tipo) throws IOException {
+        if(claseDe(tipo, A_tipo.class)){
+            preprocesa(tipo.tipo());
+            if(Integer.parseInt(tipo.capacidad()) < 0){
+                throw new SizeInvalidoExcepcion(tipo.capacidad());
+            }
+        }
+        else if(claseDe(tipo, P_tipo.class)) {
+            if(!claseDe(tipo.tipo(), Id_tipo.class)){
+                preprocesa(tipo.tipo());
+            }
+        }
+        else if(claseDe(tipo, Id_tipo.class)) {
+            if(!claseDe(ts.vinculoDe(tipo.iden()), T_dec.class))
+                throw new VinculoInvalidoExcepcion();
+            ((Id_tipo)tipo).setVinculo(ts.vinculoDe(tipo.iden()));
+        }
+        else if(claseDe(tipo, Struct_tipo.class)){
+            mCampos = new HashMap<>();
+            preprocesa(tipo.campos());
+            ((Struct_tipo) tipo).setMapaCampos(mCampos);
+        }
+    }
+
+    public void preprocesa(Campos campos) throws IOException {
+        if(claseDe(campos, L_campos.class)){
+            preprocesa(campos.campos());
+            preprocesa(campos.campo());
+        }
+        else {
+            preprocesa(campos.campo());
+        }
+    }
+
+    public void preprocesa(Campo campo) throws IOException {
+        preprocesa(campo.tipo());
+        if(mCampos.containsKey(campo.iden())){
+            throw new ElementoRepetidoExcepcion(campo.iden());
+        }
+        mCampos.put(campo.iden(), campo.tipo());
+    }
+
     @Override
     public void procesa(L_decs decs) throws IOException {
-
+        decs.decs().procesa(this);
+        decs.dec().procesa(this);
     }
 
     @Override
     public void procesa(Una_dec decs) throws IOException {
-
+        decs.dec().procesa(this);
     }
 
     @Override
     public void procesa(T_dec dec) throws IOException {
-
+        dec.tipo().procesa(this);
     }
 
     @Override
     public void procesa(V_dec dec) throws IOException {
-
+        dec.tipo().procesa(this);
     }
 
     @Override
-    public void procesa(P_dec dec) throws IOException {
-
-    }
+    public void procesa(P_dec dec) throws IOException {}
 
     @Override
     public void procesa(A_tipo tipo) throws IOException {
-
+        tipo.tipo().procesa(this);
     }
 
     @Override
     public void procesa(P_tipo tipo) throws IOException {
-
+        if(claseDe(tipo.tipo(), Id_tipo.class)){
+            if(!claseDe(tipo.getVinculo(), T_dec.class))
+                throw new VinculoInvalidoExcepcion();
+        }
+        else {
+            tipo.tipo().procesa(this);
+        }
     }
 
     @Override
-    public void procesa(In_tipo tipo) throws IOException {
-
-    }
+    public void procesa(In_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(R_tipo tipo) throws IOException {
-
-    }
+    public void procesa(R_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(B_tipo tipo) throws IOException {
-
-    }
+    public void procesa(B_tipo tipo) throws IOException { }
 
     @Override
-    public void procesa(String_tipo tipo) throws IOException {
-
-    }
+    public void procesa(String_tipo tipo) throws IOException { }
 
     @Override
-    public void procesa(Id_tipo tipo) throws IOException {
-
-    }
+    public void procesa(Id_tipo tipo) throws IOException { }
 
     @Override
     public void procesa(Struct_tipo tipo) throws IOException {
-
+        tipo.campos().procesa(this);
     }
 
     @Override
     public void procesa(L_campos campos) throws IOException {
-
+        campos.campos().procesa(this);
+        campos.campo().procesa(this);
     }
 
     @Override
     public void procesa(Un_campo campos) throws IOException {
-
+        campos.campo().procesa(this);
     }
 
     @Override
     public void procesa(Camp campo) throws IOException {
-
+        campo.tipo().procesa(this);
     }
 
     @Override
     public void procesa(Si_param lParam) throws IOException {
-
+        lParam.lParam().procesa(this);
     }
 
     @Override
-    public void procesa(No_param lParam) throws IOException {
-
-    }
+    public void procesa(No_param lParam) throws IOException {}
 
     @Override
     public void procesa(L_param lParam) throws IOException {
-
+        lParam.lParam().procesa(this);
+        lParam.param().procesa(this);
     }
 
     @Override
     public void procesa(Un_param lParam) throws IOException {
-
+        lParam.param().procesa(this);
     }
 
     @Override
     public void procesa(Param_simple param) throws IOException {
-
+        param.tipo().procesa(this);
+        if(ts.contiene(param.iden())){
+            throw new ElementoRepetidoExcepcion(param.iden());
+        }
+        ts.inserta(param.iden(), param);
     }
 
     @Override
     public void procesa(Param_ref param) throws IOException {
-
+        param.tipo().procesa(this);
+        if(ts.contiene(param.iden())){
+            throw new ElementoRepetidoExcepcion(param.iden());
+        }
+        ts.inserta(param.iden(), param);
     }
 
     @Override
     public void procesa(Si_instrs instrs) throws IOException {
-
+        instrs.instrs().procesa(this);
     }
 
     @Override
-    public void procesa(No_instrs instrs) throws IOException {
-
-    }
+    public void procesa(No_instrs instrs) throws IOException { }
 
     @Override
     public void procesa(L_instrs instrs) throws IOException {
-
+        instrs.instrs().procesa(this);
+        instrs.instr().procesa(this);
     }
 
     @Override
     public void procesa(Una_instr instrs) throws IOException {
-
+        instrs.instr().procesa(this);
     }
 
     @Override
     public void procesa(Eva instr) throws IOException {
-
+        instr.exp().procesa(this);
     }
 
     @Override
     public void procesa(If_instr instr) throws IOException {
-
+        instr.exp().procesa(this);
+        ts.abreAmbito();
+        instr.bloque().procesa(this);
+        ts.cierraAmbito();
     }
 
     @Override
     public void procesa(If_el instr) throws IOException {
-
+        instr.exp().procesa(this);
+        ts.abreAmbito();
+        instr.bloque().procesa(this);
+        ts.cierraAmbito();
+        ts.abreAmbito();
+        instr.bloqueElse().procesa(this);
+        ts.cierraAmbito();
     }
 
     @Override
     public void procesa(Wh instr) throws IOException {
-
+        instr.exp().procesa(this);
+        ts.abreAmbito();
+        instr.bloque().procesa(this);
+        ts.cierraAmbito();
     }
 
     @Override
     public void procesa(Rd instr) throws IOException {
-
+        instr.exp().procesa(this);
     }
 
     @Override
     public void procesa(Wr instr) throws IOException {
-
+        instr.exp().procesa(this);
     }
 
     @Override
     public void procesa(Nw instr) throws IOException {
-
+        instr.exp().procesa(this);
     }
 
     @Override
     public void procesa(Dl instr) throws IOException {
-
+        instr.exp().procesa(this);
     }
 
     @Override
-    public void procesa(Nl_instr instr) throws IOException {
-
-    }
+    public void procesa(Nl_instr instr) throws IOException {}
 
     @Override
     public void procesa(Cl instr) throws IOException {
-
+        if(!claseDe(ts.vinculoDe(instr.iden()), P_dec.class)){
+            throw new VinculoInvalidoExcepcion();
+        }
+        instr.setVinculo(ts.vinculoDe(instr.iden()));
+        instr.expsOpt().procesa(this);
     }
 
     @Override
     public void procesa(Bq_instr instr) throws IOException {
-
+        ts.abreAmbito();
+        instr.bloque().procesa(this);
+        ts.cierraAmbito();
     }
 
     @Override
     public void procesa(Si_exps exps) throws IOException {
-
+        exps.exps().procesa(this);
     }
 
     @Override
-    public void procesa(No_exps exps) throws IOException {
-
-    }
+    public void procesa(No_exps exps) throws IOException {}
 
     @Override
     public void procesa(L_exps exps) throws IOException {
-
+        exps.exps().procesa(this);
+        exps.exp().procesa(this);
     }
 
     @Override
     public void procesa(Una_exp exps) throws IOException {
-
+        exps.exp().procesa(this);
     }
 
     @Override
     public void procesa(Asig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(My exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Mn exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Myig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Mnig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Ig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Dif exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Suma exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Resta exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(And exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Or exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Mul exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Div exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Mod exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Menos_unario exp) throws IOException {
-
+        exp.opnd0().procesa(this);
     }
 
     @Override
     public void procesa(Not exp) throws IOException {
-
+        exp.opnd0().procesa(this);
     }
 
     @Override
     public void procesa(Indexacion exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
     }
 
     @Override
     public void procesa(Acceso exp) throws IOException {
-
+        exp.opnd0().procesa(this);
     }
 
     @Override
     public void procesa(Indireccion exp) throws IOException {
-
+        exp.opnd0().procesa(this);
     }
 
     @Override
-    public void procesa(Entero exp) throws IOException {
-
-    }
+    public void procesa(Entero exp) throws IOException {}
 
     @Override
-    public void procesa(Real exp) throws IOException {
-
-    }
+    public void procesa(Real exp) throws IOException {}
 
     @Override
-    public void procesa(True exp) throws IOException {
-
-    }
+    public void procesa(True exp) throws IOException { }
 
     @Override
-    public void procesa(False exp) throws IOException {
-
-    }
+    public void procesa(False exp) throws IOException {}
 
     @Override
-    public void procesa(String_exp exp) throws IOException {
-
-    }
+    public void procesa(String_exp exp) throws IOException { }
 
     @Override
     public void procesa(Iden exp) throws IOException {
-
+        if(!ts.contiene(exp.iden())){
+            throw new RuntimeException("Uso de un identificador no declarado");
+        }
+        exp.setVinculo(ts.vinculoDe(exp.iden()));
     }
 
     @Override
-    public void procesa(Null_exp exp) throws IOException {
+    public void procesa(Null_exp exp) throws IOException {}
 
+    private boolean claseDe(Object o, Class c) {
+        return o.getClass() == c;
     }
 }

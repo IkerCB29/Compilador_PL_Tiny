@@ -1,6 +1,7 @@
 package model.sintaxis;
 
 import java.io.IOException;
+import java.util.Map;
 import model.Procesamiento;
 import view.Printer;
 
@@ -21,6 +22,8 @@ public abstract class SintaxisAbstracta {
         }
         private int fila;
         private int col;
+        private Nodo vinculo;
+
         @Override
         public Nodo ponFila(int fila) {
             this.fila = fila;
@@ -38,6 +41,12 @@ public abstract class SintaxisAbstracta {
         @Override
         public int leeCol() {
             return col;
+        }
+        public Nodo getVinculo(){
+            return vinculo;
+        }
+        public void setVinculo(Nodo nodo){
+            this.vinculo = nodo;
         }
     }
 
@@ -528,6 +537,7 @@ public abstract class SintaxisAbstracta {
 
     public static class Struct_tipo extends Nodo implements Tipo {
         private final Campos campos;
+        private Map<String, Tipo> mCampos;
         public Struct_tipo(Campos campos) {
             super();
             this.campos = campos;
@@ -552,6 +562,14 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
+
+        public Map<String, Tipo> getMapaCampos() {
+            return mCampos;
+        }
+
+        public void setMapaCampos(Map<String, Tipo> mCampos) {
+            this.mCampos = mCampos;
+        }
     }
 
     public static class L_campos extends Nodo implements Campos {

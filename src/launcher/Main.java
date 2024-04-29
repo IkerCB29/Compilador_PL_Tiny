@@ -8,8 +8,9 @@ import view.ConsolePrinter;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        Reader input  = new BufferedReader(new FileReader(args[0]));
+        Reader input = new BufferedReader(new FileReader(args[0]));
         Controller c = new Controller();
+        input.read();
         if(args[1].equals("asc")){
             c.analisisSintacticoCUP(input, new ConsolePrinter(), args[2]);
         }
