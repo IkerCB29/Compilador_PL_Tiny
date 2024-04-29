@@ -128,7 +128,9 @@ public class Controller {
             AnalizadorLexico alex = new AnalizadorLexico(input);
             ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);
             Vinculacion v = new Vinculacion();
-            ((Prog) asin.debug_parse().value).procesa(v);
+            Prog prog = ((Prog) asin.debug_parse().value);
+            prog.procesa(v);
+            return;
         }
         catch (LexicoException e){
             output.write("ERROR_LEXICO\n");
