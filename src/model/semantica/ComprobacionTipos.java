@@ -632,7 +632,7 @@ public class ComprobacionTipos implements Procesamiento {
         if(!claseDe(ref(exp.opnd0().getTipo()), A_tipo.class)) {
             throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), A_tipo.class);
         }
-        if(!claseDe(ref(exp.opnd0().getTipo()), In_tipo.class)){
+        if(!claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)){
             throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), In_tipo.class);
         }
         exp.setTipo(exp.opnd0().getTipo().tipo());
@@ -724,6 +724,9 @@ public class ComprobacionTipos implements Procesamiento {
         else if(claseDe(ref(a), String_tipo.class) && claseDe(ref(b), String_tipo.class)) return true;
         else if(claseDe(ref(a), Struct_tipo.class) && claseDe(ref(b), Struct_tipo.class)) {
             return compruebaCampos(a.campos(), b.campos());
+        }
+        else if(claseDe(ref(a), A_tipo.class) && claseDe(ref(b), A_tipo.class)){
+            return compatible(a.tipo(), b.tipo());
         }
         else if(claseDe(ref(a), P_tipo.class) && claseDe(ref(b), P_tipo.class)){
             if(b.tipo() == null) return true;

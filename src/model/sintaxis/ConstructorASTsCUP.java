@@ -1715,7 +1715,7 @@ class CUP$ConstructorASTsCUP$actions {
 		int entleft = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).left;
 		int entright = ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()).right;
 		StringLocalizado ent = (StringLocalizado)((java_cup.runtime.Symbol) CUP$ConstructorASTsCUP$stack.peek()).value;
-		 RESULT = (Exp)sem.real(ent.str()).ponFila(ent.fila()).ponCol(ent.col()); 
+		 RESULT = (Exp)sem.entero(ent.str()).ponFila(ent.fila()).ponCol(ent.col()); 
               CUP$ConstructorASTsCUP$result = parser.getSymbolFactory().newSymbol("operando",40, ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), ((java_cup.runtime.Symbol)CUP$ConstructorASTsCUP$stack.peek()), RESULT);
             }
           return CUP$ConstructorASTsCUP$result;
