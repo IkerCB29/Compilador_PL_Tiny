@@ -17,6 +17,11 @@ public abstract class SintaxisAbstracta {
         private int fila;
         private int col;
         private Nodo vinculo;
+        private int dir;
+        private int nivel;
+        private int tam;
+        private int prim;
+        private int sig;
 
         public Nodo ponFila(int fila) {
             this.fila = fila;
@@ -31,7 +36,6 @@ public abstract class SintaxisAbstracta {
         public int leeFila() {
             return fila;
         }
-
         public int leeCol() {
             return col;
         }
@@ -40,6 +44,36 @@ public abstract class SintaxisAbstracta {
         }
         public void setVinculo(Nodo nodo){
             this.vinculo = nodo;
+        }
+        public int getDir(){
+            return dir;
+        }
+        public void setDir(int dir){
+            this.dir = dir;
+        }
+        public int getNivel(){
+            return nivel;
+        }
+        public void setNivel(int nivel){
+            this.nivel = nivel;
+        }
+        public int getTam(){
+            return tam;
+        }
+        public void setTam(int tam){
+            this.tam = tam;
+        }
+        public int getPrim(){
+            return prim;
+        }
+        public void setPrim(int prim){
+            this.prim = prim;
+        }
+        public int getSig(){
+            return sig;
+        }
+        public void setSig(int sig){
+            this.sig = sig;
         }
     }
 
