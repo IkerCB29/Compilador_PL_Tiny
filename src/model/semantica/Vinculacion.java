@@ -614,13 +614,13 @@ public class Vinculacion implements Procesamiento {
     public void procesa(Real exp) throws IOException {}
 
     @Override
-    public void procesa(True exp) throws IOException { }
+    public void procesa(True exp) throws IOException {}
 
     @Override
     public void procesa(False exp) throws IOException {}
 
     @Override
-    public void procesa(String_exp exp) throws IOException { }
+    public void procesa(String_exp exp) throws IOException {}
 
     @Override
     public void procesa(Iden exp) throws IOException {
