@@ -54,6 +54,7 @@ import model.sintaxis.SintaxisAbstracta.Nw;
 import model.sintaxis.SintaxisAbstracta.Or;
 import model.sintaxis.SintaxisAbstracta.P_dec;
 import model.sintaxis.SintaxisAbstracta.P_tipo;
+import model.sintaxis.SintaxisAbstracta.N_tipo;
 import model.sintaxis.SintaxisAbstracta.Param_ref;
 import model.sintaxis.SintaxisAbstracta.Param_simple;
 import model.sintaxis.SintaxisAbstracta.Prog;
@@ -492,6 +493,15 @@ public class ComprobacionTipos implements Procesamiento {
         else if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), P_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
+        else if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), N_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), N_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), P_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), N_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), N_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
         else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
     }
 
@@ -512,6 +522,15 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), P_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), N_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), N_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), P_tipo.class)) {
+            exp.setTipo(new B_tipo());
+        }
+        else if(claseDe(ref(exp.opnd0().getTipo()), N_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), N_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
         else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
@@ -644,7 +663,7 @@ public class ComprobacionTipos implements Procesamiento {
         if(!claseDe(ref(exp.opnd0().getTipo()), Struct_tipo.class)) {
             throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), Struct_tipo.class);
         }
-        Struct_tipo struct = (Struct_tipo) exp.opnd0().getTipo();
+        Struct_tipo struct = (Struct_tipo) ref(exp.opnd0().getTipo());
         exp.setTipo(struct.getTipoDe(exp.iden()));
     }
 
@@ -652,7 +671,7 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Indireccion exp) throws IOException {
         exp.opnd0().procesa(this);
         if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class)){
-            exp.setTipo(exp.opnd0().getTipo().tipo());
+            exp.setTipo(ref(exp.opnd0().getTipo()).tipo());
         }
         else throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), P_tipo.class);
     }
@@ -700,7 +719,7 @@ public class ComprobacionTipos implements Procesamiento {
 
     @Override
     public void procesa(Null_exp exp) throws IOException {
-        exp.setTipo(new P_tipo(null));
+        exp.setTipo(new N_tipo());
     }
 
     private Tipo ref(Tipo t){
@@ -726,11 +745,13 @@ public class ComprobacionTipos implements Procesamiento {
             return compruebaCampos(a.campos(), b.campos());
         }
         else if(claseDe(ref(a), A_tipo.class) && claseDe(ref(b), A_tipo.class)){
-            return compatible(a.tipo(), b.tipo());
+            return compatible(ref(a).tipo(), ref(b).tipo());
+        }
+        else if(claseDe(ref(a), P_tipo.class) && claseDe(ref(b), N_tipo.class)){
+            return true;
         }
         else if(claseDe(ref(a), P_tipo.class) && claseDe(ref(b), P_tipo.class)){
-            if(b.tipo() == null) return true;
-            else return compatible(a.tipo(), b.tipo());
+            return true;
         }
         else return false;
     }

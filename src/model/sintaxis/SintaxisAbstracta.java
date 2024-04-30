@@ -460,6 +460,35 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
     }
 
+    public static class N_tipo extends Tipo {
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public String capacidad() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Campos campos() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void imprime(Printer output) throws IOException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void procesa(Procesamiento p) throws IOException {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+
     public static class In_tipo extends Tipo {
         public In_tipo() {
             super();

@@ -4,6 +4,9 @@ import exceptions.ElementoRepetidoExcepcion;
 import exceptions.SizeInvalidoExcepcion;
 import exceptions.VinculoInvalidoExcepcion;
 import model.Procesamiento;
+import model.sintaxis.SintaxisAbstracta.LParam_opt;
+import model.sintaxis.SintaxisAbstracta.LParam;
+import model.sintaxis.SintaxisAbstracta.Param;
 import model.sintaxis.SintaxisAbstracta.Campo;
 import model.sintaxis.SintaxisAbstracta.Campos;
 import model.sintaxis.SintaxisAbstracta.Dec;
@@ -175,7 +178,7 @@ public class Vinculacion implements Procesamiento {
     @Override
     public void procesa(No_decs decs) throws IOException {}
 
-    public void preprocesa(Decs decs) throws IOException {
+    private void preprocesa(Decs decs) throws IOException {
         if(claseDe(decs, L_decs.class)){
             preprocesa(decs.decs());
             preprocesa(decs.dec());
@@ -185,7 +188,7 @@ public class Vinculacion implements Procesamiento {
         }
     }
 
-    public void preprocesa(Dec dec) throws IOException {
+    private void preprocesa(Dec dec) throws IOException {
         if(claseDe(dec, T_dec.class)){
             preprocesa(dec.tipo());
             if(ts.contiene(dec.iden())){
@@ -207,13 +210,13 @@ public class Vinculacion implements Procesamiento {
             ts.inserta(dec.iden(), (P_dec) dec);
             ts.abreAmbito();
             ts.inserta(dec.iden(), (P_dec) dec);
-            dec.lParamOpt().procesa(this);
+            preprocesa(dec.lParamOpt());
             dec.bloque().procesa(this);
             ts.cierraAmbito();
         }
     }
 
-    public void preprocesa(Tipo tipo) throws IOException {
+    private void preprocesa(Tipo tipo) throws IOException {
         if(claseDe(tipo, A_tipo.class)){
             preprocesa(tipo.tipo());
             if(Integer.parseInt(tipo.capacidad()) < 0){
@@ -237,7 +240,7 @@ public class Vinculacion implements Procesamiento {
         }
     }
 
-    public void preprocesa(Campos campos) throws IOException {
+    private void preprocesa(Campos campos) throws IOException {
         if(claseDe(campos, L_campos.class)){
             preprocesa(campos.campos());
             preprocesa(campos.campo());
@@ -247,12 +250,36 @@ public class Vinculacion implements Procesamiento {
         }
     }
 
-    public void preprocesa(Campo campo) throws IOException {
+    private void preprocesa(Campo campo) throws IOException {
         preprocesa(campo.tipo());
         if(mCampos.containsKey(campo.iden())){
             throw new ElementoRepetidoExcepcion(campo.iden());
         }
         mCampos.put(campo.iden(), campo.tipo());
+    }
+
+    private void preprocesa(LParam_opt lParam) throws IOException{
+        if(claseDe(lParam, Si_param.class)){
+            preprocesa(lParam.lParam());
+        }
+    }
+
+    private void preprocesa(LParam lParam) throws IOException{
+        if(claseDe(lParam, L_param.class)){
+            preprocesa(lParam.lParam());
+            preprocesa(lParam.param());
+        }
+        else{
+            preprocesa(lParam.param());
+        }
+    }
+
+    private void preprocesa(Param param) throws IOException{
+        preprocesa(param.tipo());
+        if(ts.contiene(param.iden())){
+            throw new ElementoRepetidoExcepcion(param.iden());
+        }
+        ts.inserta(param.iden(), param);
     }
 
     @Override
@@ -287,8 +314,8 @@ public class Vinculacion implements Procesamiento {
     @Override
     public void procesa(P_tipo tipo) throws IOException {
         if(claseDe(tipo.tipo(), Id_tipo.class)){
-            tipo.setVinculo(ts.vinculoDe(tipo.tipo().iden()));
-            if(!claseDe(tipo.getVinculo(), T_dec.class))
+            tipo.tipo().setVinculo(ts.vinculoDe(tipo.tipo().iden()));
+            if(!claseDe(tipo.tipo().getVinculo(), T_dec.class))
                 throw new VinculoInvalidoExcepcion();
         }
         else {
@@ -354,19 +381,11 @@ public class Vinculacion implements Procesamiento {
     @Override
     public void procesa(Param_simple param) throws IOException {
         param.tipo().procesa(this);
-        if(ts.contiene(param.iden())){
-            throw new ElementoRepetidoExcepcion(param.iden());
-        }
-        ts.inserta(param.iden(), param);
     }
 
     @Override
     public void procesa(Param_ref param) throws IOException {
         param.tipo().procesa(this);
-        if(ts.contiene(param.iden())){
-            throw new ElementoRepetidoExcepcion(param.iden());
-        }
-        ts.inserta(param.iden(), param);
     }
 
     @Override
@@ -605,9 +624,6 @@ public class Vinculacion implements Procesamiento {
 
     @Override
     public void procesa(Iden exp) throws IOException {
-        if(!ts.contiene(exp.iden())){
-            throw new RuntimeException("Uso de un identificador no declarado");
-        }
         exp.setVinculo(ts.vinculoDe(exp.iden()));
     }
 
