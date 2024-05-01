@@ -1,7 +1,5 @@
 {
-  int a;
-  type int b;
-  b c
+  int a
   &&
-  @ a = c
+  @ a = 3
 }
