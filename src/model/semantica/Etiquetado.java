@@ -475,10 +475,7 @@ public class Etiquetado implements Procesamiento {
     public void procesa(Acceso exp) throws IOException {
         exp.setPrim(etq);
         exp.opnd0().procesa(this);
-        if(claseDe(exp.opnd0(), Struct_tipo.class)){//TODO
-
-        }
-        etq++;
+        etq += 2;
         exp.setSig(etq);
     }
 
