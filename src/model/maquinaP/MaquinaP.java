@@ -3,7 +3,6 @@ package model.maquinaP;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
-import model.sintaxis.SintaxisAbstracta.Tipo;
 
 public class MaquinaP {
    public static class EAccesoIlegitimo extends RuntimeException {} 
@@ -19,49 +18,33 @@ public class MaquinaP {
     
    private static class Valor {
        public int valorInt() {throw new EAccesoIlegitimo();}
-       public int valorReal() {throw new EAccesoIlegitimo();}
+       public double valorReal() {throw new EAccesoIlegitimo();}
        public boolean valorBool() {throw new EAccesoIlegitimo();}
        public String valorString() {throw new EAccesoIlegitimo();}
    } 
    private static class ValorInt extends Valor {
       private final int valor;
-      public ValorInt(int valor) {
-         this.valor = valor; 
-      }
-      public int valorInt() {return valor;}
-      public String toString() {
-        return String.valueOf(valor);
-      }
+      public ValorInt(int valor) { this.valor = valor; }
+      public int valorInt() { return valor; }
+      public String toString() { return String.valueOf(valor); }
    }
    private static class ValorReal extends Valor {
-        private final int valor;
-        public ValorReal(int valor) {
-            this.valor = valor;
-        }
-        public int valorReal() {return valor;}
-        public String toString() {
-            return String.valueOf(valor);
-        }
+        private final double valor;
+        public ValorReal(int valor) { this.valor = valor; }
+        public double valorReal() {return valor;}
+        public String toString() { return String.valueOf(valor); }
    }
    private static class ValorBool extends Valor {
       private final boolean valor;
-      public ValorBool(boolean valor) {
-         this.valor = valor; 
-      }
+      public ValorBool(boolean valor) { this.valor = valor; }
       public boolean valorBool() {return valor;}
-      public String toString() {
-        return String.valueOf(valor);
-      }
+      public String toString() { return String.valueOf(valor); }
    }
     private static class ValorString extends Valor {
         private final String valor;
-        public ValorString(String valor) {
-            this.valor = valor;
-        }
+        public ValorString(String valor) { this.valor = valor; }
         public String valorString() {return valor;}
-        public String toString() {
-            return String.valueOf(valor);
-        }
+        public String toString() { return valor; }
     }
 
    private final List<Instruccion> codigoP;
@@ -80,8 +63,8 @@ public class MaquinaP {
     public Instruccion desapila() { return null; }
     public Instruccion apila_ind() { return null; }
     public Instruccion desapila_ind() { return null; }
-    public Instruccion apilad() { return null; }
-    public Instruccion desapilad() { return null; }
+    public Instruccion apilad(int nivel) { return null; }
+    public Instruccion desapilad(int nivel) { return null; }
     public Instruccion copia(int size) { return null; }
     public Instruccion copia_transformando() { return null; }
     public Instruccion ir_a(int dir) { return null; }
@@ -93,8 +76,11 @@ public class MaquinaP {
     public Instruccion desactiva(int nivel, int size) { return null; }
     public Instruccion dup() { return null; }
     public Instruccion stop() { return null; }
-    public Instruccion read(Tipo t) { return null; }
-    public Instruccion write(Tipo t) { return null; }
+    public Instruccion read_int() { return null; }
+    public Instruccion read_real() { return null; }
+    public Instruccion read_bool() { return null; }
+    public Instruccion read_string() { return null; }
+    public Instruccion write() { return null; }
     public Instruccion transforma_int() { return null; }
     public Instruccion my() { return null; }
     public Instruccion mn() { return null; }

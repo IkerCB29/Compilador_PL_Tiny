@@ -16,6 +16,7 @@ import model.sintaxis.SintaxisAbstracta.Prog;
 import model.sintaxis.TokenMgrError;
 import model.sintaxis.impresionRecursiva.ImpresionBonitaRecursiva;
 import model.sintaxis.impresionVisitante.ImpresionBonitaVisitante;
+import view.ConsolePrinter;
 import view.Printer;
 
 public class Controller {
@@ -129,9 +130,9 @@ public class Controller {
             AnalizadorLexico alex = new AnalizadorLexico(input);
             ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);
             Prog prog = ((Prog) asin.debug_parse().value);
-            Vinculacion v = new Vinculacion();
+            Vinculacion v = new Vinculacion(new ConsolePrinter());
             prog.procesa(v);
-            ComprobacionTipos cT = new ComprobacionTipos();
+            ComprobacionTipos cT = new ComprobacionTipos(new ConsolePrinter());
             prog.procesa(cT);
             return;
         }

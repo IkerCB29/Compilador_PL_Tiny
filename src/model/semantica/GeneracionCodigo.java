@@ -69,6 +69,7 @@ import model.sintaxis.SintaxisAbstracta.String_tipo;
 import model.sintaxis.SintaxisAbstracta.Struct_tipo;
 import model.sintaxis.SintaxisAbstracta.Suma;
 import model.sintaxis.SintaxisAbstracta.T_dec;
+import model.sintaxis.SintaxisAbstracta.Tipo;
 import model.sintaxis.SintaxisAbstracta.True;
 import model.sintaxis.SintaxisAbstracta.Un_campo;
 import model.sintaxis.SintaxisAbstracta.Un_param;
@@ -91,20 +92,20 @@ public class GeneracionCodigo implements Procesamiento {
     @Override
     public void procesa(Prog prog) throws IOException {
         prog.bloque().procesa(this);
+        m.emit(m.stop());
+        while(!procs_pendientes.empty()){
+            P_dec top = procs_pendientes.pop();
+            m.emit(m.desapilad(top.getNivel()));
+            top.bloque().procesa(this);
+            m.emit(m.desactiva(top.getNivel(), top.getTam()));
+            m.emit(m.ir_ind());
+        }
     }
 
     @Override
     public void procesa(Bloque bloque) throws IOException {
         bloque.decsOpt().procesa(this);
         bloque.instrsOpt().procesa(this);
-        m.emit(m.stop());
-        while(!procs_pendientes.empty()){
-            P_dec top = procs_pendientes.pop();
-            m.emit(m.desapilad());
-            top.bloque().procesa(this);
-            m.emit(m.desactiva(top.getNivel(), top.getTam()));
-            m.emit(m.ir_ind());
-        }
     }
 
     @Override
@@ -243,7 +244,14 @@ public class GeneracionCodigo implements Procesamiento {
     @Override
     public void procesa(Rd instr) throws IOException {
         instr.exp().procesa(this);
-        m.emit(m.read(instr.exp().getTipo()));
+        if(claseDe(ref(instr.exp().getTipo()), In_tipo.class))
+            m.emit(m.read_int());
+        else if(claseDe(ref(instr.exp().getTipo()), R_tipo.class))
+            m.emit(m.read_real());
+        else if(claseDe(ref(instr.exp().getTipo()), B_tipo.class))
+            m.emit(m.read_bool());
+        else
+            m.emit(m.read_string());
         m.emit(m.desapila_ind());
     }
 
@@ -253,7 +261,7 @@ public class GeneracionCodigo implements Procesamiento {
         if(esDesignador(instr.exp())){
             m.emit(m.apila_ind());
         }
-        m.emit(m.write(instr.exp().getTipo()));
+        m.emit(m.write());
     }
 
     @Override
@@ -275,7 +283,7 @@ public class GeneracionCodigo implements Procesamiento {
     @Override
     public void procesa(Nl_instr instr) throws IOException {
         m.emit(m.apila_string("\n"));
-        m.emit(m.write(new String_tipo()));
+        m.emit(m.write());
     }
 
     @Override
@@ -288,9 +296,22 @@ public class GeneracionCodigo implements Procesamiento {
         m.emit(m.ir_a(pDec.getPrim()));
     }
 
-    //TODO
     private void gen_paso_parametros(LParam lParam, Exps lExps){
-
+        if(claseDe(lParam, L_param.class) && claseDe(lExps, L_exps.class)){
+            gen_paso_parametros(lParam.lParam(), lExps.exps());
+        }
+        m.emit(m.dup());
+        m.emit(m.apila_int(lParam.param().getDir()));
+        m.emit(m.suma());
+        if(claseDe(lParam.param(), Param_ref.class) || !esDesignador(lExps.exp())){
+            m.emit(m.desapila_ind());
+        }
+        else if(claseDe(ref(lParam.param().getTipo()), R_tipo.class) && claseDe(ref(lExps.exp().getTipo()), In_tipo.class)){
+            m.emit(m.copia_transformando());
+        }
+        else{
+            m.emit(m.copia(lParam.param().getTipo().getTam()));
+        }
     }
 
     @Override
@@ -312,7 +333,26 @@ public class GeneracionCodigo implements Procesamiento {
 
     @Override
     public void procesa(Asig exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        m.emit(m.dup());
+        exp.opnd1().procesa(this);
+        if(esDesignador(exp.opnd1())){
+            if(claseDe(ref(exp.opnd0().getTipo()), R_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)){
+                m.emit(m.copia_transformando());
+            }
+            else{
+                m.emit(m.copia(exp.opnd0().getTipo().getTam()));
+            }
+        }
+        else{
+            if(claseDe(ref(exp.opnd0().getTipo()), R_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)){
+                m.emit(m.transforma_int());
+                m.emit(m.desapila_ind());
+            }
+            else{
+                m.emit(m.desapila_ind());
+            }
+        }
     }
 
     @Override
@@ -413,17 +453,25 @@ public class GeneracionCodigo implements Procesamiento {
 
     @Override
     public void procesa(Indexacion exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        m.emit(m.apila_int(exp.getTipo().getTam()));
+        m.emit(m.suma());
+        m.emit(m.mul());
     }
 
     @Override
     public void procesa(Acceso exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        Struct_tipo struct = (Struct_tipo) exp.opnd0().getTipo();
+        m.emit(m.apila_int(struct.getDesplazamientoDe(exp.iden())));
+        m.emit(m.suma());
     }
 
     @Override
     public void procesa(Indireccion exp) throws IOException {
-
+        exp.opnd0().procesa(this);
+        m.emit(m.apila_ind());
     }
 
     @Override
@@ -465,7 +513,6 @@ public class GeneracionCodigo implements Procesamiento {
             Param_ref param = (Param_ref) exp.getVinculo();
             gen_acc_id(param);
         }
-
     }
 
     @Override
@@ -482,28 +529,69 @@ public class GeneracionCodigo implements Procesamiento {
         return o.getClass() == c;
     }
 
-    //TODO
-    private void gen_cod_opnds(Exp opnd0, Exp opnd1, Exp exp) {
-
+    private void gen_cod_opnds(Exp opnd0, Exp opnd1, Exp exp) throws IOException {
+        opnd0.procesa(this);
+        gen_acc_val(opnd0);
+        if(claseDe(exp, Suma.class) || claseDe(exp, Resta.class) || claseDe(exp, Mul.class) || claseDe(exp, Div.class)) {
+            if(claseDe(ref(exp.getTipo()), R_tipo.class) && claseDe(ref(opnd0.getTipo()), In_tipo.class)){
+                m.emit(m.transforma_int());
+            }
+        }
+        opnd1.procesa(this);
+        gen_acc_val(opnd1);
+        if(claseDe(exp, Suma.class) || claseDe(exp, Resta.class) || claseDe(exp, Mul.class) || claseDe(exp, Div.class)) {
+            if(claseDe(ref(exp.getTipo()), R_tipo.class) && claseDe(ref(opnd1.getTipo()), In_tipo.class)){
+                m.emit(m.transforma_int());
+            }
+        }
     }
 
-    //TODO
-    private void gen_acc_id(V_dec dec){
-
+    private void gen_acc_id(V_dec dec) throws IOException {
+        if(dec.getNivel() == 0){
+            m.emit(m.apila_int(dec.getDir()));
+        }
+        else gen_acc_var(dec);
     }
 
-    //TODO
-    private void gen_acc_id(Param_simple param){
-
+    private void gen_acc_id(Param_simple param) throws IOException {
+        gen_acc_var(param);
     }
 
-    //TODO
-    private void gen_acc_id(Param_ref param){
-
+    private void gen_acc_id(Param_ref param) throws IOException {
+        gen_acc_var(param);
+        m.emit(m.apila_ind());
     }
 
-    //TODO
-    private void gen_acc_val(Exp opnd){
+    private void gen_acc_var(V_dec dec) throws IOException {
+        m.emit(m.apilad(dec.getNivel()));
+        m.emit(m.apila_int(dec.getDir()));
+        m.emit(m.suma());
+    }
 
+    private void gen_acc_var(Param_simple param) throws IOException {
+        m.emit(m.apilad(param.getNivel()));
+        m.emit(m.apila_int(param.getDir()));
+        m.emit(m.suma());
+    }
+
+    private void gen_acc_var(Param_ref param) throws IOException {
+        m.emit(m.apilad(param.getNivel()));
+        m.emit(m.apila_int(param.getDir()));
+        m.emit(m.suma());
+    }
+
+
+    private void gen_acc_val(Exp opnd) throws IOException {
+        if(esDesignador(opnd)){
+            m.emit(m.apila_ind());
+        }
+    }
+
+    private Tipo ref(Tipo t){
+        if(claseDe(t, Id_tipo.class)){
+            T_dec tDec = (T_dec) t.getVinculo();
+            return ref(tDec.tipo());
+        }
+        else return t;
     }
 }

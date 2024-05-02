@@ -11,17 +11,22 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Nodo {
-        public Nodo() {
-            fila=col=-1;
-        }
         private int fila;
         private int col;
         private Nodo vinculo;
+        private Tipo tipo;
         private int dir;
         private int nivel;
         private int tam;
         private int prim;
         private int sig;
+
+        public Nodo() {
+            fila = col = -1;
+            vinculo = null;
+            tipo = null;
+            dir = nivel = tam = prim = sig = 0;
+        }
 
         public Nodo ponFila(int fila) {
             this.fila = fila;
@@ -47,6 +52,12 @@ public abstract class SintaxisAbstracta {
         }
         public int getDir(){
             return dir;
+        }
+        public void setTipo(Tipo tipo){
+            this.tipo = tipo;
+        }
+        public Tipo getTipo(){
+            return tipo;
         }
         public void setDir(int dir){
             this.dir = dir;
@@ -81,34 +92,25 @@ public abstract class SintaxisAbstracta {
       Géneros
     */
     public static abstract class Decs_opt extends Nodo {
-        private boolean tipo = false;
         public abstract Decs decs();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static abstract class Decs extends Nodo {
-        private boolean tipo = false;
         public abstract Decs decs();
         public abstract Dec dec();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static abstract class Dec extends Nodo {
-        private boolean tipo = false;
         public abstract Tipo tipo();
         public abstract String iden();
         public abstract LParam_opt lParamOpt();
         public  abstract Bloque bloque();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static abstract class Tipo extends Nodo {
@@ -128,8 +130,15 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Campo extends Nodo {
+        private int desp;
+        public Campo(){
+            super();
+            this.desp = 0;
+        }
         public abstract Tipo tipo();
         public abstract String iden();
+        public void setDesp(int desp){ this.desp = desp; }
+        public int getDesp(){ return desp; }
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
     }
@@ -155,26 +164,19 @@ public abstract class SintaxisAbstracta {
     }
 
     public static abstract class Instrs_opt extends Nodo {
-        private boolean tipo = false;
         public abstract Instrs instrs();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static abstract class Instrs extends Nodo {
-        private boolean tipo = false;
         public abstract Instrs instrs();
         public abstract Instr instr();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static abstract class Instr extends Nodo {
-        private boolean tipo = false;
         public abstract Exp exp();
         public abstract Bloque bloque();
         public abstract Bloque bloqueElse();
@@ -182,32 +184,22 @@ public abstract class SintaxisAbstracta {
         public abstract Exps_opt expsOpt();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static abstract class Exps_opt extends Nodo {
-        private boolean tipo = false;
         public abstract Exps exps();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static abstract class Exps extends Nodo {
-        private boolean tipo = false;
         public abstract Exps exps();
         public abstract Exp exp();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static abstract class Exp extends Nodo {
-        private Tipo tipo = null;
-
         public abstract String iden();
         public abstract String valor();
         public abstract Exp opnd0();
@@ -215,15 +207,12 @@ public abstract class SintaxisAbstracta {
         public abstract int prioridad();
         public abstract void imprime(Printer output) throws IOException;
         public abstract void procesa(Procesamiento p) throws IOException;
-        public void setTipo(Tipo tipo){ this.tipo = tipo; }
-        public Tipo getTipo() { return tipo; }
     }
 
     /*
       Constructores
     */
     public static class Prog extends Nodo {
-        private boolean tipo;
         private final Bloque bq;
         public Prog(Bloque bloque) {
             super();
@@ -237,12 +226,9 @@ public abstract class SintaxisAbstracta {
             bq.imprime(output);
         }
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static class Bloque extends Nodo {
-        private boolean tipo;
         private final Decs_opt decs;
         private final Instrs_opt instrs;
         public Bloque(Decs_opt decs, Instrs_opt instrs) {
@@ -262,8 +248,6 @@ public abstract class SintaxisAbstracta {
             output.write("}\n");
         }
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
-        public void setTipo(boolean tipo){ this.tipo = tipo; }
-        public boolean getTipo() { return tipo; }
     }
 
     public static class Si_decs extends Decs_opt {
@@ -436,6 +420,62 @@ public abstract class SintaxisAbstracta {
         }
         @Override
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
+    }
+
+    public static class Ok_tipo extends Tipo {
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public String capacidad() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Campos campos() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void imprime(Printer output) throws IOException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void procesa(Procesamiento p) throws IOException {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    public static class Error_tipo extends Tipo {
+        @Override
+        public Tipo tipo() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public String iden() { throw new UnsupportedOperationException(); }
+
+        @Override
+        public String capacidad() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Campos campos() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void imprime(Printer output) throws IOException {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void procesa(Procesamiento p) throws IOException {
+            throw new UnsupportedOperationException();
+        }
     }
 
     public static class A_tipo extends Tipo {
@@ -642,7 +682,7 @@ public abstract class SintaxisAbstracta {
 
     public static class Struct_tipo extends Tipo {
         private final Campos campos;
-        private Map<String, Tipo> mCampos;
+        private Map<String, Campo> mCampos;
         public Struct_tipo(Campos campos) {
             super();
             this.campos = campos;
@@ -669,10 +709,14 @@ public abstract class SintaxisAbstracta {
         public void procesa(Procesamiento p) throws IOException{ p.procesa(this); }
 
         public Tipo getTipoDe(String iden) {
-            return mCampos.get(iden);
+            return mCampos.get(iden).tipo();
         }
 
-        public void setMapaCampos(Map<String, Tipo> mCampos) {
+        public int getDesplazamientoDe(String iden) {
+            return mCampos.get(iden).getDesp();
+        }
+
+        public void setMapaCampos(Map<String, Campo> mCampos) {
             this.mCampos = mCampos;
         }
     }
