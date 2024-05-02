@@ -525,7 +525,18 @@ public class Etiquetado implements Procesamiento {
     @Override
     public void procesa(Iden exp) throws IOException {
         exp.setPrim(etq);
-        //TODO
+        if(claseDe(exp.getVinculo(), V_dec.class)){
+            V_dec vDec = (V_dec) exp.getVinculo();
+            etiquetado_acc_id(vDec);
+        }
+        else if(claseDe(exp.getVinculo(), Param_simple.class)){
+            Param_simple pDec = (Param_simple) exp.getVinculo();
+            etiquetado_acc_id(pDec);
+        }
+        else{
+            Param_ref pDec = (Param_ref) exp.getVinculo();
+            etiquetado_acc_id(pDec);
+        }
         exp.setSig(etq);
     }
 
@@ -572,24 +583,32 @@ public class Etiquetado implements Procesamiento {
                 etq++;
     }
 
-    private void etiquetado_acc_id(SintaxisAbstracta.Dec dec_var){//TODO
-
+    private void etiquetado_acc_id(V_dec dec){
+        if(dec.getNivel() == 0)
+            etq++;
+        else
+            etiquetado_acc_var(dec);
     }
 
-    private void etiquetado_acc_id(SintaxisAbstracta.Param pval){//TODO
-
+    private void etiquetado_acc_id(Param_simple pval){
+        etiquetado_acc_var(pval);
     }
 
-    private void etiquetado_acc_id(SintaxisAbstracta.Param_ref pref){//TODO
+    private void etiquetado_acc_id(Param_ref pref){
+        etiquetado_acc_var(pref);
+        etq++;
+    }
 
+    private void etiquetado_acc_var(SintaxisAbstracta.Nodo dec){
+        etq += 3;
     }
 
     private void etiquetado_acc_val(SintaxisAbstracta.Exp exp) throws IOException {
         etq += esDesignador(exp) ? 1 : 0;
     }
 
-    private void etiquetado_campos(SintaxisAbstracta.Campos campos){ // TODO
-
+    private void etiquetado_campos(SintaxisAbstracta.Campos campos){
+        etq++;
     }
 
     private boolean esDesignador(SintaxisAbstracta.Exp exp){
