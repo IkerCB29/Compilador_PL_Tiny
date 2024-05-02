@@ -1,7 +1,10 @@
 package model.semantica;
 
 import java.io.IOException;
+import java.util.Stack;
+
 import model.Procesamiento;
+import model.sintaxis.SintaxisAbstracta;
 import model.sintaxis.SintaxisAbstracta.A_tipo;
 import model.sintaxis.SintaxisAbstracta.Acceso;
 import model.sintaxis.SintaxisAbstracta.And;
@@ -76,358 +79,528 @@ import model.sintaxis.SintaxisAbstracta.Wr;
 
 public class Etiquetado implements Procesamiento {
 
+    private static int etq = 0;
+    private static Stack<P_dec> procesosPendientes = new Stack<>();
+
     @Override
     public void procesa(Prog prog) throws IOException {
-
+        prog.setPrim(etq);
+        prog.bloque().procesa(this);
+        etq++;
+        while(!procesosPendientes.empty()){
+            P_dec procesoActual = procesosPendientes.pop();
+            procesoActual.setPrim(etq);
+            etq++;
+            procesoActual.bloque().procesa(this);
+            etq += 2;
+            procesoActual.setSig(etq);
+        }
+        prog.setSig(etq);
     }
 
     @Override
     public void procesa(Bloque bloque) throws IOException {
-
+        bloque.setPrim(etq);
+        bloque.decsOpt().procesa(this);
+        bloque.instrsOpt().procesa(this);
+        bloque.setSig(etq);
     }
 
     @Override
     public void procesa(Si_decs decs) throws IOException {
-
+        decs.decs().procesa(this);
     }
 
     @Override
-    public void procesa(No_decs decs) throws IOException {
-
-    }
+    public void procesa(No_decs decs) throws IOException {}
 
     @Override
     public void procesa(L_decs decs) throws IOException {
-
+        decs.decs().procesa((this));
+        decs.dec().procesa(this);
     }
 
     @Override
     public void procesa(Una_dec decs) throws IOException {
-
+        decs.dec().procesa(this);
     }
 
     @Override
-    public void procesa(T_dec dec) throws IOException {
-
-    }
+    public void procesa(T_dec dec) throws IOException {}
 
     @Override
-    public void procesa(V_dec dec) throws IOException {
-
-    }
+    public void procesa(V_dec dec) throws IOException {}
 
     @Override
     public void procesa(P_dec dec) throws IOException {
-
+        procesosPendientes.push(dec);
     }
 
     @Override
-    public void procesa(A_tipo tipo) throws IOException {
-
-    }
+    public void procesa(A_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(P_tipo tipo) throws IOException {
-
-    }
+    public void procesa(P_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(In_tipo tipo) throws IOException {
-
-    }
+    public void procesa(In_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(R_tipo tipo) throws IOException {
-
-    }
+    public void procesa(R_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(B_tipo tipo) throws IOException {
-
-    }
+    public void procesa(B_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(String_tipo tipo) throws IOException {
-
-    }
+    public void procesa(String_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(Id_tipo tipo) throws IOException {
-
-    }
+    public void procesa(Id_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(Struct_tipo tipo) throws IOException {
-
-    }
+    public void procesa(Struct_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(L_campos campos) throws IOException {
-
-    }
+    public void procesa(L_campos campos) throws IOException {}
 
     @Override
-    public void procesa(Un_campo campos) throws IOException {
-
-    }
+    public void procesa(Un_campo campos) throws IOException {}
 
     @Override
-    public void procesa(Camp campo) throws IOException {
-
-    }
+    public void procesa(Camp campo) throws IOException {}
 
     @Override
-    public void procesa(Si_param lParam) throws IOException {
-
-    }
+    public void procesa(Si_param lParam) throws IOException {}
 
     @Override
-    public void procesa(No_param lParam) throws IOException {
-
-    }
+    public void procesa(No_param lParam) throws IOException {}
 
     @Override
-    public void procesa(L_param lParam) throws IOException {
-
-    }
+    public void procesa(L_param lParam) throws IOException {}
 
     @Override
-    public void procesa(Un_param lParam) throws IOException {
-
-    }
+    public void procesa(Un_param lParam) throws IOException {}
 
     @Override
-    public void procesa(Param_simple param) throws IOException {
-
-    }
+    public void procesa(Param_simple param) throws IOException {}
 
     @Override
-    public void procesa(Param_ref param) throws IOException {
-
-    }
+    public void procesa(Param_ref param) throws IOException {}
 
     @Override
     public void procesa(Si_instrs instrs) throws IOException {
-
+        instrs.setPrim(etq);
+        instrs.instrs().procesa(this);
+        instrs.setSig(etq);
     }
 
     @Override
-    public void procesa(No_instrs instrs) throws IOException {
-
-    }
+    public void procesa(No_instrs instrs) throws IOException {}
 
     @Override
     public void procesa(L_instrs instrs) throws IOException {
-
+        instrs.setPrim(etq);
+        instrs.instrs().procesa(this);
+        instrs.instr().procesa(this);
+        instrs.setSig(etq);
     }
 
     @Override
     public void procesa(Una_instr instrs) throws IOException {
-
+        instrs.setPrim(etq);
+        instrs.instr().procesa(this);
+        instrs.setSig(etq);
     }
 
     @Override
     public void procesa(Eva instr) throws IOException {
-
+        instr.setPrim(etq);
+        instr.exp().procesa(this);
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(If_instr instr) throws IOException {
-
+        instr.setPrim(etq);
+        instr.exp().procesa(this);
+        etiquetado_acc_val(instr.exp());
+        etq++;
+        instr.bloque().procesa(this);
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(If_el instr) throws IOException {
-
+        instr.exp().procesa(this);
+        etiquetado_acc_val(instr.exp());
+        etq++;
+        instr.bloque().procesa(this);
+        etq++;
+        instr.setPrim(etq);
+        instr.bloqueElse().procesa(this);
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(Wh instr) throws IOException {
-
+        instr.setPrim(etq);
+        instr.exp().procesa(this);
+        etiquetado_acc_val(instr.exp());
+        etq++;
+        instr.bloque().procesa(this);
+        etq++;
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(Rd instr) throws IOException {
-
+        instr.setPrim(etq);
+        instr.exp().procesa(this);
+        etq += 2;
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(Wr instr) throws IOException {
-
+        instr.setPrim(etq);
+        instr.exp().procesa(this);
+        etq += esDesignador(instr.exp()) ? 1 : 0;
+        etq++;
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(Nw instr) throws IOException {
-
+        instr.setPrim(etq);
+        instr.exp().procesa(this);
+        etq += 3;
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(Dl instr) throws IOException {
-
+        instr.setPrim(etq);
+        instr.exp().procesa(this);
+        etq += 2;
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(Nl_instr instr) throws IOException {
-
+        instr.setPrim(etq);
+        etq += 2;
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(Cl instr) throws IOException {
-
+        instr.setPrim(etq);
+        etq++;
+        P_dec p = (P_dec) instr.getVinculo();
+        Si_param sp = claseDe(p.lParamOpt().getClass(), Si_param.class) ? (Si_param) p.lParamOpt() : null;
+        Si_exps se = claseDe(instr.expsOpt(), Si_exps.class) ? (Si_exps) instr.expsOpt() : null;
+        if (sp != null && se != null)
+            etiquetado_paso_param(sp, se);
+        etq++;
+        instr.setSig(etq);
     }
 
     @Override
     public void procesa(Bq_instr instr) throws IOException {
-
+        instr.setPrim(etq);
+        instr.bloque().procesa(this);
+        instr.setSig(etq);
     }
 
     @Override
-    public void procesa(Si_exps exps) throws IOException {
-
-    }
+    public void procesa(Si_exps exps) throws IOException {}
 
     @Override
-    public void procesa(No_exps exps) throws IOException {
-
-    }
+    public void procesa(No_exps exps) throws IOException {}
 
     @Override
-    public void procesa(L_exps exps) throws IOException {
-
-    }
+    public void procesa(L_exps exps) throws IOException {}
 
     @Override
-    public void procesa(Una_exp exps) throws IOException {
-
-    }
+    public void procesa(Una_exp exps) throws IOException {}
 
     @Override
     public void procesa(Asig exp) throws IOException {
-
+        exp.setPrim(etq);
+        exp.opnd0().procesa(this);
+        etq++;
+        exp.opnd1().procesa(this);
+        if(claseDe(exp.opnd0(), R_tipo.class) && claseDe(exp.opnd1(), In_tipo.class))
+            etq += 2;
+        else
+            etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(My exp) throws IOException {
+        exp.setPrim(etq);
 
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Mn exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Myig exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Mnig exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Ig exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Dif exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Suma exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Resta exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(And exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Or exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Mul exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Div exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Mod exp) throws IOException {
-
+        exp.setPrim(etq);
+        etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Menos_unario exp) throws IOException {
-
+        exp.setPrim(etq);
+        exp.opnd0().procesa(this);
+        if(esDesignador(exp.opnd0()))
+            etq++;
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Not exp) throws IOException {
-
+        exp.setPrim(etq);
+        exp.opnd0().procesa(this);
+        if(esDesignador(exp.opnd0()))
+            etq++;
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Indexacion exp) throws IOException {
-
+        exp.setPrim(etq);
+        exp.opnd0().procesa(this);
+        exp.opnd1().procesa(this);
+        etq += 3;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Acceso exp) throws IOException {
+        exp.setPrim(etq);
+        exp.opnd0().procesa(this);
+        if(claseDe(exp.opnd0(), Struct_tipo.class)){//TODO
 
+        }
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Indireccion exp) throws IOException {
-
+        exp.setPrim(etq);
+        exp.opnd0().procesa(this);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Entero exp) throws IOException {
-
+        exp.setPrim(etq);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Real exp) throws IOException {
-
+        exp.setPrim(etq);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(True exp) throws IOException {
-
+        exp.setPrim(etq);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(False exp) throws IOException {
-
+        exp.setPrim(etq);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(String_exp exp) throws IOException {
-
+        exp.setPrim(etq);
+        etq++;
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Iden exp) throws IOException {
-
+        exp.setPrim(etq);
+        //TODO
+        exp.setSig(etq);
     }
 
     @Override
     public void procesa(Null_exp exp) throws IOException {
+        exp.setPrim(etq);
+        etq++;
+        exp.setSig(etq);
+    }
 
+    private void etiquetado_paso_param(Si_param lParam, Si_exps exps) throws IOException {
+        if(claseDe(lParam.lParam(), L_param.class) && claseDe(exps.exps(), L_exps.class))
+            etiquetado_paso_param((L_param) lParam.lParam(), (L_exps) exps.exps());
+        else if(claseDe(lParam.lParam(), Un_param.class) && claseDe(exps.exps(), Una_exp.class))
+            etiquetado_paso_param((Un_param) lParam.lParam(), (Una_exp) exps.exps());
+    }
+
+    private void etiquetado_paso_param(L_param lParam, L_exps exps) throws IOException {
+        if(claseDe(lParam.lParam(), L_param.class) && claseDe(exps.exps(), L_exps.class))
+            etiquetado_paso_param((L_param) lParam.lParam(), (L_exps) exps.exps());
+        else if(claseDe(lParam.lParam(), Un_param.class) && claseDe(exps.exps(), Una_exp.class))
+            etiquetado_paso_param((Un_param) lParam.lParam(), (Una_exp) exps.exps());
+        etq += 3;
+        exps.exp().procesa(this);
+        etq++;
+    }
+
+    private void etiquetado_paso_param(Un_param param, Una_exp exp) throws IOException {
+        etq+=3;
+        exp.exp().procesa(this);
+        etq++;
+    }
+
+    private void etiquetado_opnds(SintaxisAbstracta.Exp opnd0, SintaxisAbstracta.Exp opnd1, SintaxisAbstracta.Exp exp) throws IOException {
+        opnd0.procesa(this);
+        etiquetado_acc_val(opnd0);
+        if(claseDe(exp, Suma.class) || claseDe(exp, Resta.class) || claseDe(exp, Mul.class) || claseDe(exp, Div.class))
+            if(claseDe(exp.getTipo(), R_tipo.class) && claseDe(opnd0.getTipo(), In_tipo.class))
+                etq++;
+        opnd1.procesa(this);
+        etiquetado_acc_val(opnd1);
+        if(claseDe(exp, Suma.class) || claseDe(exp, Resta.class) || claseDe(exp, Mul.class) || claseDe(exp, Div.class))
+            if(claseDe(exp.getTipo(), R_tipo.class) && claseDe(opnd1.getTipo(), In_tipo.class))
+                etq++;
+    }
+
+    private void etiquetado_acc_id(SintaxisAbstracta.Dec dec_var){//TODO
+
+    }
+
+    private void etiquetado_acc_id(SintaxisAbstracta.Param pval){//TODO
+
+    }
+
+    private void etiquetado_acc_id(SintaxisAbstracta.Param_ref pref){//TODO
+
+    }
+
+    private void etiquetado_acc_val(SintaxisAbstracta.Exp exp) throws IOException {
+        etq += esDesignador(exp) ? 1 : 0;
+    }
+
+    private void etiquetado_campos(SintaxisAbstracta.Campos campos){ // TODO
+
+    }
+
+    private boolean esDesignador(SintaxisAbstracta.Exp exp){
+        return claseDe(exp, Iden.class) || claseDe(exp, Acceso.class) || claseDe(exp, Indexacion.class) ||
+                claseDe(exp, Asig.class);
+    }
+
+    private boolean claseDe(Object o, Class c) {
+        return o.getClass() == c;
     }
 }
