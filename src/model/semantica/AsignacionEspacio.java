@@ -2,283 +2,337 @@ package model.semantica;
 
 import java.io.IOException;
 import model.Procesamiento;
-import model.sintaxis.SintaxisAbstracta.A_tipo;
-import model.sintaxis.SintaxisAbstracta.Acceso;
-import model.sintaxis.SintaxisAbstracta.And;
-import model.sintaxis.SintaxisAbstracta.Asig;
-import model.sintaxis.SintaxisAbstracta.B_tipo;
-import model.sintaxis.SintaxisAbstracta.Bloque;
-import model.sintaxis.SintaxisAbstracta.Bq_instr;
-import model.sintaxis.SintaxisAbstracta.Camp;
-import model.sintaxis.SintaxisAbstracta.Cl;
-import model.sintaxis.SintaxisAbstracta.Dif;
-import model.sintaxis.SintaxisAbstracta.Div;
-import model.sintaxis.SintaxisAbstracta.Dl;
-import model.sintaxis.SintaxisAbstracta.Entero;
-import model.sintaxis.SintaxisAbstracta.Eva;
-import model.sintaxis.SintaxisAbstracta.False;
-import model.sintaxis.SintaxisAbstracta.Id_tipo;
-import model.sintaxis.SintaxisAbstracta.Iden;
-import model.sintaxis.SintaxisAbstracta.If_el;
-import model.sintaxis.SintaxisAbstracta.If_instr;
-import model.sintaxis.SintaxisAbstracta.Ig;
-import model.sintaxis.SintaxisAbstracta.In_tipo;
-import model.sintaxis.SintaxisAbstracta.Indexacion;
-import model.sintaxis.SintaxisAbstracta.Indireccion;
-import model.sintaxis.SintaxisAbstracta.L_campos;
-import model.sintaxis.SintaxisAbstracta.L_decs;
-import model.sintaxis.SintaxisAbstracta.L_exps;
-import model.sintaxis.SintaxisAbstracta.L_instrs;
-import model.sintaxis.SintaxisAbstracta.L_param;
-import model.sintaxis.SintaxisAbstracta.Menos_unario;
-import model.sintaxis.SintaxisAbstracta.Mn;
-import model.sintaxis.SintaxisAbstracta.Mnig;
-import model.sintaxis.SintaxisAbstracta.Mod;
-import model.sintaxis.SintaxisAbstracta.Mul;
-import model.sintaxis.SintaxisAbstracta.My;
-import model.sintaxis.SintaxisAbstracta.Myig;
-import model.sintaxis.SintaxisAbstracta.Nl_instr;
-import model.sintaxis.SintaxisAbstracta.No_decs;
-import model.sintaxis.SintaxisAbstracta.No_exps;
-import model.sintaxis.SintaxisAbstracta.No_instrs;
-import model.sintaxis.SintaxisAbstracta.No_param;
-import model.sintaxis.SintaxisAbstracta.Not;
-import model.sintaxis.SintaxisAbstracta.Null_exp;
-import model.sintaxis.SintaxisAbstracta.Nw;
-import model.sintaxis.SintaxisAbstracta.Or;
-import model.sintaxis.SintaxisAbstracta.P_dec;
-import model.sintaxis.SintaxisAbstracta.P_tipo;
-import model.sintaxis.SintaxisAbstracta.Param_ref;
-import model.sintaxis.SintaxisAbstracta.Param_simple;
-import model.sintaxis.SintaxisAbstracta.Prog;
-import model.sintaxis.SintaxisAbstracta.R_tipo;
-import model.sintaxis.SintaxisAbstracta.Rd;
-import model.sintaxis.SintaxisAbstracta.Real;
-import model.sintaxis.SintaxisAbstracta.Resta;
-import model.sintaxis.SintaxisAbstracta.Si_decs;
-import model.sintaxis.SintaxisAbstracta.Si_exps;
-import model.sintaxis.SintaxisAbstracta.Si_instrs;
-import model.sintaxis.SintaxisAbstracta.Si_param;
-import model.sintaxis.SintaxisAbstracta.String_exp;
-import model.sintaxis.SintaxisAbstracta.String_tipo;
-import model.sintaxis.SintaxisAbstracta.Struct_tipo;
-import model.sintaxis.SintaxisAbstracta.Suma;
-import model.sintaxis.SintaxisAbstracta.T_dec;
-import model.sintaxis.SintaxisAbstracta.True;
-import model.sintaxis.SintaxisAbstracta.Un_campo;
-import model.sintaxis.SintaxisAbstracta.Un_param;
-import model.sintaxis.SintaxisAbstracta.Una_dec;
-import model.sintaxis.SintaxisAbstracta.Una_exp;
-import model.sintaxis.SintaxisAbstracta.Una_instr;
-import model.sintaxis.SintaxisAbstracta.V_dec;
-import model.sintaxis.SintaxisAbstracta.Wh;
-import model.sintaxis.SintaxisAbstracta.Wr;
+import model.sintaxis.SintaxisAbstracta.*;
+import view.Printer;
 
 public class AsignacionEspacio implements Procesamiento {
+
+
+	private final Printer output;
+	private int dir;
+	private int max_dir;
+	private int dir_ant;
+	private int max_dir_ant;
+	private int nivel;
+
+	public AsignacionEspacio(Printer output) {
+		this.output = output;
+		dir = 0;
+		max_dir = 0;
+		nivel = 0;
+	}
+
     @Override
     public void procesa(Prog prog) throws IOException {
-
+		prog.bloque().procesa(this);
     }
 
     @Override
     public void procesa(Bloque bloque) throws IOException {
-
+		bloque.decsOpt().procesa(this);
+		bloque.instrsOpt().procesa(this);
     }
 
     @Override
     public void procesa(Si_decs decs) throws IOException {
-
+		preprocesa(decs.decs());
+        decs.decs().procesa(this);
     }
 
     @Override
-    public void procesa(No_decs decs) throws IOException {
+    public void procesa(No_decs decs) throws IOException { }
 
+	private void preprocesa(Decs decs) throws IOException {
+        if(claseDe(decs, L_decs.class)){
+            preprocesa(decs.decs());
+        }
+        preprocesa(decs.dec());
     }
 
-    @Override
+	private void preprocesa(Dec dec) throws IOException {
+        if(claseDe(dec, T_dec.class)){
+            preprocesa(dec.tipo());
+        }
+        else if(claseDe(dec, V_dec.class)){
+			preprocesa(dec.tipo());
+			dec.setDir(this.dir);
+			dec.setNivel(this.nivel);
+			inc_dir(dec.tipo().getTam());
+        }
+        else{
+			dec.setDirAnt(dir);
+			dec.setMaxDirAnt(max_dir);  
+			this.nivel++;
+			dec.setNivel(nivel);
+			dir = 0;
+			max_dir = 0; 
+			preprocesa(dec.lParamOpt()); 
+			dec.lParamOpt().procesa(this);
+			dec.bloque().procesa(this);
+			dec.setDir(dir); 
+			dir = dec.getDirAnt();
+			max_dir = dec.getMaxDirAnt();
+			nivel--;
+        }
+    }
+
+	private void preprocesa(Tipo tipo) throws IOException {
+        if(claseDe(tipo, A_tipo.class)){
+            preprocesa(tipo);
+            tipo.setTam(tipo.getTam() * Integer.parseInt(tipo.capacidad()));
+        }
+        else if(claseDe(tipo, P_tipo.class)) {
+            if(!claseDe(tipo.tipo(), Id_tipo.class)){
+                preprocesa(tipo.tipo());
+            }
+			tipo.setTam(1);
+        }
+        else if(claseDe(tipo, Id_tipo.class)) {
+            if(!claseDe(tipo.getVinculo(), T_dec.class))
+                output.write("El identificador " + tipo.iden() + " no esta vinculado a un declaracion "
+                    + "de tipo\n");
+            ((Id_tipo)tipo).setVinculo(tipo.getVinculo());
+			tipo.setTam(tipo.getVinculo().getTam());
+        }
+        else if(claseDe(tipo, Struct_tipo.class)){
+            preprocesa(tipo.campos());
+            tipo.setTam(tipo.campos().getTam());
+        }
+		else{
+			tipo.setTam(1);
+		}
+    }
+
+	private void preprocesa(Campos campos) throws IOException{
+		if(claseDe(campos, L_campos.class)){
+			preprocesa(campos.campos());
+			preprocesa(campos.campo(), campos.getTam());
+			campos.setTam(campos.campos().getTam() + campos.campo().getTam());
+		}
+		else{
+			preprocesa(campos.campo(), 0);
+			campos.setTam(campos.campo().getTam());
+		}	
+	}
+
+	private void preprocesa(Campo campo, int desp) throws IOException{
+		preprocesa(campo.tipo());
+		campo.setTam(campo.tipo().getTam());
+		campo.setDesp(desp);
+	}
+
+	private void preprocesa(LParam_opt lParam) throws IOException{
+        if(claseDe(lParam, Si_param.class)){
+            preprocesa(lParam.lParam());
+        }
+    }
+
+    private void preprocesa(LParam lParam) throws IOException{
+        if(claseDe(lParam, L_param.class)){
+            preprocesa(lParam.lParam());
+            preprocesa(lParam.param());
+        }
+        else{
+            preprocesa(lParam.param());
+        }
+    }
+
+    private void preprocesa(Param param) throws IOException{
+		preprocesa(param.tipo());
+		param.setDir(dir);
+		param.setNivel(nivel);
+		inc_dir(param.tipo().getTam());
+    }
+
+	@Override
     public void procesa(L_decs decs) throws IOException {
-
+        decs.decs().procesa(this);
+        decs.dec().procesa(this);
     }
 
     @Override
     public void procesa(Una_dec decs) throws IOException {
-
+        decs.dec().procesa(this);
     }
 
-    @Override
+	@Override
     public void procesa(T_dec dec) throws IOException {
-
+        dec.tipo().procesa(this);
     }
 
     @Override
     public void procesa(V_dec dec) throws IOException {
-
+        dec.tipo().procesa(this);
     }
 
     @Override
-    public void procesa(P_dec dec) throws IOException {
-
-    }
+    public void procesa(P_dec dec) throws IOException {}
 
     @Override
     public void procesa(A_tipo tipo) throws IOException {
-
+		tipo.tipo().procesa(this);
     }
 
     @Override
     public void procesa(P_tipo tipo) throws IOException {
-
+		if(claseDe(tipo.tipo(), Id_tipo.class)){
+            tipo.tipo().setVinculo(tipo.getVinculo());
+            if(!claseDe(tipo.tipo().getVinculo(), T_dec.class))
+                output.write("El identificador " + tipo.iden() + " no esta vinculado a un declaracion "
+                    + "de tipo\n");
+        }
+        else {
+            tipo.tipo().procesa(this);
+        }
     }
 
     @Override
-    public void procesa(In_tipo tipo) throws IOException {
-
-    }
+    public void procesa(In_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(R_tipo tipo) throws IOException {
-
-    }
+    public void procesa(R_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(B_tipo tipo) throws IOException {
-
-    }
+    public void procesa(B_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(String_tipo tipo) throws IOException {
-
-    }
+    public void procesa(String_tipo tipo) throws IOException {}
 
     @Override
     public void procesa(Id_tipo tipo) throws IOException {
+		if(!claseDe(tipo.getVinculo(), T_dec.class))
+			output.write("El identificador " + tipo.iden() + " no esta vinculado a un declaracion "
+				+ "de tipo\n");
+		((Id_tipo)tipo).setVinculo(tipo.getVinculo());
+		tipo.setTam(tipo.getVinculo().getTam());
 
     }
 
     @Override
     public void procesa(Struct_tipo tipo) throws IOException {
-
+		tipo.campos().procesa(this);
     }
 
     @Override
     public void procesa(L_campos campos) throws IOException {
-
+		campos.campos().procesa(this);
+		campos.campo().procesa(this);
     }
 
     @Override
     public void procesa(Un_campo campos) throws IOException {
-
+		campos.campo().procesa(this);
     }
 
     @Override
     public void procesa(Camp campo) throws IOException {
-
+		campo.tipo().procesa(this);
     }
 
     @Override
     public void procesa(Si_param lParam) throws IOException {
-
+		lParam.lParam().procesa(this);
     }
 
     @Override
-    public void procesa(No_param lParam) throws IOException {
-
-    }
+    public void procesa(No_param lParam) throws IOException {}
 
     @Override
     public void procesa(L_param lParam) throws IOException {
-
+		lParam.lParam().procesa(this);
+		lParam.param().procesa(this);
     }
 
     @Override
     public void procesa(Un_param lParam) throws IOException {
-
+		lParam.param().procesa(this);
     }
 
     @Override
     public void procesa(Param_simple param) throws IOException {
-
+		param.tipo().procesa(this);
     }
 
     @Override
     public void procesa(Param_ref param) throws IOException {
-
+		param.tipo().procesa(this);
     }
 
     @Override
     public void procesa(Si_instrs instrs) throws IOException {
-
+		instrs.instrs().procesa(this);
     }
 
     @Override
-    public void procesa(No_instrs instrs) throws IOException {
-
-    }
+    public void procesa(No_instrs instrs) throws IOException {}
 
     @Override
     public void procesa(L_instrs instrs) throws IOException {
-
+		instrs.instrs().procesa(this);
+		instrs.instr().procesa(this);
     }
 
     @Override
     public void procesa(Una_instr instrs) throws IOException {
-
+		instrs.instr().procesa(this);
     }
 
     @Override
-    public void procesa(Eva instr) throws IOException {
-
-    }
+    public void procesa(Eva instr) throws IOException {}
 
     @Override
     public void procesa(If_instr instr) throws IOException {
-
+		instr.setDirAnt(dir);
+		instr.bloque().procesa(this);
+		dir = instr.getDirAnt();
     }
 
     @Override
     public void procesa(If_el instr) throws IOException {
-
+		instr.setDirAnt(dir);
+		instr.bloque().procesa(this);
+		dir = instr.getDirAnt();
+		instr.bloqueElse().procesa(this);
+		dir = instr.getDirAnt();
     }
 
     @Override
     public void procesa(Wh instr) throws IOException {
-
+		instr.setDirAnt(dir);
+		instr.bloque().procesa(this);
+		dir = instr.getDirAnt();
     }
 
     @Override
-    public void procesa(Rd instr) throws IOException {
-
-    }
+    public void procesa(Rd instr) throws IOException { }
 
     @Override
-    public void procesa(Wr instr) throws IOException {
-
-    }
+    public void procesa(Wr instr) throws IOException {}
 
     @Override
-    public void procesa(Nw instr) throws IOException {
-
-    }
+    public void procesa(Nw instr) throws IOException {}
 
     @Override
-    public void procesa(Dl instr) throws IOException {
-
-    }
+    public void procesa(Dl instr) throws IOException {}
 
     @Override
-    public void procesa(Nl_instr instr) throws IOException {
-
-    }
+    public void procesa(Nl_instr instr) throws IOException {}
 
     @Override
-    public void procesa(Cl instr) throws IOException {
-
-    }
+    public void procesa(Cl instr) throws IOException {}
 
     @Override
     public void procesa(Bq_instr instr) throws IOException {
-
+		instr.setDirAnt(dir);
+		instr.bloque().procesa(this);
+		dir = instr.getDirAnt();
     }
+
+	private void inc_dir(int tam) {
+		dir += tam;
+		if(dir > max_dir)
+			max_dir = dir;
+	}
 
     @Override
     public void procesa(Si_exps exps) throws IOException {
@@ -428,5 +482,9 @@ public class AsignacionEspacio implements Procesamiento {
     @Override
     public void procesa(Null_exp exp) throws IOException {
 
+    }
+
+	private boolean claseDe(Object o, Class c) {
+        return o.getClass() == c;
     }
 }

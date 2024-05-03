@@ -16,6 +16,9 @@ public abstract class SintaxisAbstracta {
         private Nodo vinculo;
         private Tipo tipo;
         private int dir;
+		private int dir_ant;
+		private int max_dir_ant;
+		private int max_dir;
         private int nivel;
         private int tam;
         private int prim;
@@ -53,6 +56,12 @@ public abstract class SintaxisAbstracta {
         public int getDir(){
             return dir;
         }
+		public int getMaxDir(){ return max_dir; }
+		public void setMaxDir(int max_dir){ this.max_dir = max_dir; }
+		public int getMaxDirAnt(){ return max_dir_ant; }
+		public void setMaxDirAnt(int max_dir_ant){ this.max_dir_ant = max_dir_ant; }
+		public int getDirAnt(){ return dir_ant; }
+		public void setDirAnt(int dir_ant){ this.dir_ant = dir_ant; }
         public void setTipo(Tipo tipo){
             this.tipo = tipo;
         }
