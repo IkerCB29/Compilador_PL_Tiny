@@ -1,8 +1,11 @@
 package model.maquinaP;
 
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Stack;
+import view.Printer;
 
 public class MaquinaP {
    public static class EAccesoIlegitimo extends RuntimeException {} 
@@ -105,16 +108,21 @@ public class MaquinaP {
    private final int tamdatos;
    private final int tamheap;
    private final int ndisplays;
-   public MaquinaP(int tamdatos, int tampila, int tamheap, int ndisplays) {
-      this.tamdatos = tamdatos;
-      this.tamheap = tamheap;
-      this.ndisplays = ndisplays;
-      this.codigoP = new ArrayList<>();  
-      pilaEvaluacion = new Stack<>();
-      datos = new Valor[tamdatos+tampila+tamheap];
-      this.pc = 0;
-      gestorPilaActivaciones = new GestorPilaActivaciones(tamdatos,(tamdatos+tampila)-1,ndisplays); 
-      gestorMemoriaDinamica = new GestorMemoriaDinamica(tamdatos+tampila,(tamdatos+tampila+tamheap)-1);
+   private final Scanner input;
+   private final Printer output;
+
+   public MaquinaP(Reader input, Printer output, int tamdatos, int tampila, int tamheap, int ndisplays) {
+       this.input = new Scanner(input);
+       this.output = output;
+       this.tamdatos = tamdatos;
+       this.tamheap = tamheap;
+       this.ndisplays = ndisplays;
+       this.codigoP = new ArrayList<>();
+       pilaEvaluacion = new Stack<>();
+       datos = new Valor[tamdatos+tampila+tamheap];
+       this.pc = 0;
+       gestorPilaActivaciones = new GestorPilaActivaciones(tamdatos,(tamdatos+tampila)-1,ndisplays);
+       gestorMemoriaDinamica = new GestorMemoriaDinamica(tamdatos+tampila,(tamdatos+tampila+tamheap)-1);
    }
    public void ejecuta() {
       while(pc != codigoP.size()) {

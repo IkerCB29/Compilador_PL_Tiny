@@ -1,7 +1,7 @@
 package model.semantica;
 
-import exceptions.TipadoInvalidoExcepcion;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import model.Procesamiento;
 import model.sintaxis.SintaxisAbstracta.Campos;
@@ -84,7 +84,6 @@ import model.sintaxis.SintaxisAbstracta.Wh;
 import model.sintaxis.SintaxisAbstracta.Wr;
 import view.Printer;
 
-//TODO
 public class ComprobacionTipos implements Procesamiento {
     private final Printer output;
     private List<Param> listaParam;
@@ -180,16 +179,23 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Camp campo) throws IOException {}
 
     @Override
-    public void procesa(Si_param lParam) throws IOException {}
+    public void procesa(Si_param lParam) throws IOException {
+        lParam.lParam().procesa(this);
+    }
 
     @Override
     public void procesa(No_param lParam) throws IOException {}
 
     @Override
-    public void procesa(L_param lParam) throws IOException {}
+    public void procesa(L_param lParam) throws IOException {
+        lParam.lParam().procesa(this);
+        lParam.param().procesa(this);
+    }
 
     @Override
-    public void procesa(Un_param lParam) throws IOException { }
+    public void procesa(Un_param lParam) throws IOException {
+        listaParam.add(lParam.param());
+    }
 
     @Override
     public void procesa(Param_simple param) throws IOException {}
@@ -233,7 +239,7 @@ public class ComprobacionTipos implements Procesamiento {
         instr.bloque().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
             aviso_error(ref(instr.exp().getTipo()), "Se esta intentado poner una condicion de un if que no es un"
-                + "booleano");
+                + "booleano\n");
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(instr.bloque().getTipo());
@@ -246,7 +252,7 @@ public class ComprobacionTipos implements Procesamiento {
         instr.bloqueElse().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
             aviso_error(ref(instr.exp().getTipo()), "Se esta intentado poner una condicion de un if que no es un"
-                + "booleano");
+                + "booleano\n");
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(ambos_ok(instr.bloque().getTipo(), instr.bloqueElse().getTipo()));
@@ -258,7 +264,7 @@ public class ComprobacionTipos implements Procesamiento {
         instr.bloque().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
             aviso_error(ref(instr.exp().getTipo()), "Se esta intentado poner una condicion de un if que no es un"
-                + "booleano");
+                + "booleano\n");
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(instr.bloque().getTipo());
@@ -268,7 +274,7 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Rd instr) throws IOException {
         instr.exp().procesa(this);
         if(!esDesignador(instr.exp())){
-            aviso_error(ref(instr.exp().getTipo()), "La expresion que se esta pasando para leer no es un designador");
+            aviso_error(ref(instr.exp().getTipo()), "La expresion que se esta pasando para leer no es un designador\n");
             instr.setTipo(new Error_tipo());
         }
         if(claseDe(ref(instr.exp().getTipo()), In_tipo.class)){
@@ -285,7 +291,7 @@ public class ComprobacionTipos implements Procesamiento {
         }
         else {
             aviso_error(ref(instr.exp().getTipo()), "La expresion que se esta pasando para leer no es de tipo"
-                + "imprimible");
+                + "imprimible\n");
             instr.setTipo(new Error_tipo());
         }
     }
@@ -307,7 +313,7 @@ public class ComprobacionTipos implements Procesamiento {
         }
         else {
             aviso_error(ref(instr.exp().getTipo()), "La expresion que se esta pasando para leer no es de tipo"
-                + "imprimible");
+                + "imprimible\n");
             instr.setTipo(new Error_tipo());
         }
     }
@@ -316,7 +322,7 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Nw instr) throws IOException {
         instr.exp().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), P_tipo.class)) {
-            aviso_error(ref(instr.exp().getTipo()), "Esta intentando alocar algo que no es un puntero");
+            aviso_error(ref(instr.exp().getTipo()), "Esta intentando alocar algo que no es un puntero\n");
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(new Ok_tipo());
@@ -326,7 +332,7 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Dl instr) throws IOException {
         instr.exp().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), P_tipo.class)) {
-            aviso_error(ref(instr.exp().getTipo()), "Esta intentando desalocar algo que no es un puntero");
+            aviso_error(ref(instr.exp().getTipo()), "Esta intentando desalocar algo que no es un puntero\n");
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(new Ok_tipo());
@@ -337,10 +343,25 @@ public class ComprobacionTipos implements Procesamiento {
         instr.setTipo(new Ok_tipo());
     }
 
-    //TODO
     @Override
     public void procesa(Cl instr) throws IOException {
-
+        listaExp = new ArrayList<>();
+        listaParam = new ArrayList<>();
+        instr.expsOpt().procesa(this);
+        ((P_dec) instr.getVinculo()).lParamOpt().procesa(this);
+        if(listaParam.size() != listaExp.size()) {
+            aviso_error("El número de argumentos no coincide con el número de parametros\n");
+            instr.setTipo(new Error_tipo());
+        }
+        else{
+            instr.setTipo(new Ok_tipo());
+            for(int i = 0; i < listaParam.size(); ++i){
+                if(!compatible(listaExp.get(i).getTipo(), listaParam.get(i).tipo())){
+                    aviso_error(listaExp.get(i).getTipo(), "El argumento " + i + "-esimo no es de tipo compatible con el parametro\n");
+                    instr.setTipo(new Error_tipo());
+                }
+            }
+        }
     }
 
     @Override
@@ -361,22 +382,26 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(L_exps exps) throws IOException {
         exps.exps().procesa(this);
         exps.exp().procesa(this);
-
     }
 
     @Override
     public void procesa(Una_exp exps) throws IOException {
         exps.exp().procesa(this);
+        listaExp.add(exps.exp());
     }
 
     @Override
     public void procesa(Asig exp) throws IOException {
         exp.opnd0().procesa(this);
         exp.opnd1().procesa(this);
-        if(!esDesignador(exp.opnd0()))
-            throw new RuntimeException("Se esperaba un designador");
-        if(!compatible(exp.opnd0().getTipo(), exp.opnd1().getTipo()))
-            throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        if(!esDesignador(exp.opnd0())){
+            aviso_error("Se esperaba un designador");
+            exp.setTipo(new Error_tipo());
+        }
+        if(!compatible(exp.opnd0().getTipo(), exp.opnd1().getTipo())){
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(),"Tipos no compatibles");
+            exp.setTipo(new Error_tipo());
+        }
         exp.setTipo(exp.opnd0().getTipo());
     }
 
@@ -396,7 +421,10 @@ public class ComprobacionTipos implements Procesamiento {
             claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -415,7 +443,10 @@ public class ComprobacionTipos implements Procesamiento {
             claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -434,7 +465,10 @@ public class ComprobacionTipos implements Procesamiento {
             claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -453,7 +487,10 @@ public class ComprobacionTipos implements Procesamiento {
             claseDe(ref(exp.opnd1().getTipo()), String_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -484,7 +521,10 @@ public class ComprobacionTipos implements Procesamiento {
         else if(claseDe(ref(exp.opnd0().getTipo()), N_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), N_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -515,7 +555,10 @@ public class ComprobacionTipos implements Procesamiento {
         else if(claseDe(ref(exp.opnd0().getTipo()), N_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), N_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -530,7 +573,10 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new R_tipo());
             }
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -545,7 +591,10 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new R_tipo());
             }
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -555,7 +604,10 @@ public class ComprobacionTipos implements Procesamiento {
         if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -565,7 +617,10 @@ public class ComprobacionTipos implements Procesamiento {
         if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), B_tipo.class)) {
             exp.setTipo(new B_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -580,7 +635,10 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new R_tipo());
             }
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -595,7 +653,10 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new R_tipo());
             }
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -605,7 +666,10 @@ public class ComprobacionTipos implements Procesamiento {
         if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)) {
             exp.setTipo(new In_tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), exp.opnd0().getTipo().getClass());
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -614,7 +678,10 @@ public class ComprobacionTipos implements Procesamiento {
         if(claseDe(ref(exp.opnd0().getTipo()), In_tipo.class) || claseDe(ref(exp.opnd0().getTipo()), R_tipo.class)) {
             exp.setTipo(exp.opnd0().getTipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), In_tipo.class, R_tipo.class);
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -623,7 +690,10 @@ public class ComprobacionTipos implements Procesamiento {
         if(claseDe(ref(exp.opnd0().getTipo()), B_tipo.class)) {
             exp.setTipo(exp.opnd0().getTipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), B_tipo.class);
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Tipado de al menos un operando no valido");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -631,10 +701,12 @@ public class ComprobacionTipos implements Procesamiento {
         exp.opnd0().procesa(this);
         exp.opnd1().procesa(this);
         if(!claseDe(ref(exp.opnd0().getTipo()), A_tipo.class)) {
-            throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), A_tipo.class);
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "El operando no se puedo indexar");
+            exp.setTipo(new Error_tipo());
         }
         if(!claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)){
-            throw new TipadoInvalidoExcepcion(exp.opnd1().getTipo().getClass(), In_tipo.class);
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Se esta intentando indexar sin pasar un entero");
+            exp.setTipo(new Error_tipo());
         }
         exp.setTipo(exp.opnd0().getTipo().tipo());
     }
@@ -643,7 +715,8 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Acceso exp) throws IOException {
         exp.opnd0().procesa(this);
         if(!claseDe(ref(exp.opnd0().getTipo()), Struct_tipo.class)) {
-            throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), Struct_tipo.class);
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "El operando no puede acceder a campos");
+            exp.setTipo(new Error_tipo());
         }
         Struct_tipo struct = (Struct_tipo) ref(exp.opnd0().getTipo());
         exp.setTipo(struct.getTipoDe(exp.iden()));
@@ -655,7 +728,10 @@ public class ComprobacionTipos implements Procesamiento {
         if(claseDe(ref(exp.opnd0().getTipo()), P_tipo.class)){
             exp.setTipo(ref(exp.opnd0().getTipo()).tipo());
         }
-        else throw new TipadoInvalidoExcepcion(exp.opnd0().getTipo().getClass(), P_tipo.class);
+        else {
+            aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "El operando no es un puntero");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -697,8 +773,11 @@ public class ComprobacionTipos implements Procesamiento {
             Param_ref param = (Param_ref) exp.getVinculo();
             exp.setTipo(param.tipo());
         }
-        else throw new RuntimeException("El identificador esta vinculado con una declaración de procedimiento o tipo "
+        else {
+            aviso_error("El identificador esta vinculado con una declaración de procedimiento o tipo "
                 + "pero se espera que fuera variable o parámetro");
+            exp.setTipo(new Error_tipo());
+        }
     }
 
     @Override
@@ -727,7 +806,7 @@ public class ComprobacionTipos implements Procesamiento {
         else if(claseDe(ref(a), String_tipo.class) && claseDe(ref(b), String_tipo.class)) return true;
         //TODO hacer lo del unificable
         else if(claseDe(ref(a), Struct_tipo.class) && claseDe(ref(b), Struct_tipo.class)) {
-            return compruebaCampos(a.campos(), b.campos());
+            return compruebaCampos(ref(a).campos(), ref(b).campos());
         }
         else if(claseDe(ref(a), A_tipo.class) && claseDe(ref(b), A_tipo.class)){
             return compatible(ref(a).tipo(), ref(b).tipo());

@@ -306,11 +306,11 @@ public class GeneracionCodigo implements Procesamiento {
         if(claseDe(lParam.param(), Param_ref.class) || !esDesignador(lExps.exp())){
             m.emit(m.desapila_ind());
         }
-        else if(claseDe(ref(lParam.param().getTipo()), R_tipo.class) && claseDe(ref(lExps.exp().getTipo()), In_tipo.class)){
+        else if(claseDe(ref(lParam.param().tipo()), R_tipo.class) && claseDe(ref(lExps.exp().getTipo()), In_tipo.class)){
             m.emit(m.copia_transformando());
         }
         else{
-            m.emit(m.copia(lParam.param().getTipo().getTam()));
+            m.emit(m.copia(lParam.param().tipo().getTam()));
         }
     }
 
@@ -463,7 +463,7 @@ public class GeneracionCodigo implements Procesamiento {
     @Override
     public void procesa(Acceso exp) throws IOException {
         exp.opnd0().procesa(this);
-        Struct_tipo struct = (Struct_tipo) exp.opnd0().getTipo();
+        Struct_tipo struct = (Struct_tipo) ref(exp.opnd0().getTipo());
         m.emit(m.apila_int(struct.getDesplazamientoDe(exp.iden())));
         m.emit(m.suma());
     }
@@ -486,12 +486,12 @@ public class GeneracionCodigo implements Procesamiento {
 
     @Override
     public void procesa(True exp) throws IOException {
-        m.emit(m.apila_bool(Boolean.parseBoolean(exp.valor())));
+        m.emit(m.apila_bool(true));
     }
 
     @Override
     public void procesa(False exp) throws IOException {
-        m.emit(m.apila_bool(Boolean.parseBoolean(exp.valor())));
+        m.emit(m.apila_bool(false));
     }
 
     @Override
@@ -546,42 +546,42 @@ public class GeneracionCodigo implements Procesamiento {
         }
     }
 
-    private void gen_acc_id(V_dec dec) throws IOException {
+    private void gen_acc_id(V_dec dec) {
         if(dec.getNivel() == 0){
             m.emit(m.apila_int(dec.getDir()));
         }
         else gen_acc_var(dec);
     }
 
-    private void gen_acc_id(Param_simple param) throws IOException {
+    private void gen_acc_id(Param_simple param) {
         gen_acc_var(param);
     }
 
-    private void gen_acc_id(Param_ref param) throws IOException {
+    private void gen_acc_id(Param_ref param) {
         gen_acc_var(param);
         m.emit(m.apila_ind());
     }
 
-    private void gen_acc_var(V_dec dec) throws IOException {
+    private void gen_acc_var(V_dec dec) {
         m.emit(m.apilad(dec.getNivel()));
         m.emit(m.apila_int(dec.getDir()));
         m.emit(m.suma());
     }
 
-    private void gen_acc_var(Param_simple param) throws IOException {
+    private void gen_acc_var(Param_simple param) {
         m.emit(m.apilad(param.getNivel()));
         m.emit(m.apila_int(param.getDir()));
         m.emit(m.suma());
     }
 
-    private void gen_acc_var(Param_ref param) throws IOException {
+    private void gen_acc_var(Param_ref param) {
         m.emit(m.apilad(param.getNivel()));
         m.emit(m.apila_int(param.getDir()));
         m.emit(m.suma());
     }
 
 
-    private void gen_acc_val(Exp opnd) throws IOException {
+    private void gen_acc_val(Exp opnd) {
         if(esDesignador(opnd)){
             m.emit(m.apila_ind());
         }

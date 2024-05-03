@@ -11,7 +11,7 @@ public class ProbarProcesamiento {
     public static void main(String[] args) {
         try {
             Controller c = new Controller();
-            Reader input = new BufferedReader(new FileReader("files/sample3a.in"));
+            Reader input = new BufferedReader(new FileReader("files/sample7a.in"));
             input.read();
             c.procesamiento(input, new ConsolePrinter());
         }

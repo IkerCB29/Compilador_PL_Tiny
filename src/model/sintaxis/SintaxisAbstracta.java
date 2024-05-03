@@ -16,9 +16,9 @@ public abstract class SintaxisAbstracta {
         private Nodo vinculo;
         private Tipo tipo;
         private int dir;
-		private int dir_ant;
-		private int max_dir_ant;
-		private int max_dir;
+		    private int dir_ant;
+		    private int max_dir_ant;
+		    private int max_dir;
         private int nivel;
         private int tam;
         private int prim;

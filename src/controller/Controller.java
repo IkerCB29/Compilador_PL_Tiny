@@ -5,7 +5,11 @@ import java.io.*;
 
 import exceptions.LexicoException;
 import model.lexico.AnalizadorLexico;
+import model.maquinaP.MaquinaP;
+import model.semantica.AsignacionEspacio;
 import model.semantica.ComprobacionTipos;
+import model.semantica.Etiquetado;
+import model.semantica.GeneracionCodigo;
 import model.semantica.Vinculacion;
 import model.sintaxis.AnalizadorSintacticoCC;
 import model.sintaxis.AnalizadorSintacticoCUP;
@@ -130,11 +134,12 @@ public class Controller {
             AnalizadorLexico alex = new AnalizadorLexico(input);
             ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);
             Prog prog = ((Prog) asin.debug_parse().value);
-            Vinculacion v = new Vinculacion(new ConsolePrinter());
-            prog.procesa(v);
-            ComprobacionTipos cT = new ComprobacionTipos(new ConsolePrinter());
-            prog.procesa(cT);
-            return;
+            new Vinculacion(new ConsolePrinter()).procesa(prog);
+            new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
+            new AsignacionEspacio().procesa(prog);
+            new Etiquetado().procesa(prog);
+            MaquinaP maquinaP = new MaquinaP(input, output,1000, 1000, 1000, 5);
+            new GeneracionCodigo(maquinaP).procesa(prog);
         }
         catch (LexicoException e){
             output.write("ERROR_LEXICO\n");

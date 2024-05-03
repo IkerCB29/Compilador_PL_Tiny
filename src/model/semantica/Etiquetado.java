@@ -78,7 +78,6 @@ import model.sintaxis.SintaxisAbstracta.Wh;
 import model.sintaxis.SintaxisAbstracta.Wr;
 
 public class Etiquetado implements Procesamiento {
-
     private static int etq = 0;
     private static Stack<P_dec> procesosPendientes = new Stack<>();
 

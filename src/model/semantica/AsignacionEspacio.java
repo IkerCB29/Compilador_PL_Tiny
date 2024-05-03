@@ -6,17 +6,11 @@ import model.sintaxis.SintaxisAbstracta.*;
 import view.Printer;
 
 public class AsignacionEspacio implements Procesamiento {
-
-
-	private final Printer output;
 	private int dir;
 	private int max_dir;
-	private int dir_ant;
-	private int max_dir_ant;
 	private int nivel;
 
-	public AsignacionEspacio(Printer output) {
-		this.output = output;
+	public AsignacionEspacio() {
 		dir = 0;
 		max_dir = 0;
 		nivel = 0;
@@ -78,21 +72,16 @@ public class AsignacionEspacio implements Procesamiento {
 
 	private void preprocesa(Tipo tipo) throws IOException {
         if(claseDe(tipo, A_tipo.class)){
-            preprocesa(tipo);
-            tipo.setTam(tipo.getTam() * Integer.parseInt(tipo.capacidad()));
+            preprocesa(tipo.tipo());
+            tipo.setTam(tipo.tipo().getTam() * Integer.parseInt(tipo.capacidad()));
         }
         else if(claseDe(tipo, P_tipo.class)) {
-            if(!claseDe(tipo.tipo(), Id_tipo.class)){
-                preprocesa(tipo.tipo());
-            }
-			tipo.setTam(1);
+            preprocesa(tipo.tipo());
+			      tipo.setTam(1);
         }
         else if(claseDe(tipo, Id_tipo.class)) {
-            if(!claseDe(tipo.getVinculo(), T_dec.class))
-                output.write("El identificador " + tipo.iden() + " no esta vinculado a un declaracion "
-                    + "de tipo\n");
-            ((Id_tipo)tipo).setVinculo(tipo.getVinculo());
-			tipo.setTam(tipo.getVinculo().getTam());
+            T_dec tDec = (T_dec) tipo.getVinculo();
+			      tipo.setTam(tDec.tipo().getTam());
         }
         else if(claseDe(tipo, Struct_tipo.class)){
             preprocesa(tipo.campos());
@@ -175,11 +164,9 @@ public class AsignacionEspacio implements Procesamiento {
 
     @Override
     public void procesa(P_tipo tipo) throws IOException {
-		if(claseDe(tipo.tipo(), Id_tipo.class)){
-            tipo.tipo().setVinculo(tipo.getVinculo());
-            if(!claseDe(tipo.tipo().getVinculo(), T_dec.class))
-                output.write("El identificador " + tipo.iden() + " no esta vinculado a un declaracion "
-                    + "de tipo\n");
+		    if(claseDe(tipo.tipo(), Id_tipo.class)){
+            T_dec tDec = (T_dec) tipo.tipo().getVinculo();
+            tipo.setTam(tDec.getTam());
         }
         else {
             tipo.tipo().procesa(this);
@@ -199,14 +186,7 @@ public class AsignacionEspacio implements Procesamiento {
     public void procesa(String_tipo tipo) throws IOException {}
 
     @Override
-    public void procesa(Id_tipo tipo) throws IOException {
-		if(!claseDe(tipo.getVinculo(), T_dec.class))
-			output.write("El identificador " + tipo.iden() + " no esta vinculado a un declaracion "
-				+ "de tipo\n");
-		((Id_tipo)tipo).setVinculo(tipo.getVinculo());
-		tipo.setTam(tipo.getVinculo().getTam());
-
-    }
+    public void procesa(Id_tipo tipo) throws IOException {}
 
     @Override
     public void procesa(Struct_tipo tipo) throws IOException {
@@ -323,168 +303,108 @@ public class AsignacionEspacio implements Procesamiento {
 
     @Override
     public void procesa(Bq_instr instr) throws IOException {
-		instr.setDirAnt(dir);
-		instr.bloque().procesa(this);
-		dir = instr.getDirAnt();
+        instr.setDirAnt(dir);
+        instr.bloque().procesa(this);
+        dir = instr.getDirAnt();
     }
 
-	private void inc_dir(int tam) {
-		dir += tam;
-		if(dir > max_dir)
-			max_dir = dir;
-	}
-
-    @Override
-    public void procesa(Si_exps exps) throws IOException {
-
+    private void inc_dir(int tam) {
+        dir += tam;
+        if(dir > max_dir)
+            max_dir = dir;
     }
 
     @Override
-    public void procesa(No_exps exps) throws IOException {
-
-    }
+    public void procesa(Si_exps exps) throws IOException {}
 
     @Override
-    public void procesa(L_exps exps) throws IOException {
-
-    }
+    public void procesa(No_exps exps) throws IOException {}
 
     @Override
-    public void procesa(Una_exp exps) throws IOException {
-
-    }
+    public void procesa(L_exps exps) throws IOException {}
 
     @Override
-    public void procesa(Asig exp) throws IOException {
-
-    }
+    public void procesa(Una_exp exps) throws IOException {}
 
     @Override
-    public void procesa(My exp) throws IOException {
-
-    }
+    public void procesa(Asig exp) throws IOException {}
 
     @Override
-    public void procesa(Mn exp) throws IOException {
-
-    }
+    public void procesa(My exp) throws IOException {}
 
     @Override
-    public void procesa(Myig exp) throws IOException {
-
-    }
+    public void procesa(Mn exp) throws IOException { }
 
     @Override
-    public void procesa(Mnig exp) throws IOException {
-
-    }
+    public void procesa(Myig exp) throws IOException {}
 
     @Override
-    public void procesa(Ig exp) throws IOException {
-
-    }
+    public void procesa(Mnig exp) throws IOException {}
 
     @Override
-    public void procesa(Dif exp) throws IOException {
-
-    }
+    public void procesa(Ig exp) throws IOException {}
 
     @Override
-    public void procesa(Suma exp) throws IOException {
-
-    }
+    public void procesa(Dif exp) throws IOException {}
 
     @Override
-    public void procesa(Resta exp) throws IOException {
-
-    }
+    public void procesa(Suma exp) throws IOException {}
 
     @Override
-    public void procesa(And exp) throws IOException {
-
-    }
+    public void procesa(Resta exp) throws IOException {}
 
     @Override
-    public void procesa(Or exp) throws IOException {
-
-    }
+    public void procesa(And exp) throws IOException {}
 
     @Override
-    public void procesa(Mul exp) throws IOException {
-
-    }
+    public void procesa(Or exp) throws IOException { }
 
     @Override
-    public void procesa(Div exp) throws IOException {
-
-    }
+    public void procesa(Mul exp) throws IOException {}
 
     @Override
-    public void procesa(Mod exp) throws IOException {
-
-    }
+    public void procesa(Div exp) throws IOException {}
 
     @Override
-    public void procesa(Menos_unario exp) throws IOException {
-
-    }
+    public void procesa(Mod exp) throws IOException {}
 
     @Override
-    public void procesa(Not exp) throws IOException {
-
-    }
+    public void procesa(Menos_unario exp) throws IOException {}
 
     @Override
-    public void procesa(Indexacion exp) throws IOException {
-
-    }
+    public void procesa(Not exp) throws IOException {}
 
     @Override
-    public void procesa(Acceso exp) throws IOException {
-
-    }
+    public void procesa(Indexacion exp) throws IOException {}
 
     @Override
-    public void procesa(Indireccion exp) throws IOException {
-
-    }
+    public void procesa(Acceso exp) throws IOException {}
 
     @Override
-    public void procesa(Entero exp) throws IOException {
-
-    }
+    public void procesa(Indireccion exp) throws IOException {}
 
     @Override
-    public void procesa(Real exp) throws IOException {
-
-    }
+    public void procesa(Entero exp) throws IOException {}
 
     @Override
-    public void procesa(True exp) throws IOException {
-
-    }
+    public void procesa(Real exp) throws IOException {}
 
     @Override
-    public void procesa(False exp) throws IOException {
-
-    }
+    public void procesa(True exp) throws IOException {}
 
     @Override
-    public void procesa(String_exp exp) throws IOException {
-
-    }
+    public void procesa(False exp) throws IOException {}
 
     @Override
-    public void procesa(Iden exp) throws IOException {
-
-    }
+    public void procesa(String_exp exp) throws IOException {}
 
     @Override
-    public void procesa(Null_exp exp) throws IOException {
+    public void procesa(Iden exp) throws IOException {}
 
-    }
+    @Override
+    public void procesa(Null_exp exp) throws IOException {}
 
-	private boolean claseDe(Object o, Class c) {
+    private boolean claseDe(Object o, Class c) {
         return o.getClass() == c;
     }
 }

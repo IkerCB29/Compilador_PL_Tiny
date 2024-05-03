@@ -95,6 +95,7 @@ puntero = \^
 referencia = \&
 separador = [ \t\r\b\n]
 comentario = \#\#[^\n]*
+eof = \$
 
 %%
 {entero}				{return ULBuilder.construirUL(ClaseLexica.ENTERO, "<int>");}
@@ -148,6 +149,7 @@ comentario = \#\#[^\n]*
 {evalua}				{return ULBuilder.construirUL(ClaseLexica.EVALUA, "@");}
 {puntero}				{return ULBuilder.construirUL(ClaseLexica.PUNTERO, "^");}
 {referencia}			{return ULBuilder.construirUL(ClaseLexica.REFERENCIA, "&");}
+{eof}           {return ULBuilder.construirUL(ClaseLexica.EOF, "$");}
 {separador}         	{}
 {comentario}        	{}
 [^]                 	{throw new LexicoException(getFila(), getColumna(), getLexema());}
