@@ -78,8 +78,8 @@ import model.sintaxis.SintaxisAbstracta.Wh;
 import model.sintaxis.SintaxisAbstracta.Wr;
 
 public class Etiquetado implements Procesamiento {
-    private static int etq = 0;
-    private static Stack<P_dec> procesosPendientes = new Stack<>();
+    private int etq = 0;
+    private Stack<P_dec> procesosPendientes = new Stack<>();
 
     @Override
     public void procesa(Prog prog) throws IOException {

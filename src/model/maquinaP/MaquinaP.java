@@ -616,7 +616,7 @@ public class MaquinaP {
                 pilaEvaluacion.push(new ValorReal(opnd1.valorReal()-opnd2.valorReal()));
             pc++;
         }
-        public String toString() {return "suma";};
+        public String toString() {return "resta";};
     }
 
     private IAnd IAND;
