@@ -95,7 +95,7 @@ public class AsignacionEspacio implements Procesamiento {
 	private void preprocesa(Campos campos) throws IOException{
 		if(claseDe(campos, L_campos.class)){
 			preprocesa(campos.campos());
-			preprocesa(campos.campo(), campos.getTam());
+			preprocesa(campos.campo(), campos.campos().getTam());
 			campos.setTam(campos.campos().getTam() + campos.campo().getTam());
 		}
 		else{

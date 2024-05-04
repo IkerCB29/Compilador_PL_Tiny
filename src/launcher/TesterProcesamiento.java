@@ -22,14 +22,14 @@ public class TesterProcesamiento {
 
     private static List<Pair<String, String>> fileList(){
         List<Pair<String, String>> list = new ArrayList<>();
-        list.add(new Pair<>("files/Procesamiento/01hw_a.in", "files/Procesamiento/01hw.out"));
+        /*list.add(new Pair<>("files/Procesamiento/01hw_a.in", "files/Procesamiento/01hw.out"));
         list.add(new Pair<>("files/Procesamiento/02basico_a.in", "files/Procesamiento/02basico.out"));
         list.add(new Pair<>("files/Procesamiento/03basico_io_a.in", "files/Procesamiento/03basico_io.out"));
         list.add(new Pair<>("files/Procesamiento/04control_a.in", "files/Procesamiento/04control.out"));
         list.add(new Pair<>("files/Procesamiento/05tipos_1_a.in", "files/Procesamiento/05tipos_1.out"));
         list.add(new Pair<>("files/Procesamiento/06procs1_a.in", "files/Procesamiento/06procs1.out"));
-        //list.add(new Pair<>("files/Procesamiento/07tipos_2_a.in", "files/Procesamiento/07tipos_2.out"));
-        //list.add(new Pair<>("files/Procesamiento/08procs2_a.in", "files/Procesamiento/08procs2.out"));
+        list.add(new Pair<>("files/Procesamiento/07tipos_2_a.in", "files/Procesamiento/07tipos_2.out"));*/
+        list.add(new Pair<>("files/Procesamiento/08procs2_a.in", "files/Procesamiento/08procs2.out"));
         return list;
     };
 

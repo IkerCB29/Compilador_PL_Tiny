@@ -467,6 +467,9 @@ public class Etiquetado implements Procesamiento {
         exp.setPrim(etq);
         exp.opnd0().procesa(this);
         exp.opnd1().procesa(this);
+        if(esDesignador(exp.opnd1())){
+            etq++;
+        }
         etq += 3;
         exp.setSig(etq);
     }
