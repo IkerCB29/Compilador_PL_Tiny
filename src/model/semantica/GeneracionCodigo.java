@@ -228,7 +228,7 @@ public class GeneracionCodigo implements Procesamiento {
         gen_acc_val(instr.exp());
         m.emit(m.ir_f(instr.getPrim()));
         instr.bloque().procesa(this);
-        m.emit(m.ir_f(instr.getSig()));
+        m.emit(m.ir_a(instr.getSig()));
         instr.bloqueElse().procesa(this);
     }
 

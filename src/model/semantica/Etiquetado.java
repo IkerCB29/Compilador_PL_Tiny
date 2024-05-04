@@ -215,6 +215,7 @@ public class Etiquetado implements Procesamiento {
     public void procesa(Eva instr) throws IOException {
         instr.setPrim(etq);
         instr.exp().procesa(this);
+        etq++;
         instr.setSig(etq);
     }
 
