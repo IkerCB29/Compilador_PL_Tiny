@@ -48,9 +48,14 @@ public class MaquinaP {
     }
     private static class ValorString extends Valor {
         private final String valor;
-        public ValorString(String valor) { this.valor = valor; }
+        public ValorString(String valor) {
+            if(valor.length() >= 2)
+                this.valor = valor.substring(1, valor.length() - 1);
+            else
+                this.valor = valor;
+        }
         public String valorString() {return valor;}
-        public String toString() { return valor; }
+        public String toString() { return String.valueOf(valor); }
     }
 
     private final List<Instruccion> codigoP;
@@ -146,7 +151,6 @@ public class MaquinaP {
         public String toString() {return "desapila-ind";};
     }
 
-    private IApilaD IAPILAD;
     private class IApilaD implements Instruccion {
         private int nivel;
         public IApilaD(int nivel) {
@@ -516,6 +520,10 @@ public class MaquinaP {
     public MaquinaP(Reader input, Printer output, int tamdatos, int tampila, int tamheap, int ndisplays) {
        this.input = new Scanner(input);
        this.output = output;
+       this.IDESAPILA = new IDesapila();
+       this.IAPILAIND = new IApilaInd();
+       this.IWRITE = new IWrite();
+       this.ISTOP = new IStop();
        this.tamdatos = tamdatos;
        this.tamheap = tamheap;
        this.ndisplays = ndisplays;

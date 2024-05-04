@@ -16,6 +16,7 @@ import model.sintaxis.AnalizadorSintacticoCUP;
 import model.sintaxis.ConstructorASTsCC;
 import model.sintaxis.ConstructorASTsCUP;
 import model.sintaxis.ParseException;
+import model.sintaxis.SintaxisAbstracta.Ok_tipo;
 import model.sintaxis.SintaxisAbstracta.Prog;
 import model.sintaxis.TokenMgrError;
 import model.sintaxis.impresionRecursiva.ImpresionBonitaRecursiva;
@@ -136,10 +137,15 @@ public class Controller {
             Prog prog = ((Prog) asin.debug_parse().value);
             new Vinculacion(new ConsolePrinter()).procesa(prog);
             new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
-            new AsignacionEspacio().procesa(prog);
-            new Etiquetado().procesa(prog);
-            MaquinaP maquinaP = new MaquinaP(input, output,1000, 1000, 1000, 5);
-            new GeneracionCodigo(maquinaP).procesa(prog);
+            if(prog.getTipo().getClass() == Ok_tipo.class) {
+                new AsignacionEspacio().procesa(prog);
+                new Etiquetado().procesa(prog);
+                MaquinaP maquinaP = new MaquinaP(input, output, 1000, 1000, 1000, 5);
+                new GeneracionCodigo(maquinaP).procesa(prog);
+                maquinaP.ejecuta();
+            }
+            else
+                output.write("Errores en comprobacion de tipos");
         }
         catch (LexicoException e){
             output.write("ERROR_LEXICO\n");
