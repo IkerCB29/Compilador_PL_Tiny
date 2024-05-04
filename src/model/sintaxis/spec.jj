@@ -86,8 +86,13 @@ PARSER_END(ConstructorASTsCC)
 Prog analiza() :
     {Prog prog;}
     {
-      prog = programa() <EOF>
+      prog = programa() fin()
         {return prog;}
+    }
+void fin() :
+    {}
+    {
+      <EOF> | "$$"
     }
 Prog programa():
     {Bloque bq;}

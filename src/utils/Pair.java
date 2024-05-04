@@ -25,4 +25,15 @@ public class Pair<T1, T2> {
     public T2 getSecond(){
         return _second;
     }
+
+    @Override
+    public boolean equals(Object o){
+        if(o == this)
+            return true;
+        if(!(o instanceof Pair<?,?>))
+            return false;
+
+        Pair<T1, T2> casted = (Pair<T1, T2>) o;
+        return casted._first == this._first && casted._second == this._second;
+    }
 }

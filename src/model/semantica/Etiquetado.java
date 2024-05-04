@@ -67,6 +67,7 @@ import model.sintaxis.SintaxisAbstracta.String_tipo;
 import model.sintaxis.SintaxisAbstracta.Struct_tipo;
 import model.sintaxis.SintaxisAbstracta.Suma;
 import model.sintaxis.SintaxisAbstracta.T_dec;
+import model.sintaxis.SintaxisAbstracta.Tipo;
 import model.sintaxis.SintaxisAbstracta.True;
 import model.sintaxis.SintaxisAbstracta.Un_campo;
 import model.sintaxis.SintaxisAbstracta.Un_param;
@@ -273,7 +274,7 @@ public class Etiquetado implements Procesamiento {
     public void procesa(Nw instr) throws IOException {
         instr.setPrim(etq);
         instr.exp().procesa(this);
-        etq += 3;
+        etq += 2;
         instr.setSig(etq);
     }
 
@@ -281,7 +282,7 @@ public class Etiquetado implements Procesamiento {
     public void procesa(Dl instr) throws IOException {
         instr.setPrim(etq);
         instr.exp().procesa(this);
-        etq += 2;
+        etq += 4;
         instr.setSig(etq);
     }
 
@@ -330,17 +331,28 @@ public class Etiquetado implements Procesamiento {
         exp.opnd0().procesa(this);
         etq++;
         exp.opnd1().procesa(this);
-        if(claseDe(exp.opnd0(), R_tipo.class) && claseDe(exp.opnd1(), In_tipo.class))
-            etq += 2;
-        else
-            etq++;
+        if(esDesignador(exp.opnd1())){
+            if(claseDe(ref(exp.opnd0().getTipo()), R_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)){
+                etq++;
+            }
+            else{
+                etq++;
+            }
+        }
+        else{
+            if(claseDe(ref(exp.opnd0().getTipo()), R_tipo.class) && claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)){
+                etq+=2;
+            }
+            else{
+                etq++;
+            }
+        }
         exp.setSig(etq);
     }
 
     @Override
     public void procesa(My exp) throws IOException {
         exp.setPrim(etq);
-
         etiquetado_opnds(exp.opnd0(),exp.opnd1(), exp);
         etq++;
         exp.setSig(etq);
@@ -576,14 +588,18 @@ public class Etiquetado implements Procesamiento {
     private void etiquetado_opnds(SintaxisAbstracta.Exp opnd0, SintaxisAbstracta.Exp opnd1, SintaxisAbstracta.Exp exp) throws IOException {
         opnd0.procesa(this);
         etiquetado_acc_val(opnd0);
-        if(claseDe(exp, Suma.class) || claseDe(exp, Resta.class) || claseDe(exp, Mul.class) || claseDe(exp, Div.class))
-            if(claseDe(exp.getTipo(), R_tipo.class) && claseDe(opnd0.getTipo(), In_tipo.class))
+        if(claseDe(exp, Suma.class) || claseDe(exp, Resta.class) || claseDe(exp, Mul.class) || claseDe(exp, Div.class)) {
+            if(claseDe(ref(exp.getTipo()), R_tipo.class) && claseDe(ref(opnd0.getTipo()), In_tipo.class)){
                 etq++;
+            }
+        }
         opnd1.procesa(this);
         etiquetado_acc_val(opnd1);
-        if(claseDe(exp, Suma.class) || claseDe(exp, Resta.class) || claseDe(exp, Mul.class) || claseDe(exp, Div.class))
-            if(claseDe(exp.getTipo(), R_tipo.class) && claseDe(opnd1.getTipo(), In_tipo.class))
+        if(claseDe(exp, Suma.class) || claseDe(exp, Resta.class) || claseDe(exp, Mul.class) || claseDe(exp, Div.class)) {
+            if(claseDe(ref(exp.getTipo()), R_tipo.class) && claseDe(ref(opnd1.getTipo()), In_tipo.class)){
                 etq++;
+            }
+        }
     }
 
     private void etiquetado_acc_id(V_dec dec){
@@ -621,5 +637,13 @@ public class Etiquetado implements Procesamiento {
 
     private boolean claseDe(Object o, Class c) {
         return o.getClass() == c;
+    }
+
+    private Tipo ref(Tipo t){
+        if(claseDe(t, Id_tipo.class)){
+            T_dec tDec = (T_dec) t.getVinculo();
+            return ref(tDec.tipo());
+        }
+        else return t;
     }
 }

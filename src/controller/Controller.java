@@ -130,7 +130,33 @@ public class Controller {
         output.close();
     }
 
-    public void procesamiento(Reader input, Printer output) throws Exception {
+    public void procesamientoCC(Reader input, Printer output) throws Exception {
+        try {
+            ConstructorASTsCC asin = new ConstructorASTsCC(input);
+            asin.disable_tracing();
+            Prog prog = asin.analiza();
+            new Vinculacion(new ConsolePrinter()).procesa(prog);
+            new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
+            if(prog.getTipo().getClass() == Ok_tipo.class) {
+                new AsignacionEspacio().procesa(prog);
+                new Etiquetado().procesa(prog);
+                MaquinaP maquinaP = new MaquinaP(input, output, 1000, 1000, 1000, 5);
+                new GeneracionCodigo(maquinaP).procesa(prog);
+                maquinaP.ejecuta();
+            }
+            else
+                output.write("Errores en comprobacion de tipos");
+        }
+        catch (LexicoException e){
+            output.write("ERROR_LEXICO\n");
+        }
+        catch (SintaxisException e){
+            output.write("ERROR_SINTACTICO\n");
+        }
+        output.close();
+    }
+
+    public void procesamientoCUP(Reader input, Printer output) throws Exception {
         try {
             AnalizadorLexico alex = new AnalizadorLexico(input);
             ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);

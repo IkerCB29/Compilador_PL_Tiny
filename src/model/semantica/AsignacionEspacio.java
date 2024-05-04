@@ -29,7 +29,7 @@ public class AsignacionEspacio implements Procesamiento {
 
     @Override
     public void procesa(Si_decs decs) throws IOException {
-		preprocesa(decs.decs());
+		    preprocesa(decs.decs());
         decs.decs().procesa(this);
     }
 
@@ -63,7 +63,7 @@ public class AsignacionEspacio implements Procesamiento {
 			preprocesa(dec.lParamOpt()); 
 			dec.lParamOpt().procesa(this);
 			dec.bloque().procesa(this);
-			dec.setTam(dir);
+			dec.setTam(max_dir);
 			dir = dec.getDirAnt();
 			max_dir = dec.getMaxDirAnt();
 			nivel--;

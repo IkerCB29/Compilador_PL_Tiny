@@ -2,9 +2,8 @@ package model.semantica;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.TreeSet;
 import model.Procesamiento;
 import model.sintaxis.SintaxisAbstracta.Campos;
 import model.sintaxis.SintaxisAbstracta.Error_tipo;
@@ -91,7 +90,7 @@ public class ComprobacionTipos implements Procesamiento {
     private final Printer output;
     private List<Param> listaParam;
     private List<Exp> listaExp;
-    private Set<Pair<Tipo, Tipo>> checkeo;
+    private List<Pair<Tipo, Tipo>> checkeo;
 
     public ComprobacionTipos(Printer output){
         this.output = output;
@@ -803,27 +802,32 @@ public class ComprobacionTipos implements Procesamiento {
     }
 
     private boolean compatible(Tipo a, Tipo b){
-        checkeo = new HashSet<>();
+        checkeo = new ArrayList<>();
         return unificables(a, b);
     }
 
     private boolean unificables(Tipo a, Tipo b){
-        if(claseDe(ref(a), In_tipo.class) && claseDe(ref(b), In_tipo.class)) return true;
-        else if(claseDe(ref(a), R_tipo.class) && claseDe(ref(b), In_tipo.class)) return true;
-        else if(claseDe(ref(a), R_tipo.class) && claseDe(ref(b), R_tipo.class)) return true;
-        else if(claseDe(ref(a), B_tipo.class) && claseDe(ref(b), B_tipo.class)) return true;
-        else if(claseDe(ref(a), String_tipo.class) && claseDe(ref(b), String_tipo.class)) return true;
+        if(claseDe(ref(a), In_tipo.class) && claseDe(ref(b), In_tipo.class))
+            return true;
+        else if(claseDe(ref(a), R_tipo.class) && claseDe(ref(b), In_tipo.class))
+            return true;
+        else if(claseDe(ref(a), R_tipo.class) && claseDe(ref(b), R_tipo.class))
+            return true;
+        else if(claseDe(ref(a), B_tipo.class) && claseDe(ref(b), B_tipo.class))
+            return true;
+        else if(claseDe(ref(a), String_tipo.class) && claseDe(ref(b), String_tipo.class))
+            return true;
         else if(claseDe(ref(a), Struct_tipo.class) && claseDe(ref(b), Struct_tipo.class)) {
-            sonUnificablesCampos(ref(a).campos(), ref(b).campos());
+            return sonUnificablesCampos(ref(a).campos(), ref(b).campos());
         }
         else if(claseDe(ref(a), A_tipo.class) && claseDe(ref(b), A_tipo.class)){
-            sonUnificables(ref(a).tipo(), ref(b).tipo());
+            return sonUnificables(ref(a).tipo(), ref(b).tipo());
         }
         else if(claseDe(ref(a), P_tipo.class) && claseDe(ref(b), N_tipo.class)){
             return true;
         }
         else if(claseDe(ref(a), P_tipo.class) && claseDe(ref(b), P_tipo.class)) {
-            sonUnificables(ref(a).tipo(), ref(b).tipo());
+            return sonUnificables(ref(a).tipo(), ref(b).tipo());
         }
         return false;
     }

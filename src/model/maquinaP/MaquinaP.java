@@ -808,8 +808,10 @@ public class MaquinaP {
         IMENOSUNARIO = new IMenosUnario();
         INOT = new INot();
     }
+
+
     public void ejecuta() {
-        while(pc != codigoP.size()) {
+        while (pc != codigoP.size()) {
             codigoP.get(pc).ejecuta();
         }
     }

@@ -157,6 +157,7 @@ public interface ConstructorASTsCCConstants {
     "\"@\"",
     "<token of kind 47>",
     "<token of kind 48>",
+    "\"$$\"",
     "\"=\"",
     "\"+\"",
     "\"-\"",
