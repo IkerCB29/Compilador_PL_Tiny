@@ -399,7 +399,8 @@ public class MaquinaP {
     private ITransformaInt ITRANSFORMAINT;
     private class ITransformaInt implements Instruccion{
         public void ejecuta() {
-
+            Valor valInt = pilaEvaluacion.pop();
+            pilaEvaluacion.push(new ValorReal(valInt.valorInt()));
         }
         public String toString(){
             return "transforma-int";
@@ -409,7 +410,66 @@ public class MaquinaP {
     private Imy IMY;
     private class Imy implements Instruccion{
         public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorInt() > opnd2.valorInt()));
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorInt.class))
+                throw new RuntimeException("Real > Entero Error");
+            else if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorReal.class))
+                throw new RuntimeException("Entero > Real Error");
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorReal.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorReal() > opnd2.valorReal()));
+            else if(claseDe(opnd1, ValorBool.class) && claseDe(opnd2, ValorBool.class)){
+                if(opnd1.valorBool() && opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(false));
+                else if(opnd1.valorBool() && !opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(true));
+                else if(!opnd1.valorBool() && opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(false));
+                else
+                    pilaEvaluacion.push(new ValorBool(false));
+            }
+            else if(claseDe(opnd1, ValorString.class) && claseDe(opnd2, ValorString.class))
+                if(opnd1.valorString().compareTo(opnd2.valorString()) == 0 || opnd1.valorString().compareTo(opnd2.valorString()) > 0){
+                    pilaEvaluacion.push(new ValorBool(false));
+                }
+                else {
+                    pilaEvaluacion.push(new ValorBool(true));
+                }
+            pc++;
+        }
+        public String toString(){
+            return "my";
+        }
+    }
 
+    private Imn IMN;
+    private class Imn implements Instruccion{
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorInt() < opnd2.valorInt()));
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorInt.class))
+                throw new RuntimeException("Real < Entero Error");
+            else if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorReal.class))
+                throw new RuntimeException("Entero < Real Error");
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorReal.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorReal() < opnd2.valorReal()));
+            else if(claseDe(opnd1, ValorBool.class) && claseDe(opnd2, ValorBool.class)){
+                if(opnd1.valorBool() && opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(false));
+                else if(opnd1.valorBool() && !opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(false));
+                else if(!opnd1.valorBool() && opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(true));
+                else
+                    pilaEvaluacion.push(new ValorBool(false));
+            }
+            else if(claseDe(opnd1, ValorString.class) && claseDe(opnd2, ValorString.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorString().compareTo(opnd2.valorString()) < 0));
+            pc++;
         }
         public String toString(){
             return "my";
@@ -520,10 +580,6 @@ public class MaquinaP {
     public MaquinaP(Reader input, Printer output, int tamdatos, int tampila, int tamheap, int ndisplays) {
        this.input = new Scanner(input);
        this.output = output;
-       this.IDESAPILA = new IDesapila();
-       this.IAPILAIND = new IApilaInd();
-       this.IWRITE = new IWrite();
-       this.ISTOP = new IStop();
        this.tamdatos = tamdatos;
        this.tamheap = tamheap;
        this.ndisplays = ndisplays;
