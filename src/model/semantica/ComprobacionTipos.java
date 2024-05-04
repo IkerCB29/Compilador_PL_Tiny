@@ -2,7 +2,9 @@ package model.semantica;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import model.Procesamiento;
 import model.sintaxis.SintaxisAbstracta.Campos;
 import model.sintaxis.SintaxisAbstracta.Error_tipo;
@@ -82,12 +84,14 @@ import model.sintaxis.SintaxisAbstracta.Una_instr;
 import model.sintaxis.SintaxisAbstracta.V_dec;
 import model.sintaxis.SintaxisAbstracta.Wh;
 import model.sintaxis.SintaxisAbstracta.Wr;
+import utils.Pair;
 import view.Printer;
 
 public class ComprobacionTipos implements Procesamiento {
     private final Printer output;
     private List<Param> listaParam;
     private List<Exp> listaExp;
+    private Set<Pair<Tipo, Tipo>> checkeo;
 
     public ComprobacionTipos(Printer output){
         this.output = output;
@@ -708,7 +712,7 @@ public class ComprobacionTipos implements Procesamiento {
             aviso_error(exp.opnd0().getTipo(), exp.opnd1().getTipo(), "Se esta intentando indexar sin pasar un entero\n");
             exp.setTipo(new Error_tipo());
         }
-        exp.setTipo(exp.opnd0().getTipo().tipo());
+        exp.setTipo(ref(exp.opnd0().getTipo()).tipo());
     }
 
     @Override
@@ -799,30 +803,47 @@ public class ComprobacionTipos implements Procesamiento {
     }
 
     private boolean compatible(Tipo a, Tipo b){
+        checkeo = new HashSet<>();
+        return unificables(a, b);
+    }
+
+    private boolean unificables(Tipo a, Tipo b){
         if(claseDe(ref(a), In_tipo.class) && claseDe(ref(b), In_tipo.class)) return true;
         else if(claseDe(ref(a), R_tipo.class) && claseDe(ref(b), In_tipo.class)) return true;
         else if(claseDe(ref(a), R_tipo.class) && claseDe(ref(b), R_tipo.class)) return true;
         else if(claseDe(ref(a), B_tipo.class) && claseDe(ref(b), B_tipo.class)) return true;
         else if(claseDe(ref(a), String_tipo.class) && claseDe(ref(b), String_tipo.class)) return true;
-        //TODO hacer lo del unificable
         else if(claseDe(ref(a), Struct_tipo.class) && claseDe(ref(b), Struct_tipo.class)) {
-            return compruebaCampos(ref(a).campos(), ref(b).campos());
+            sonUnificablesCampos(ref(a).campos(), ref(b).campos());
         }
         else if(claseDe(ref(a), A_tipo.class) && claseDe(ref(b), A_tipo.class)){
-            return compatible(ref(a).tipo(), ref(b).tipo());
+            sonUnificables(ref(a).tipo(), ref(b).tipo());
         }
         else if(claseDe(ref(a), P_tipo.class) && claseDe(ref(b), N_tipo.class)){
             return true;
         }
-        else return claseDe(ref(a), P_tipo.class) && claseDe(ref(b), P_tipo.class);
+        else if(claseDe(ref(a), P_tipo.class) && claseDe(ref(b), P_tipo.class)) {
+            sonUnificables(ref(a).tipo(), ref(b).tipo());
+        }
+        return false;
     }
 
-    private boolean compruebaCampos(Campos c0, Campos c1){
+    private boolean sonUnificables(Tipo a, Tipo b){
+        if(!checkeo.contains(new Pair<>(a, b))){
+            checkeo.add(new Pair<>(a, b));
+            return unificables(a, b);
+        }
+        else{
+            return true;
+        }
+    }
+
+    private boolean sonUnificablesCampos(Campos c0, Campos c1){
         if(claseDe(c0, L_campos.class) && claseDe(c1, L_campos.class)){
-            return compruebaCampos(c0.campos(), c1.campos()) && compatible(c0.campo().tipo(), c1.campo().tipo());
+            return sonUnificablesCampos(c0.campos(), c1.campos()) && sonUnificables(c0.campo().tipo(), c1.campo().tipo());
         }
         else if(claseDe(c0, Un_campo.class) && claseDe(c1, Un_campo.class)) {
-            return compatible(c0.campo().tipo(), c1.campo().tipo());
+            return sonUnificables(c0.campo().tipo(), c1.campo().tipo());
         }
         else throw new RuntimeException("Los campos de las estructuras no coinciden\n");
     }

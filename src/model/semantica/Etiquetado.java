@@ -297,7 +297,7 @@ public class Etiquetado implements Procesamiento {
         instr.setPrim(etq);
         etq++;
         P_dec p = (P_dec) instr.getVinculo();
-        Si_param sp = claseDe(p.lParamOpt().getClass(), Si_param.class) ? (Si_param) p.lParamOpt() : null;
+        Si_param sp = claseDe(p.lParamOpt(), Si_param.class) ? (Si_param) p.lParamOpt() : null;
         Si_exps se = claseDe(instr.expsOpt(), Si_exps.class) ? (Si_exps) instr.expsOpt() : null;
         if (sp != null && se != null)
             etiquetado_paso_param(sp, se);

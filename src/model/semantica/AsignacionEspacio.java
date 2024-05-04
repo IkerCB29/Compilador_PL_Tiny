@@ -63,7 +63,7 @@ public class AsignacionEspacio implements Procesamiento {
 			preprocesa(dec.lParamOpt()); 
 			dec.lParamOpt().procesa(this);
 			dec.bloque().procesa(this);
-			dec.setDir(dir); 
+			dec.setTam(dir);
 			dir = dec.getDirAnt();
 			max_dir = dec.getMaxDirAnt();
 			nivel--;
