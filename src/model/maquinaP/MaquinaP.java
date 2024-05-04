@@ -49,7 +49,7 @@ public class MaquinaP {
     private static class ValorString extends Valor {
         private final String valor;
         public ValorString(String valor) {
-            if(valor.length() >= 2)
+            if(valor.length() >= 2 && valor.startsWith("\""))
                 this.valor = valor.substring(1, valor.length() - 1);
             else
                 this.valor = valor;
@@ -340,7 +340,7 @@ public class MaquinaP {
     private IReadInt IREADINT;
     private class IReadInt implements Instruccion{
         public void ejecuta() {
-            pilaEvaluacion.push(new ValorInt(input.nextInt()));
+            pilaEvaluacion.push(new ValorInt(Integer.parseInt(input.nextLine())));
             pc++;
         }
         public String toString() {
@@ -351,7 +351,7 @@ public class MaquinaP {
     private IReadReal IREADREAL;
     private class IReadReal implements Instruccion{
         public void ejecuta() {
-            pilaEvaluacion.push(new ValorReal(input.nextDouble()));
+            pilaEvaluacion.push(new ValorReal(Double.parseDouble(input.nextLine())));
             pc = codigoP.size();
         }
         public String toString() {
@@ -362,7 +362,7 @@ public class MaquinaP {
     private IReadBool IREADBOOL;
     private class IReadBool implements Instruccion{
         public void ejecuta() {
-            pilaEvaluacion.push(new ValorBool(input.nextBoolean()));
+            pilaEvaluacion.push(new ValorBool(Boolean.parseBoolean(input.nextLine())));
             pc++;
         }
         public String toString() {
@@ -770,6 +770,8 @@ public class MaquinaP {
 
     public MaquinaP(Reader input, Printer output, int tamdatos, int tampila, int tamheap, int ndisplays) {
         this.input = new Scanner(input);
+        if(this.input.hasNextLine())
+            this.input.nextLine();
         this.output = output;
         this.tamdatos = tamdatos;
         this.tamheap = tamheap;
