@@ -267,7 +267,7 @@ public class GeneracionCodigo implements Procesamiento {
     @Override
     public void procesa(Nw instr) throws IOException {
         instr.exp().procesa(this);
-        m.emit(m.alloc(ref(instr.exp().getTipo()).tipo().getTam()));
+        m.emit(m.alloc(ref(ref(instr.exp().getTipo()).tipo()).getTam()));
         m.emit(m.desapila_ind());
     }
 
