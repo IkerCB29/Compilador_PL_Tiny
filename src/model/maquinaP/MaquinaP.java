@@ -769,17 +769,44 @@ public class MaquinaP {
     private final Printer output;
 
     public MaquinaP(Reader input, Printer output, int tamdatos, int tampila, int tamheap, int ndisplays) {
-       this.input = new Scanner(input);
-       this.output = output;
-       this.tamdatos = tamdatos;
-       this.tamheap = tamheap;
-       this.ndisplays = ndisplays;
-       this.codigoP = new ArrayList<>();
-       pilaEvaluacion = new Stack<>();
-       datos = new Valor[tamdatos+tampila+tamheap];
-       this.pc = 0;
-       gestorPilaActivaciones = new GestorPilaActivaciones(tamdatos,(tamdatos+tampila)-1,ndisplays);
-       gestorMemoriaDinamica = new GestorMemoriaDinamica(tamdatos+tampila,(tamdatos+tampila+tamheap)-1);
+        this.input = new Scanner(input);
+        this.output = output;
+        this.tamdatos = tamdatos;
+        this.tamheap = tamheap;
+        this.ndisplays = ndisplays;
+        this.codigoP = new ArrayList<>();
+        pilaEvaluacion = new Stack<>();
+        datos = new Valor[tamdatos+tampila+tamheap];
+        this.pc = 0;
+        gestorPilaActivaciones = new GestorPilaActivaciones(tamdatos,(tamdatos+tampila)-1,ndisplays);
+        gestorMemoriaDinamica = new GestorMemoriaDinamica(tamdatos+tampila,(tamdatos+tampila+tamheap)-1);
+        IDESAPILA = new IDesapila();
+        IAPILAIND = new IApilaInd();
+        IDESAPILAIND = new IDesapilaInd();
+        IIRIND = new IIrind();
+        IDUP = new IDup();
+        ISTOP = new IStop();
+        IREADINT = new IReadInt();
+        IREADREAL = new IReadReal();
+        IREADBOOL = new IReadBool();
+        IREADSTRING = new IReadString();
+        IWRITE = new IWrite();
+        ITRANSFORMAINT = new ITransformaInt();
+        IMY = new IMy();
+        IMN = new IMn();
+        IMY_IG = new IMy_ig();
+        IMN_IG = new IMn_ig();
+        IIG = new IIg(); 
+        IDIF = new IDif();
+        ISUMA = new ISuma();
+        IRESTA = new IResta();
+        IAND = new IAnd();
+        IOR = new IOr();
+        IMUL = new IMul();
+        IDIV = new IDiv();
+        IMOD = new IMod();
+        IMENOSUNARIO = new IMenosUnario();
+        INOT = new INot();
     }
     public void ejecuta() {
         while(pc != codigoP.size()) {
