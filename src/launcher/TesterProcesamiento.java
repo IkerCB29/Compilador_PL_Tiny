@@ -25,7 +25,9 @@ public class TesterProcesamiento {
         //list.add(new Pair<>("files/Procesamiento/01hw_a.in", "files/Procesamiento/01hw.out"));
         //list.add(new Pair<>("files/Procesamiento/02basico_a.in", "files/Procesamiento/02basico.out"));
         //list.add(new Pair<>("files/Procesamiento/03basico_io_a.in", "files/Procesamiento/03basico_io.out"));
-        list.add(new Pair<>("files/Procesamiento/04control_a.in", "files/Procesamiento/04control.out"));
+        //list.add(new Pair<>("files/Procesamiento/04control_a.in", "files/Procesamiento/04control.out"));
+        //list.add(new Pair<>("files/Procesamiento/05tipos_1_a.in", "files/Procesamiento/05tipos_1.out"));
+        list.add(new Pair<>("files/Procesamiento/06procs1_a.in", "files/Procesamiento/06procs1.out"));
         return list;
     };
 

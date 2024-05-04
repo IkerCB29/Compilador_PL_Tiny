@@ -267,7 +267,7 @@ public class GeneracionCodigo implements Procesamiento {
     @Override
     public void procesa(Nw instr) throws IOException {
         instr.exp().procesa(this);
-        m.emit(m.alloc(instr.exp().getTipo().getTam()));
+        m.emit(m.alloc(ref(instr.exp().getTipo()).tipo().getTam()));
         m.emit(m.desapila_ind());
     }
 
@@ -296,13 +296,14 @@ public class GeneracionCodigo implements Procesamiento {
         m.emit(m.ir_a(pDec.getPrim()));
     }
 
-    private void gen_paso_parametros(LParam lParam, Exps lExps){
+    private void gen_paso_parametros(LParam lParam, Exps lExps) throws IOException {
         if(claseDe(lParam, L_param.class) && claseDe(lExps, L_exps.class)){
             gen_paso_parametros(lParam.lParam(), lExps.exps());
         }
         m.emit(m.dup());
         m.emit(m.apila_int(lParam.param().getDir()));
         m.emit(m.suma());
+        lExps.exp().procesa(this);
         if(claseDe(lParam.param(), Param_ref.class) || !esDesignador(lExps.exp())){
             m.emit(m.desapila_ind());
         }
@@ -455,9 +456,12 @@ public class GeneracionCodigo implements Procesamiento {
     public void procesa(Indexacion exp) throws IOException {
         exp.opnd0().procesa(this);
         exp.opnd1().procesa(this);
+        if(esDesignador(exp.opnd1())){
+            m.emit(m.apila_ind());
+        }
         m.emit(m.apila_int(exp.getTipo().getTam()));
-        m.emit(m.suma());
         m.emit(m.mul());
+        m.emit(m.suma());
     }
 
     @Override
