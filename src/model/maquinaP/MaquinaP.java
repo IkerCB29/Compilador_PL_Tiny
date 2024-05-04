@@ -407,8 +407,8 @@ public class MaquinaP {
         }
     }
 
-    private Imy IMY;
-    private class Imy implements Instruccion{
+    private IMy IMY;
+    private class IMy implements Instruccion{
         public void ejecuta() {
             Valor opnd2 = pilaEvaluacion.pop();
             Valor opnd1 = pilaEvaluacion.pop();
@@ -431,12 +431,7 @@ public class MaquinaP {
                     pilaEvaluacion.push(new ValorBool(false));
             }
             else if(claseDe(opnd1, ValorString.class) && claseDe(opnd2, ValorString.class))
-                if(opnd1.valorString().compareTo(opnd2.valorString()) == 0 || opnd1.valorString().compareTo(opnd2.valorString()) > 0){
-                    pilaEvaluacion.push(new ValorBool(false));
-                }
-                else {
-                    pilaEvaluacion.push(new ValorBool(true));
-                }
+                pilaEvaluacion.push(new ValorBool(opnd1.valorString().compareTo(opnd2.valorString()) > 0));
             pc++;
         }
         public String toString(){
@@ -444,8 +439,8 @@ public class MaquinaP {
         }
     }
 
-    private Imn IMN;
-    private class Imn implements Instruccion{
+    private IMn IMN;
+    private class IMn implements Instruccion{
         public void ejecuta() {
             Valor opnd2 = pilaEvaluacion.pop();
             Valor opnd1 = pilaEvaluacion.pop();
@@ -472,10 +467,121 @@ public class MaquinaP {
             pc++;
         }
         public String toString(){
-            return "my";
+            return "mn";
         }
     }
-    //============================================================================================
+
+    private IMy_ig IMY_IG;
+    private class IMy_ig implements Instruccion{
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorInt() >= opnd2.valorInt()));
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorInt.class))
+                throw new RuntimeException("Real >= Entero Error");
+            else if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorReal.class))
+                throw new RuntimeException("Entero >= Real Error");
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorReal.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorReal() >= opnd2.valorReal()));
+            else if(claseDe(opnd1, ValorBool.class) && claseDe(opnd2, ValorBool.class)){
+                if(opnd1.valorBool() && opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(true));
+                else if(opnd1.valorBool() && !opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(true));
+                else if(!opnd1.valorBool() && opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(false));
+                else
+                    pilaEvaluacion.push(new ValorBool(true));
+            }
+            else if(claseDe(opnd1, ValorString.class) && claseDe(opnd2, ValorString.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorString().compareTo(opnd2.valorString()) >= 0));
+            pc++;
+        }
+        public String toString(){
+            return "my_ig";
+        }
+    }
+
+    private IMn_ig IMN_IG;
+    private class IMn_ig implements Instruccion{
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorInt() <= opnd2.valorInt()));
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorInt.class))
+                throw new RuntimeException("Real <= Entero Error");
+            else if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorReal.class))
+                throw new RuntimeException("Entero <= Real Error");
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorReal.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorReal() <= opnd2.valorReal()));
+            else if(claseDe(opnd1, ValorBool.class) && claseDe(opnd2, ValorBool.class)){
+                if(opnd1.valorBool() && opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(true));
+                else if(opnd1.valorBool() && !opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(false));
+                else if(!opnd1.valorBool() && opnd2.valorBool())
+                    pilaEvaluacion.push(new ValorBool(true));
+                else
+                    pilaEvaluacion.push(new ValorBool(true));
+            }
+            else if(claseDe(opnd1, ValorString.class) && claseDe(opnd2, ValorString.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorString().compareTo(opnd2.valorString()) <= 0));
+            pc++;
+        }
+        public String toString(){
+            return "mn_ig";
+        }
+    }
+
+    private IIg IIG;
+    private class IIg implements Instruccion{
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorInt() == opnd2.valorInt()));
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorInt.class))
+                throw new RuntimeException("Real == Entero Error");
+            else if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorReal.class))
+                throw new RuntimeException("Entero == Real Error");
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorReal.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorReal() == opnd2.valorReal()));
+            else if(claseDe(opnd1, ValorBool.class) && claseDe(opnd2, ValorBool.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorBool() == opnd2.valorBool()));
+            else if(claseDe(opnd1, ValorString.class) && claseDe(opnd2, ValorString.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorString().compareTo(opnd2.valorString()) == 0));
+            pc++;
+        }
+        public String toString(){
+            return "ig";
+        }
+    }
+
+    private IDif IDIF;
+    private class IDif implements Instruccion{
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorInt() != opnd2.valorInt()));
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorInt.class))
+                throw new RuntimeException("Real != Entero Error");
+            else if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorReal.class))
+                throw new RuntimeException("Entero != Real Error");
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorReal.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorReal() != opnd2.valorReal()));
+            else if(claseDe(opnd1, ValorBool.class) && claseDe(opnd2, ValorBool.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorBool() != opnd2.valorBool()));
+            else if(claseDe(opnd1, ValorString.class) && claseDe(opnd2, ValorString.class))
+                pilaEvaluacion.push(new ValorBool(opnd1.valorString().compareTo(opnd2.valorString()) != 0));
+            pc++;
+        }
+        public String toString(){
+            return "dif";
+        }
+    }
 
     private ISuma ISUMA;
     private class ISuma implements Instruccion {
@@ -495,6 +601,47 @@ public class MaquinaP {
         public String toString() {return "suma";};
     }
 
+    private IResta IRESTA;
+    private class IResta implements Instruccion {
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorInt(opnd1.valorInt()-opnd2.valorInt()));
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorInt.class))
+                throw new RuntimeException("Real - Entero Error");
+            else if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorReal.class))
+                throw new RuntimeException("Entero - Real Error");
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorReal.class))
+                pilaEvaluacion.push(new ValorReal(opnd1.valorReal()-opnd2.valorReal()));
+            pc++;
+        }
+        public String toString() {return "suma";};
+    }
+
+    private IAnd IAND;
+    private class IAnd implements Instruccion {
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            pilaEvaluacion.push(new ValorBool(opnd1.valorBool() && opnd2.valorBool()));
+            pc++;
+        }
+        public String toString() {return "and";};
+    }
+
+    private IOr IOR;
+    private class IOr implements Instruccion {
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            pilaEvaluacion.push(new ValorBool(opnd1.valorBool() || opnd2.valorBool()));
+            pc++;
+        }
+        public String toString() {return "or";};
+    }
+
+
     private IMul IMUL;
     private class IMul implements Instruccion {
         public void ejecuta() {
@@ -513,16 +660,60 @@ public class MaquinaP {
         public String toString() {return "mul";};
     }
 
-
-    private IAnd IAND;
-    private class IAnd implements Instruccion {
+    private IDiv IDIV;
+    private class IDiv implements Instruccion {
         public void ejecuta() {
             Valor opnd2 = pilaEvaluacion.pop();
             Valor opnd1 = pilaEvaluacion.pop();
-            pilaEvaluacion.push(new ValorBool(opnd1.valorBool() && opnd2.valorBool()));
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorInt(opnd1.valorInt()/opnd2.valorInt()));
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorInt.class))
+                throw new RuntimeException("Real / Entero Error");
+            else if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorReal.class))
+                throw new RuntimeException("Entero / Real Error");
+            else if(claseDe(opnd1, ValorReal.class) && claseDe(opnd2, ValorReal.class))
+                pilaEvaluacion.push(new ValorReal(opnd1.valorReal()/opnd2.valorReal()));
             pc++;
         }
-        public String toString() {return "and";};
+        public String toString() {return "div";};
+    }
+
+    private IMod IMOD;
+    private class IMod implements Instruccion {
+        public void ejecuta() {
+            Valor opnd2 = pilaEvaluacion.pop();
+            Valor opnd1 = pilaEvaluacion.pop();
+            if(claseDe(opnd1, ValorInt.class) && claseDe(opnd2, ValorInt.class))
+                pilaEvaluacion.push(new ValorInt(opnd1.valorInt()%opnd2.valorInt()));
+            else
+                throw new RuntimeException("Entero % Entero Error");
+            pc++;
+        }
+        public String toString() {return "mod";};
+    }
+
+    private IMenosUnario IMENOSUNARIO;
+    private class IMenosUnario implements Instruccion {
+        public void ejecuta() {
+            Valor val = pilaEvaluacion.pop();
+            if(claseDe(val, ValorInt.class))
+                pilaEvaluacion.push(new ValorInt(-val.valorInt()));
+            else if(claseDe(val, ValorReal.class))
+                pilaEvaluacion.push(new ValorReal(-val.valorReal()));
+            pc++;
+        }
+        public String toString() {return "menos-unario";};
+    }
+
+    private INot INOT;
+    private class INot implements Instruccion {
+        public void ejecuta() {
+            Valor val = pilaEvaluacion.pop();
+            if(claseDe(val, ValorBool.class))
+                pilaEvaluacion.push(new ValorBool(!val.valorBool()));
+            pc++;
+        }
+        public String toString() {return "not";};
     }
 
     public Instruccion apila_int(int valor) { return new IApilaInt(valor); }
@@ -550,22 +741,22 @@ public class MaquinaP {
     public Instruccion read_bool() { return IREADBOOL; }
     public Instruccion read_string() { return IREADSTRING; }
     public Instruccion write() { return IWRITE; }
-    public Instruccion transforma_int() { return null; }
-    public Instruccion my() { return null; }
-    public Instruccion mn() { return null; }
-    public Instruccion my_ig() { return null; }
-    public Instruccion mn_ig() { return null; }
-    public Instruccion ig() { return null; }
-    public Instruccion dif() { return null; }
-    public Instruccion suma() { return null; }
-    public Instruccion resta() { return null; }
-    public Instruccion and() { return null; }
-    public Instruccion or() { return null; }
-    public Instruccion mul() { return null; }
-    public Instruccion div() { return null; }
-    public Instruccion mod() { return null; }
-    public Instruccion menos_unario() { return null; }
-    public Instruccion not() { return null; }
+    public Instruccion transforma_int() { return ITRANSFORMAINT; }
+    public Instruccion my() { return IMY; }
+    public Instruccion mn() { return IMN; }
+    public Instruccion my_ig() { return IMY_IG; }
+    public Instruccion mn_ig() { return IMN_IG; }
+    public Instruccion ig() { return IIG; }
+    public Instruccion dif() { return IDIF; }
+    public Instruccion suma() { return ISUMA; }
+    public Instruccion resta() { return IRESTA; }
+    public Instruccion and() { return IAND; }
+    public Instruccion or() { return IOR; }
+    public Instruccion mul() { return IMUL; }
+    public Instruccion div() { return IDIV; }
+    public Instruccion mod() { return IMOD; }
+    public Instruccion menos_unario() { return IMENOSUNARIO; }
+    public Instruccion not() { return INOT; }
 
     public void emit(Instruccion i) {
       codigoP.add(i); 
