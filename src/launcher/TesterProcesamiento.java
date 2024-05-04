@@ -3,13 +3,16 @@ package launcher;
 import controller.Controller;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import model.lexico.BISReader;
 import utils.Pair;
 import view.FilePrinter;
 
@@ -19,8 +22,10 @@ public class TesterProcesamiento {
 
     private static List<Pair<String, String>> fileList(){
         List<Pair<String, String>> list = new ArrayList<>();
-        list.add(new Pair<>("files/Procesamiento/01hw_a.in", "files/Procesamiento/01hw.out"));
-        list.add(new Pair<>("files/Procesamiento/02basico_a.in", "files/Procesamiento/02basico.out"));
+        //list.add(new Pair<>("files/Procesamiento/01hw_a.in", "files/Procesamiento/01hw.out"));
+        //list.add(new Pair<>("files/Procesamiento/02basico_a.in", "files/Procesamiento/02basico.out"));
+        //list.add(new Pair<>("files/Procesamiento/03basico_io_a.in", "files/Procesamiento/03basico_io.out"));
+        list.add(new Pair<>("files/Procesamiento/04control_a.in", "files/Procesamiento/04control.out"));
         return list;
     };
 
@@ -30,7 +35,7 @@ public class TesterProcesamiento {
 
         for(Pair<String, String> files : FILES_INPUT) {
             try {
-                Reader input = new BufferedReader(new FileReader(files.getFirst()));
+                Reader input = new BISReader(new FileInputStream(files.getFirst()));
                 char type = (char) input.read();
                 if(type == 'd'){
 
