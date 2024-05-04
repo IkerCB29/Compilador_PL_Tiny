@@ -76,7 +76,8 @@ public class AsignacionEspacio implements Procesamiento {
             tipo.setTam(tipo.tipo().getTam() * Integer.parseInt(tipo.capacidad()));
         }
         else if(claseDe(tipo, P_tipo.class)) {
-            preprocesa(tipo.tipo());
+            if(!claseDe(tipo.tipo(), Id_tipo.class))
+                preprocesa(tipo.tipo());
 			      tipo.setTam(1);
         }
         else if(claseDe(tipo, Id_tipo.class)) {
@@ -166,7 +167,7 @@ public class AsignacionEspacio implements Procesamiento {
     public void procesa(P_tipo tipo) throws IOException {
 		    if(claseDe(tipo.tipo(), Id_tipo.class)){
             T_dec tDec = (T_dec) tipo.tipo().getVinculo();
-            tipo.setTam(tDec.getTam());
+            tipo.setTam(tDec.tipo().getTam());
         }
         else {
             tipo.tipo().procesa(this);
