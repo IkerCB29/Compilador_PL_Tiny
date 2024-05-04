@@ -437,7 +437,7 @@ public class GeneracionCodigo implements Procesamiento {
     @Override
     public void procesa(Menos_unario exp) throws IOException {
         exp.opnd0().procesa(this);
-        if(esDesignador(exp)){
+        if(esDesignador(exp.opnd0())){
             m.emit(m.apila_ind());
         }
         m.emit(m.menos_unario());
@@ -446,10 +446,10 @@ public class GeneracionCodigo implements Procesamiento {
     @Override
     public void procesa(Not exp) throws IOException {
         exp.opnd0().procesa(this);
-        if(esDesignador(exp)){
+        if(esDesignador(exp.opnd0())){
             m.emit(m.apila_ind());
         }
-        m.emit(m.menos_unario());
+        m.emit(m.not());
     }
 
     @Override

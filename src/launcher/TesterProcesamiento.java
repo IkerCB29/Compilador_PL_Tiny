@@ -38,8 +38,8 @@ public class TesterProcesamiento {
         list.add(new Pair<>("files/Procesamiento/07tipos_2_d.in", "files/Procesamiento/07tipos_2.out"));
         list.add(new Pair<>("files/Procesamiento/08procs2_a.in", "files/Procesamiento/08procs2.out"));
         list.add(new Pair<>("files/Procesamiento/08procs2_d.in", "files/Procesamiento/08procs2.out"));
-        //list.add(new Pair<>("files/Procesamiento/09ejemplo_a.in", "files/Procesamiento/09ejemplo.out"));
-        //list.add(new Pair<>("files/Procesamiento/09ejemplo_d.in", "files/Procesamiento/09ejemplo.out"));
+        list.add(new Pair<>("files/Procesamiento/09ejemplo_a.in", "files/Procesamiento/09ejemplo.out"));
+        list.add(new Pair<>("files/Procesamiento/09ejemplo_d.in", "files/Procesamiento/09ejemplo.out"));
         list.add(new Pair<>("files/Procesamiento/10procs3_a.in", "files/Procesamiento/10procs3.out"));
         return list;
     };
