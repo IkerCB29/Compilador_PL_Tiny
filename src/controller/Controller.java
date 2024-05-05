@@ -25,48 +25,12 @@ import view.ConsolePrinter;
 import view.Printer;
 
 public class Controller {
-    public void analisisSintacticoCC(Reader input, Printer output) throws Exception {
-        try {
-            output.write("CONSTRUCCION AST DESCENDENTE\n");
-            ConstructorASTsCC asin = new AnalizadorSintacticoCC(input, output);
-            asin.disable_tracing();
-            Prog prog = asin.analiza();
-            output.write("IMPRESION RECURSIVA\n");
-            ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
-            impresionBonitaRecursiva.imprime(prog);
-            output.write("IMPRESION INTERPRETE\n");
-            prog.imprime(output);
-            output.write("IMPRESION VISITANTE\n");
-            ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
-            prog.procesa(impresionBonitaVisitante);
-        }
-        catch(TokenMgrError e) {
-            output.write("ERROR_LEXICO\n");
-        }
-        catch(ParseException e) {
-            output.write("ERROR_SINTACTICO\n");
-        }
-        output.close();
-    }
-
-    public void analisisSintacticoCC(Reader input, Printer output, String outputOption) throws Exception {
+    public Prog analisisSintacticoCC(Reader input, Printer output, boolean debug) throws Exception {
+        Prog prog = null;
         try{
-            ConstructorASTsCC asin = new ConstructorASTsCC(input);
+            ConstructorASTsCC asin = debug ? new AnalizadorSintacticoCC(input, output) : new ConstructorASTsCC(input);
             asin.disable_tracing();
-            switch (outputOption) {
-                case "rec":
-                    ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
-                    impresionBonitaRecursiva.imprime(asin.analiza());
-                    break;
-                case "int":
-                    asin.analiza().imprime(output);
-                    break;
-                case "vis":
-                    ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
-                    asin.analiza().procesa(impresionBonitaVisitante);
-                    break;
-                default: throw new RuntimeException("Invalid parameters");
-            }
+            prog = asin.analiza();
         }
         catch(TokenMgrError e) {
             output.write("ERROR_LEXICO\n");
@@ -74,52 +38,15 @@ public class Controller {
         catch(ParseException e) {
             output.write("ERROR_SINTACTICO\n");
         }
-        output.close();
+        return prog;
     }
 
-    public void analisisSintacticoCUP(Reader input, Printer output) throws Exception {
-        try {
-            output.write("CONSTRUCCION AST ASCENDENTE\n");
-            AnalizadorLexico alex = new AnalizadorLexico(input);
-            ConstructorASTsCUP asin = new AnalizadorSintacticoCUP(alex, output);
-            Prog prog = (Prog) asin.debug_parse().value;
-            output.write("IMPRESION RECURSIVA\n");
-            ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
-            impresionBonitaRecursiva.imprime(prog);
-            output.write("IMPRESION INTERPRETE\n");
-            prog.imprime(output);
-            output.write("IMPRESION VISITANTE\n");
-            ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
-            prog.procesa(impresionBonitaVisitante);
-        }
-        catch (LexicoException e){
-            output.write("ERROR_LEXICO\n");
-        }
-        catch (SintaxisException e){
-            output.write("ERROR_SINTACTICO\n");
-        }
-        output.close();
-    }
-
-    public void analisisSintacticoCUP(Reader input, Printer output, String outputOption) throws Exception {
+    public Prog analisisSintacticoCUP(Reader input, Printer output, boolean debug) throws Exception {
+        Prog prog = null;
         try {
             AnalizadorLexico alex = new AnalizadorLexico(input);
-            ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);
-            switch (outputOption) {
-                case "rec":
-                    ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
-                    impresionBonitaRecursiva.imprime((Prog) asin.debug_parse().value);
-                    break;
-                case "int":
-                    ((Prog) asin.debug_parse().value).imprime(output);
-                    break;
-                case "vis":
-                    ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
-                    ((Prog) asin.debug_parse().value).procesa(impresionBonitaVisitante);
-                    break;
-                default: throw new Exception("Invalid parameters");
-            }
-
+            ConstructorASTsCUP asin = debug ? new AnalizadorSintacticoCUP(alex, output) : new ConstructorASTsCUP(alex);
+            prog = (Prog) asin.debug_parse().value;
         }
         catch (LexicoException e){
             output.write("ERROR_LEXICO\n");
@@ -127,58 +54,41 @@ public class Controller {
         catch (SintaxisException e){
             output.write("ERROR_SINTACTICO\n");
         }
+        return prog;
+    }
+
+    public void impresionBonita(Prog prog, Reader input, Printer output) throws Exception {
+        if(prog == null) {
+            output.close();
+            return;
+        }
+        output.write("IMPRESION RECURSIVA\n");
+        ImpresionBonitaRecursiva impresionBonitaRecursiva = new ImpresionBonitaRecursiva(output);
+        impresionBonitaRecursiva.imprime(prog);
+        output.write("IMPRESION INTERPRETE\n");
+        prog.imprime(output);
+        output.write("IMPRESION VISITANTE\n");
+        ImpresionBonitaVisitante impresionBonitaVisitante = new ImpresionBonitaVisitante(output);
+        prog.procesa(impresionBonitaVisitante);
         output.close();
     }
 
-    public void procesamientoCC(Reader input, Printer output) throws Exception {
-        try {
-            ConstructorASTsCC asin = new ConstructorASTsCC(input);
-            asin.disable_tracing();
-            Prog prog = asin.analiza();
-            new Vinculacion(new ConsolePrinter()).procesa(prog);
-            new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
-            if(prog.getTipo().getClass() == Ok_tipo.class) {
-                new AsignacionEspacio().procesa(prog);
-                new Etiquetado().procesa(prog);
-                MaquinaP maquinaP = new MaquinaP(input, output, 1000, 1000, 1000, 5);
-                new GeneracionCodigo(maquinaP).procesa(prog);
-                maquinaP.ejecuta();
-            }
-            else
-                output.write("Errores en comprobacion de tipos");
+    public void procesamiento(Prog prog, Reader input, Printer output) throws Exception {
+        if(prog == null) {
+            output.close();
+            return;
         }
-        catch (LexicoException e){
-            output.write("ERROR_LEXICO\n");
+        new Vinculacion(new ConsolePrinter()).procesa(prog);
+        new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
+        if(prog.getTipo().getClass() == Ok_tipo.class) {
+            new AsignacionEspacio().procesa(prog);
+            new Etiquetado().procesa(prog);
+            MaquinaP maquinaP = new MaquinaP(input, output, 1000, 1000, 1000, 5);
+            new GeneracionCodigo(maquinaP).procesa(prog);
+            maquinaP.ejecuta();
         }
-        catch (SintaxisException e){
-            output.write("ERROR_SINTACTICO\n");
-        }
-        output.close();
-    }
-
-    public void procesamientoCUP(Reader input, Printer output) throws Exception {
-        try {
-            AnalizadorLexico alex = new AnalizadorLexico(input);
-            ConstructorASTsCUP asin = new ConstructorASTsCUP(alex);
-            Prog prog = ((Prog) asin.debug_parse().value);
-            new Vinculacion(new ConsolePrinter()).procesa(prog);
-            new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
-            if(prog.getTipo().getClass() == Ok_tipo.class) {
-                new AsignacionEspacio().procesa(prog);
-                new Etiquetado().procesa(prog);
-                MaquinaP maquinaP = new MaquinaP(input, output, 1000, 1000, 1000, 5);
-                new GeneracionCodigo(maquinaP).procesa(prog);
-                maquinaP.ejecuta();
-            }
-            else
-                output.write("Errores en comprobacion de tipos");
-        }
-        catch (LexicoException e){
-            output.write("ERROR_LEXICO\n");
-        }
-        catch (SintaxisException e){
-            output.write("ERROR_SINTACTICO\n");
-        }
+        else
+            output.write("Errores en comprobacion de tipos");
         output.close();
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Scanner;
 import utils.Pair;
 import view.FilePrinter;
+import view.Printer;
 
 public class TesterConstruccionASTs {
     private final static String DIFFERENCES_FILE = "files/ConstruccionASTs/differences.log";
@@ -43,10 +44,22 @@ public class TesterConstruccionASTs {
                 Reader input = new BufferedReader(new FileReader(files.getFirst()));
                 char type = (char) input.read();
                 if(type == 'd'){
-                    c.analisisSintacticoCC(input, new FilePrinter(files.getSecond() + "_test"));
+                    Printer filePrinter = new FilePrinter(files.getSecond() + "_test");
+                    filePrinter.write("CONSTRUCCION AST DESCENDENTE\n");
+                    c.impresionBonita(
+                        c.analisisSintacticoCC(input, filePrinter, true),
+                        input,
+                        filePrinter
+                    );
                 }
                 else if(type == 'a'){
-                    c.analisisSintacticoCUP(input, new FilePrinter(files.getSecond() + "_test"));
+                    Printer filePrinter = new FilePrinter(files.getSecond() + "_test");
+                    filePrinter.write("CONSTRUCCION AST ASCENDENTE\n");
+                    c.impresionBonita(
+                        c.analisisSintacticoCUP(input, filePrinter, true),
+                        input,
+                        filePrinter
+                    );
                 }
                 else throw new RuntimeException("Tipo invalido");
                 input.close();

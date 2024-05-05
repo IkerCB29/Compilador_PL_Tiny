@@ -15,6 +15,7 @@ import java.util.Scanner;
 import model.lexico.BISReader;
 import utils.Pair;
 import view.FilePrinter;
+import view.Printer;
 
 public class TesterProcesamiento {
     private final static String DIFFERENCES_FILE = "files/Procesamiento/differences.log";
@@ -53,10 +54,20 @@ public class TesterProcesamiento {
                 Reader input = new BISReader(new FileInputStream(files.getFirst()));
                 char type = (char) input.read();
                 if(type == 'd'){
-                    c.procesamientoCC(input, new FilePrinter(files.getSecond() + "_test"));
+                    Printer filePrinter = new FilePrinter(files.getSecond() + "_test");
+                    c.procesamiento(
+                        c.analisisSintacticoCC(input, filePrinter, false),
+                        input,
+                        filePrinter
+                    );
                 }
                 else if(type == 'a'){
-                    c.procesamientoCUP(input, new FilePrinter(files.getSecond() + "_test"));
+                    Printer filePrinter = new FilePrinter(files.getSecond() + "_test");
+                    c.procesamiento(
+                        c.analisisSintacticoCUP(input, filePrinter, false),
+                        input,
+                        filePrinter
+                    );
                 }
                 else throw new RuntimeException("Tipo invalido");
                 input.close();
