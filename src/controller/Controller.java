@@ -57,7 +57,7 @@ public class Controller {
         return prog;
     }
 
-    public void impresionBonita(Prog prog, Reader input, Printer output) throws Exception {
+    public void impresionBonita(Prog prog, Printer output) throws Exception {
         if(prog == null) {
             output.close();
             return;

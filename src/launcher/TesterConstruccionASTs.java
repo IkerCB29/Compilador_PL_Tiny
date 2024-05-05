@@ -48,7 +48,6 @@ public class TesterConstruccionASTs {
                     filePrinter.write("CONSTRUCCION AST DESCENDENTE\n");
                     c.impresionBonita(
                         c.analisisSintacticoCC(input, filePrinter, true),
-                        input,
                         filePrinter
                     );
                 }
@@ -57,7 +56,6 @@ public class TesterConstruccionASTs {
                     filePrinter.write("CONSTRUCCION AST ASCENDENTE\n");
                     c.impresionBonita(
                         c.analisisSintacticoCUP(input, filePrinter, true),
-                        input,
                         filePrinter
                     );
                 }
