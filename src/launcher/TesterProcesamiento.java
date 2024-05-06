@@ -46,6 +46,10 @@ public class TesterProcesamiento {
         list.add(new Pair<>("files/Procesamiento/01_errores_vinculacion_d.in", "files/Procesamiento/01_errores_vinculacion.out"));
         list.add(new Pair<>("files/Procesamiento/02_errores_pretipado_a.in", "files/Procesamiento/02_errores_pretipado.out"));
         list.add(new Pair<>("files/Procesamiento/02_errores_pretipado_d.in", "files/Procesamiento/02_errores_pretipado.out"));
+        list.add(new Pair<>("files/Procesamiento/03_errores_tipado1_a.in", "files/Procesamiento/03_errores_tipado1.out"));
+        list.add(new Pair<>("files/Procesamiento/03_errores_tipado1_d.in", "files/Procesamiento/03_errores_tipado1.out"));
+        list.add(new Pair<>("files/Procesamiento/04_errores_tipado2_a.in", "files/Procesamiento/04_errores_tipado2.out"));
+        list.add(new Pair<>("files/Procesamiento/04_errores_tipado2_d.in", "files/Procesamiento/04_errores_tipado2.out"));
         return list;
     };
 

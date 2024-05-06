@@ -59,7 +59,11 @@ public class Errores{
     }
 
     public void addErrorTipado(Nodo nodo){
-
+        erroresTipado.add(new Error(
+            String.format("Errores_tipado fila:%d col:%d", nodo.leeFila(), nodo.leeCol()),
+            nodo.leeFila(),
+            nodo.leeCol()
+        ));
     }
 
     public boolean hayErroresVinculacion(){
@@ -89,6 +93,7 @@ public class Errores{
     }
 
     public void printErroresTipado(Printer output) throws IOException {
+        Collections.sort(erroresTipado);
         for(Error error: erroresTipado){
             output.write(error + "\n");
         }

@@ -19,6 +19,7 @@ import model.sintaxis.SintaxisAbstracta.Div;
 import model.sintaxis.SintaxisAbstracta.Dl;
 import model.sintaxis.SintaxisAbstracta.Entero;
 import model.sintaxis.SintaxisAbstracta.Eva;
+import model.sintaxis.SintaxisAbstracta.Exp;
 import model.sintaxis.SintaxisAbstracta.False;
 import model.sintaxis.SintaxisAbstracta.Id_tipo;
 import model.sintaxis.SintaxisAbstracta.Iden;
@@ -630,9 +631,11 @@ public class Etiquetado implements Procesamiento {
         etq++;
     }
 
-    private boolean esDesignador(SintaxisAbstracta.Exp exp){
+    private boolean esDesignador(Exp exp){
+        if(claseDe(exp, Indireccion.class))
+            return esDesignador(exp.opnd0());
         return claseDe(exp, Iden.class) || claseDe(exp, Acceso.class) || claseDe(exp, Indexacion.class) ||
-                claseDe(exp, Asig.class);
+            claseDe(exp, Asig.class);
     }
 
     private boolean claseDe(Object o, Class c) {

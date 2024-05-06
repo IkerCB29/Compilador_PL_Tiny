@@ -525,6 +525,8 @@ public class GeneracionCodigo implements Procesamiento {
     }
 
     private boolean esDesignador(Exp exp){
+        if(claseDe(exp, Indireccion.class))
+            return esDesignador(exp.opnd0());
         return claseDe(exp, Iden.class) || claseDe(exp, Acceso.class) || claseDe(exp, Indexacion.class) ||
             claseDe(exp, Asig.class);
     }

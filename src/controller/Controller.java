@@ -90,7 +90,12 @@ public class Controller {
             output.close();
             return;
         }
-        new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
+        new ComprobacionTipos(errores).procesa(prog);
+        if(errores.hayErroresTipado()){
+            errores.printErroresTipado(output);
+            output.close();
+            return;
+        }
         new AsignacionEspacio().procesa(prog);
         new Etiquetado().procesa(prog);
         MaquinaP maquinaP = new MaquinaP(input, output, 1000, 1000, 1000, 5);
