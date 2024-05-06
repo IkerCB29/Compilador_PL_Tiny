@@ -579,7 +579,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString(){
-            return "dif";
+            return "dif()";
         }
     }
 
@@ -598,7 +598,7 @@ public class MaquinaP {
                 pilaEvaluacion.push(new ValorReal(opnd1.valorReal()+opnd2.valorReal()));
             pc++;
         }
-        public String toString() {return "suma";};
+        public String toString() {return "suma()";};
     }
 
     private IResta IRESTA;
@@ -616,7 +616,7 @@ public class MaquinaP {
                 pilaEvaluacion.push(new ValorReal(opnd1.valorReal()-opnd2.valorReal()));
             pc++;
         }
-        public String toString() {return "resta";};
+        public String toString() {return "resta()";};
     }
 
     private IAnd IAND;
@@ -627,7 +627,7 @@ public class MaquinaP {
             pilaEvaluacion.push(new ValorBool(opnd1.valorBool() && opnd2.valorBool()));
             pc++;
         }
-        public String toString() {return "and";};
+        public String toString() {return "and()";};
     }
 
     private IOr IOR;
@@ -638,7 +638,7 @@ public class MaquinaP {
             pilaEvaluacion.push(new ValorBool(opnd1.valorBool() || opnd2.valorBool()));
             pc++;
         }
-        public String toString() {return "or";};
+        public String toString() {return "or()";};
     }
 
 
@@ -657,7 +657,7 @@ public class MaquinaP {
                 pilaEvaluacion.push(new ValorReal(opnd1.valorReal()*opnd2.valorReal()));
             pc++;
         }
-        public String toString() {return "mul";};
+        public String toString() {return "mul()";};
     }
 
     private IDiv IDIV;
@@ -675,7 +675,7 @@ public class MaquinaP {
                 pilaEvaluacion.push(new ValorReal(opnd1.valorReal()/opnd2.valorReal()));
             pc++;
         }
-        public String toString() {return "div";};
+        public String toString() {return "div()";};
     }
 
     private IMod IMOD;
@@ -689,7 +689,7 @@ public class MaquinaP {
                 throw new RuntimeException("Entero % Entero Error");
             pc++;
         }
-        public String toString() {return "mod";};
+        public String toString() {return "mod()";};
     }
 
     private IMenosUnario IMENOSUNARIO;
@@ -702,7 +702,7 @@ public class MaquinaP {
                 pilaEvaluacion.push(new ValorReal(-val.valorReal()));
             pc++;
         }
-        public String toString() {return "menos-unario";};
+        public String toString() {return "menos-unario()";};
     }
 
     private INot INOT;
@@ -713,7 +713,7 @@ public class MaquinaP {
                 pilaEvaluacion.push(new ValorBool(!val.valorBool()));
             pc++;
         }
-        public String toString() {return "not";};
+        public String toString() {return "not()";};
     }
 
     public Instruccion apila_int(int valor) { return new IApilaInt(valor); }
