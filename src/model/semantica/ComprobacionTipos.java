@@ -340,6 +340,10 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Cl instr) throws IOException {
         instr.expsOpt().procesa(this);
         List<Exp>listaExp = recolectaExps(instr.expsOpt());
+        if(!claseDe(instr.getVinculo(), P_dec.class)){
+            errores.addErrorTipado(instr);
+            return;
+        }
         List<Param>listaParam = recolectaParam(((P_dec) instr.getVinculo()).lParamOpt());
         if(listaParam.size() != listaExp.size()) {
             aviso_error(instr);

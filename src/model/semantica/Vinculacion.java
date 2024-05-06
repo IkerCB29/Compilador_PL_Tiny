@@ -491,10 +491,6 @@ public class Vinculacion implements Procesamiento {
             errores.addErrorVinculacion(instr);
             return;
         }
-        if(!claseDe(vinculo, P_dec.class)){
-            errores.addErrorVinculacion(instr);
-            return;
-        }
         instr.setVinculo(ts.vinculoDe(instr.iden()));
         instr.expsOpt().procesa(this);
     }

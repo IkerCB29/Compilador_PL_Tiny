@@ -21,5 +21,6 @@ d
  @ l1 = l2;
  call v(l2,l1);
  call v(l2);
- call v(true + 5, "hola" and true)
+ call l1(true + 5, "hola" and true)
+
 }
