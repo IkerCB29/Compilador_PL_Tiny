@@ -51,7 +51,7 @@ public class Errores{
     }
 
     public void addErrorPretipado(Nodo nodo){
-        erroresVinculacion.add(new Error(
+        erroresPretipado.add(new Error(
             String.format("Errores_pretipado fila:%d col:%d", nodo.leeFila(), nodo.leeCol()),
             nodo.leeFila(),
             nodo.leeCol()

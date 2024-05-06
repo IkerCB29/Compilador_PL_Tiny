@@ -12,6 +12,7 @@ import model.sintaxis.SintaxisAbstracta.Exps;
 import model.sintaxis.SintaxisAbstracta.Exps_opt;
 import model.sintaxis.SintaxisAbstracta.LParam;
 import model.sintaxis.SintaxisAbstracta.LParam_opt;
+import model.sintaxis.SintaxisAbstracta.Nodo;
 import model.sintaxis.SintaxisAbstracta.Ok_tipo;
 import model.sintaxis.SintaxisAbstracta.Param;
 import model.sintaxis.SintaxisAbstracta.Tipo;
@@ -88,7 +89,6 @@ import model.sintaxis.SintaxisAbstracta.V_dec;
 import model.sintaxis.SintaxisAbstracta.Wh;
 import model.sintaxis.SintaxisAbstracta.Wr;
 import utils.Pair;
-import view.Printer;
 
 public class ComprobacionTipos implements Procesamiento {
     private final Errores errores;
@@ -236,7 +236,7 @@ public class ComprobacionTipos implements Procesamiento {
         instr.exp().procesa(this);
         instr.bloque().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
-            errores.addErrorTipado(instr.exp());
+            aviso_error(instr.exp(), instr.exp());
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(instr.bloque().getTipo());
@@ -248,7 +248,7 @@ public class ComprobacionTipos implements Procesamiento {
         instr.bloque().procesa(this);
         instr.bloqueElse().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
-            errores.addErrorTipado(instr.exp());
+            aviso_error(instr.exp(), instr.exp());
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(ambos_ok(instr.bloque().getTipo(), instr.bloqueElse().getTipo()));
@@ -259,7 +259,7 @@ public class ComprobacionTipos implements Procesamiento {
         instr.exp().procesa(this);
         instr.bloque().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), B_tipo.class)){
-            errores.addErrorTipado(instr.exp());
+            aviso_error(instr.exp(), instr.exp());
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(instr.bloque().getTipo());
@@ -269,7 +269,7 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Rd instr) throws IOException {
         instr.exp().procesa(this);
         if(!esDesignador(instr.exp())){
-            errores.addErrorTipado(instr.exp());
+            aviso_error(instr.exp(), instr.exp());
             instr.setTipo(new Error_tipo());
         }
         if(claseDe(ref(instr.exp().getTipo()), In_tipo.class)){
@@ -285,7 +285,7 @@ public class ComprobacionTipos implements Procesamiento {
             instr.setTipo(new Ok_tipo());
         }
         else {
-            errores.addErrorTipado(instr.exp());
+            aviso_error(instr.exp(), instr.exp());
             instr.setTipo(new Error_tipo());
         }
     }
@@ -306,7 +306,7 @@ public class ComprobacionTipos implements Procesamiento {
             instr.setTipo(new Ok_tipo());
         }
         else {
-            errores.addErrorTipado(instr.exp());
+            aviso_error(instr.exp(), instr.exp());
             instr.setTipo(new Error_tipo());
         }
     }
@@ -315,7 +315,7 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Nw instr) throws IOException {
         instr.exp().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), P_tipo.class)) {
-            errores.addErrorTipado(instr.exp());
+            aviso_error(instr.exp(), instr.exp());
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(new Ok_tipo());
@@ -325,7 +325,7 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Dl instr) throws IOException {
         instr.exp().procesa(this);
         if(!claseDe(ref(instr.exp().getTipo()), P_tipo.class)) {
-            errores.addErrorTipado(instr.exp());
+            aviso_error(instr.exp(), instr.exp());
             instr.setTipo(new Error_tipo());
         }
         else instr.setTipo(new Ok_tipo());
@@ -342,14 +342,25 @@ public class ComprobacionTipos implements Procesamiento {
         List<Exp>listaExp = recolectaExps(instr.expsOpt());
         List<Param>listaParam = recolectaParam(((P_dec) instr.getVinculo()).lParamOpt());
         if(listaParam.size() != listaExp.size()) {
-            errores.addErrorTipado(instr);
+            aviso_error(instr);
             instr.setTipo(new Error_tipo());
         }
         else{
             instr.setTipo(new Ok_tipo());
             for(int i = 0; i < listaParam.size(); ++i){
                 if(!compatible(listaParam.get(i).tipo(), listaExp.get(i).getTipo())){
-                    errores.addErrorTipado(listaExp.get(i));
+                    aviso_error(listaExp.get(i), listaExp.get(i));
+                    instr.setTipo(new Error_tipo());
+                }
+                else if(claseDe(listaParam.get(i), Param_ref.class) && !esDesignador(listaExp.get(i))){
+                    aviso_error(listaExp.get(i), listaExp.get(i));
+                    instr.setTipo(new Error_tipo());
+                }
+                else if(claseDe(listaParam.get(i), Param_ref.class)
+                    && claseDe(ref(listaParam.get(i).tipo()), R_tipo.class)
+                    && claseDe(ref(listaExp.get(i).getTipo()), In_tipo.class))
+                {
+                    aviso_error(listaExp.get(i), listaExp.get(i));
                     instr.setTipo(new Error_tipo());
                 }
             }
@@ -386,11 +397,11 @@ public class ComprobacionTipos implements Procesamiento {
         exp.opnd0().procesa(this);
         exp.opnd1().procesa(this);
         if(!esDesignador(exp.opnd0())){
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
         if(!compatible(exp.opnd0().getTipo(), exp.opnd1().getTipo())){
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
         exp.setTipo(exp.opnd0().getTipo());
@@ -405,7 +416,7 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new B_tipo());
             }
             else{
-                errores.addErrorTipado(exp);
+                aviso_error(exp.opnd0(), exp.opnd1(), exp);
                 exp.setTipo(new Error_tipo());
             }
         }
@@ -417,7 +428,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -431,7 +442,7 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new B_tipo());
             }
             else{
-                errores.addErrorTipado(exp);
+                aviso_error(exp.opnd0(), exp.opnd1(), exp);
                 exp.setTipo(new Error_tipo());
             }
         }
@@ -443,7 +454,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -457,7 +468,7 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new B_tipo());
             }
             else{
-                errores.addErrorTipado(exp);
+                aviso_error(exp.opnd0(), exp.opnd1(), exp);
                 exp.setTipo(new Error_tipo());
             }
         }
@@ -469,7 +480,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -483,7 +494,7 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new B_tipo());
             }
             else{
-                errores.addErrorTipado(exp);
+                aviso_error(exp.opnd0(), exp.opnd1(), exp);
                 exp.setTipo(new Error_tipo());
             }
         }
@@ -495,7 +506,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -509,7 +520,7 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new B_tipo());
             }
             else{
-                errores.addErrorTipado(exp);
+                aviso_error(exp.opnd0(), exp.opnd1(), exp);
                 exp.setTipo(new Error_tipo());
             }
         }
@@ -533,7 +544,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -547,7 +558,7 @@ public class ComprobacionTipos implements Procesamiento {
                 exp.setTipo(new B_tipo());
             }
             else{
-                errores.addErrorTipado(exp);
+                aviso_error(exp.opnd0(), exp.opnd1(), exp);
                 exp.setTipo(new Error_tipo());
             }
         }
@@ -571,7 +582,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -593,7 +604,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new R_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -615,7 +626,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new R_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -628,7 +639,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -641,7 +652,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new B_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -663,7 +674,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new R_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -685,7 +696,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new R_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -698,7 +709,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(new In_tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -710,9 +721,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(exp.opnd0().getTipo());
         }
         else {
-            if(!claseDe(ref(exp.opnd0().getTipo()), Error_tipo.class)){
-                errores.addErrorTipado(exp);
-            }
+            aviso_error(exp.opnd0(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -724,7 +733,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(exp.opnd0().getTipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -734,12 +743,12 @@ public class ComprobacionTipos implements Procesamiento {
         exp.opnd0().procesa(this);
         exp.opnd1().procesa(this);
         if(!claseDe(ref(exp.opnd0().getTipo()), A_tipo.class)) {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
             return;
         }
         if(!claseDe(ref(exp.opnd1().getTipo()), In_tipo.class)){
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp.opnd1(), exp);
             exp.setTipo(new Error_tipo());
             return;
         }
@@ -750,13 +759,13 @@ public class ComprobacionTipos implements Procesamiento {
     public void procesa(Acceso exp) throws IOException {
         exp.opnd0().procesa(this);
         if(!claseDe(ref(exp.opnd0().getTipo()), Struct_tipo.class)) {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp);
             exp.setTipo(new Error_tipo());
             return;
         }
         Struct_tipo struct = (Struct_tipo) ref(exp.opnd0().getTipo());
         if(!struct.existeCampo(exp.iden())){
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp);
             exp.setTipo(new Error_tipo());
         }
         else {
@@ -771,7 +780,7 @@ public class ComprobacionTipos implements Procesamiento {
             exp.setTipo(ref(exp.opnd0().getTipo()).tipo());
         }
         else {
-            errores.addErrorTipado(exp);
+            aviso_error(exp.opnd0(), exp);
             exp.setTipo(new Error_tipo());
         }
     }
@@ -943,4 +952,17 @@ public class ComprobacionTipos implements Procesamiento {
         }
     }
 
+    private void aviso_error(Nodo n) {
+        errores.addErrorTipado(n);
+    }
+
+    private void aviso_error(Nodo opnd, Nodo n) {
+        if(!claseDe(opnd.getTipo(), Error_tipo.class))
+            errores.addErrorTipado(n);
+    }
+
+    private void aviso_error(Nodo opnd0, Nodo opnd1, Nodo n) {
+        if(!claseDe(opnd0.getTipo(), Error_tipo.class) && !claseDe(opnd1.getTipo(), Error_tipo.class))
+            errores.addErrorTipado(n);
+    }
 }
