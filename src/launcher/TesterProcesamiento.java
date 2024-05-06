@@ -21,7 +21,7 @@ public class TesterProcesamiento {
     private final static String DIFFERENCES_FILE = "files/Procesamiento/differences.log";
     private final static List<Pair<String, String>> FILES_INPUT = fileList();
 
-    private static List<Pair<String, String>> fileList(){
+   private static List<Pair<String, String>> fileList(){
         List<Pair<String, String>> list = new ArrayList<>();
         list.add(new Pair<>("files/Procesamiento/01hw_a.in", "files/Procesamiento/01hw.out"));
         list.add(new Pair<>("files/Procesamiento/01hw_d.in", "files/Procesamiento/01hw.out"));
@@ -42,6 +42,10 @@ public class TesterProcesamiento {
         list.add(new Pair<>("files/Procesamiento/09ejemplo_a.in", "files/Procesamiento/09ejemplo.out"));
         list.add(new Pair<>("files/Procesamiento/09ejemplo_d.in", "files/Procesamiento/09ejemplo.out"));
         list.add(new Pair<>("files/Procesamiento/10procs3_a.in", "files/Procesamiento/10procs3.out"));
+        list.add(new Pair<>("files/Procesamiento/01_errores_vinculacion_a.in", "files/Procesamiento/01_errores_vinculacion.out"));
+        list.add(new Pair<>("files/Procesamiento/01_errores_vinculacion_d.in", "files/Procesamiento/01_errores_vinculacion.out"));
+        list.add(new Pair<>("files/Procesamiento/02_errores_pretipado_a.in", "files/Procesamiento/02_errores_pretipado.out"));
+        list.add(new Pair<>("files/Procesamiento/02_errores_pretipado_d.in", "files/Procesamiento/02_errores_pretipado.out"));
         return list;
     };
 

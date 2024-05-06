@@ -11,12 +11,12 @@ import model.semantica.ComprobacionTipos;
 import model.semantica.Etiquetado;
 import model.semantica.GeneracionCodigo;
 import model.semantica.Vinculacion;
+import model.semantica.errores.Errores;
 import model.sintaxis.AnalizadorSintacticoCC;
 import model.sintaxis.AnalizadorSintacticoCUP;
 import model.sintaxis.ConstructorASTsCC;
 import model.sintaxis.ConstructorASTsCUP;
 import model.sintaxis.ParseException;
-import model.sintaxis.SintaxisAbstracta.Ok_tipo;
 import model.sintaxis.SintaxisAbstracta.Prog;
 import model.sintaxis.TokenMgrError;
 import model.sintaxis.impresionRecursiva.ImpresionBonitaRecursiva;
@@ -78,17 +78,24 @@ public class Controller {
             output.close();
             return;
         }
-        new Vinculacion(new ConsolePrinter()).procesa(prog);
-        new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
-        if(prog.getTipo().getClass() == Ok_tipo.class) {
-            new AsignacionEspacio().procesa(prog);
-            new Etiquetado().procesa(prog);
-            MaquinaP maquinaP = new MaquinaP(input, output, 1000, 1000, 1000, 5);
-            new GeneracionCodigo(maquinaP).procesa(prog);
-            maquinaP.ejecuta();
+        Errores errores = new Errores();
+        new Vinculacion(errores).procesa(prog);
+        if(errores.hayErroresVinculacion()){
+            errores.printErroresVinculacion(output);
+            output.close();
+            return;
         }
-        else
-            output.write("Errores en comprobacion de tipos");
+        if(errores.hayErroresPretipado()){
+            errores.printErroresPretipado(output);
+            output.close();
+            return;
+        }
+        new ComprobacionTipos(new ConsolePrinter()).procesa(prog);
+        new AsignacionEspacio().procesa(prog);
+        new Etiquetado().procesa(prog);
+        MaquinaP maquinaP = new MaquinaP(input, output, 1000, 1000, 1000, 5);
+        new GeneracionCodigo(maquinaP).procesa(prog);
+        maquinaP.ejecuta();
         output.close();
     }
 }

@@ -247,7 +247,7 @@ public class MaquinaP {
             pc = pilaEvaluacion.pop().valorInt();
         }
         public String toString() {
-            return "ir-ind";
+            return "ir-ind()";
         }
     }
 
@@ -810,7 +810,6 @@ public class MaquinaP {
         IMENOSUNARIO = new IMenosUnario();
         INOT = new INot();
     }
-
 
     public void ejecuta() {
         while (pc != codigoP.size()) {

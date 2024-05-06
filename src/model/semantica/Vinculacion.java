@@ -1,6 +1,7 @@
 package model.semantica;
 
 import model.Procesamiento;
+import model.semantica.errores.Errores;
 import model.sintaxis.SintaxisAbstracta.LParam_opt;
 import model.sintaxis.SintaxisAbstracta.LParam;
 import model.sintaxis.SintaxisAbstracta.Param;
@@ -88,10 +89,6 @@ import java.util.Map;
 import view.Printer;
 
 public class Vinculacion implements Procesamiento {
-    public Vinculacion(Printer output){
-        this.output = output;
-    }
-
     private static class Ambito {
         private Ambito puntero;
         private final Map<String, Nodo> mapa;
@@ -119,6 +116,8 @@ public class Vinculacion implements Procesamiento {
 
         public Nodo get(String id){
             if(!mapa.containsKey(id)){
+                if(puntero == null)
+                    return null;
                 return puntero.get(id);
             }
             else return mapa.get(id);
@@ -155,9 +154,12 @@ public class Vinculacion implements Procesamiento {
         }
     }
 
-    private final Printer output;
     private TablaSimbolos ts;
-    private Map<String, Campo> mCampos;
+    private final Errores errores;
+
+    public Vinculacion(Errores errores){
+        this.errores = errores;
+    }
 
     @Override
     public void procesa(Prog prog) throws IOException {
@@ -195,26 +197,29 @@ public class Vinculacion implements Procesamiento {
         if(claseDe(dec, T_dec.class)){
             preprocesa(dec.tipo());
             if(ts.contiene(dec.iden())){
-                output.write("Uso repetido del identificador " + dec.iden() + "\n");
+                errores.addErrorVinculacion(dec);
+                return;
             }
-            ts.inserta(dec.iden(), (T_dec) dec);
+            ts.inserta(dec.iden(), dec);
         }
         else if(claseDe(dec, V_dec.class)){
             preprocesa(dec.tipo());
             if(ts.contiene(dec.iden())){
-                output.write("Uso repetido del identificador " + dec.iden() + "\n");
+                errores.addErrorVinculacion(dec);
+                return;
             }
-            ts.inserta(dec.iden(), (V_dec) dec);
+            ts.inserta(dec.iden(), dec);
         }
         else{
             if(ts.contiene(dec.iden())){
-                output.write("Uso repetido del identificador " + dec.iden() + "\n");
+                errores.addErrorVinculacion(dec);
             }
-            ts.inserta(dec.iden(), (P_dec) dec);
+            ts.inserta(dec.iden(), dec);
             ts.abreAmbito();
-            ts.inserta(dec.iden(), (P_dec) dec);
             preprocesa(dec.lParamOpt());
+            ts.abreAmbito();
             dec.bloque().procesa(this);
+            ts.cierraAmbito();
             ts.cierraAmbito();
         }
     }
@@ -223,7 +228,7 @@ public class Vinculacion implements Procesamiento {
         if(claseDe(tipo, A_tipo.class)){
             preprocesa(tipo.tipo());
             if(Integer.parseInt(tipo.capacidad()) < 0){
-                output.write("Inicializacion de un array con tamaño no positivo\n");
+                errores.addErrorPretipado(tipo);
             }
         }
         else if(claseDe(tipo, P_tipo.class)) {
@@ -232,34 +237,39 @@ public class Vinculacion implements Procesamiento {
             }
         }
         else if(claseDe(tipo, Id_tipo.class)) {
-            if(!claseDe(ts.vinculoDe(tipo.iden()), T_dec.class))
-                output.write("El identificador " + tipo.iden() + " no esta vinculado a un declaracion "
-                    + "de tipo\n");
-            ((Id_tipo)tipo).setVinculo(ts.vinculoDe(tipo.iden()));
+            Nodo vinculo = ts.vinculoDe(tipo.iden());
+            if(vinculo == null) {
+                errores.addErrorVinculacion(tipo);
+                return;
+            }
+            if(!claseDe(vinculo, T_dec.class)) {
+                errores.addErrorPretipado(tipo);
+                return;
+            }
+            tipo.setVinculo(vinculo);
         }
         else if(claseDe(tipo, Struct_tipo.class)){
-            mCampos = new HashMap<>();
-            preprocesa(tipo.campos());
-            ((Struct_tipo) tipo).setMapaCampos(mCampos);
+            preprocesa(tipo.campos(), (Struct_tipo) tipo);
         }
     }
 
-    private void preprocesa(Campos campos) throws IOException {
+    private void preprocesa(Campos campos, Struct_tipo struct) throws IOException {
         if(claseDe(campos, L_campos.class)){
-            preprocesa(campos.campos());
-            preprocesa(campos.campo());
+            preprocesa(campos.campos(), struct);
+            preprocesa(campos.campo(), struct);
         }
         else {
-            preprocesa(campos.campo());
+            preprocesa(campos.campo(), struct);
         }
     }
 
-    private void preprocesa(Campo campo) throws IOException {
+    private void preprocesa(Campo campo, Struct_tipo struct) throws IOException {
         preprocesa(campo.tipo());
-        if(mCampos.containsKey(campo.iden())){
-            output.write("Uso repetido del identificador " + campo.iden() + "para un campo de un struct\n");
+        if(struct.existeCampo(campo.iden())){
+            errores.addErrorPretipado(campo);
+            return;
         }
-        mCampos.put(campo.iden(), campo);
+        struct.addCampo(campo.iden(), campo);
     }
 
     private void preprocesa(LParam_opt lParam) throws IOException{
@@ -281,7 +291,8 @@ public class Vinculacion implements Procesamiento {
     private void preprocesa(Param param) throws IOException{
         preprocesa(param.tipo());
         if(ts.contiene(param.iden())){
-            output.write("Uso repetido del identificador " + param.iden() + "\n");
+            errores.addErrorVinculacion(param);
+            return;
         }
         ts.inserta(param.iden(), param);
     }
@@ -318,10 +329,16 @@ public class Vinculacion implements Procesamiento {
     @Override
     public void procesa(P_tipo tipo) throws IOException {
         if(claseDe(tipo.tipo(), Id_tipo.class)){
-            tipo.tipo().setVinculo(ts.vinculoDe(tipo.tipo().iden()));
-            if(!claseDe(tipo.tipo().getVinculo(), T_dec.class))
-                output.write("El identificador " + tipo.iden() + " no esta vinculado a un declaracion "
-                    + "de tipo\n");
+            Nodo vinculo = ts.vinculoDe(tipo.tipo().iden());
+            if(vinculo == null){
+                errores.addErrorVinculacion(tipo.tipo());
+                return;
+            }
+            if(!claseDe(vinculo, T_dec.class)) {
+                errores.addErrorPretipado(tipo);
+                return;
+            }
+            tipo.tipo().setVinculo(vinculo);
         }
         else {
             tipo.tipo().procesa(this);
@@ -469,9 +486,14 @@ public class Vinculacion implements Procesamiento {
 
     @Override
     public void procesa(Cl instr) throws IOException {
-        if(!claseDe(ts.vinculoDe(instr.iden()), P_dec.class)){
-            output.write("El identificador " + instr.iden() + " no esta vinculado a un declaracion "
-                + "de procedimiento\n");
+        Nodo vinculo = ts.vinculoDe(instr.iden());
+        if(vinculo == null){
+            errores.addErrorVinculacion(instr);
+            return;
+        }
+        if(!claseDe(vinculo, P_dec.class)){
+            errores.addErrorVinculacion(instr);
+            return;
         }
         instr.setVinculo(ts.vinculoDe(instr.iden()));
         instr.expsOpt().procesa(this);
@@ -630,7 +652,12 @@ public class Vinculacion implements Procesamiento {
 
     @Override
     public void procesa(Iden exp) throws IOException {
-        exp.setVinculo(ts.vinculoDe(exp.iden()));
+        Nodo vinculo = ts.vinculoDe(exp.iden());
+        if(vinculo == null){
+            errores.addErrorVinculacion(exp);
+            return;
+        }
+        exp.setVinculo(vinculo);
     }
 
     @Override

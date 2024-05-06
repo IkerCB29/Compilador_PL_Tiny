@@ -1,6 +1,7 @@
 package model.sintaxis;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import model.Procesamiento;
 import view.Printer;
@@ -695,6 +696,7 @@ public abstract class SintaxisAbstracta {
         public Struct_tipo(Campos campos) {
             super();
             this.campos = campos;
+            this.mCampos = new HashMap<>();
         }
         public String toString() {
             return "struct_tipo("+campos+")";
@@ -725,8 +727,12 @@ public abstract class SintaxisAbstracta {
             return mCampos.get(iden).getDesp();
         }
 
-        public void setMapaCampos(Map<String, Campo> mCampos) {
-            this.mCampos = mCampos;
+        public void addCampo(String iden, Campo campo) {
+            mCampos.put(iden, campo);
+        }
+
+        public boolean existeCampo(String iden) {
+            return mCampos.containsKey(iden);
         }
     }
 
