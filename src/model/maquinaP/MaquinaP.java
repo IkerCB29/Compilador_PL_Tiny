@@ -123,7 +123,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString() {
-            return "desapila";
+            return "desapila()";
         }
     }
 
@@ -136,7 +136,7 @@ public class MaquinaP {
             pilaEvaluacion.push(datos[dir]);
             pc++;
         }
-        public String toString() {return "apila-ind";};
+        public String toString() {return "apila-ind()";};
     }
 
     private IDesapilaInd IDESAPILAIND;
@@ -148,7 +148,7 @@ public class MaquinaP {
             datos[dir] = valor;
             pc++;
         }
-        public String toString() {return "desapila-ind";};
+        public String toString() {return "desapila-ind()";};
     }
 
     private class IApilaD implements Instruccion {
@@ -323,7 +323,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString() {
-            return "dup";
+            return "dup()";
         }
     }
 
@@ -333,7 +333,7 @@ public class MaquinaP {
             pc = codigoP.size();
         }
         public String toString() {
-            return "stop";
+            return "stop()";
         }
     }
 
@@ -344,7 +344,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString() {
-            return "read-int";
+            return "read-int()";
         }
     }
 
@@ -355,7 +355,7 @@ public class MaquinaP {
             pc = codigoP.size();
         }
         public String toString() {
-            return "read-real";
+            return "read-real()";
         }
     }
 
@@ -366,7 +366,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString() {
-            return "read-bool";
+            return "read-bool()";
         }
     }
 
@@ -377,7 +377,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString() {
-            return "read-string";
+            return "read-string()";
         }
     }
 
@@ -392,7 +392,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString() {
-            return "write";
+            return "write()";
         }
     }
 
@@ -403,7 +403,7 @@ public class MaquinaP {
             pilaEvaluacion.push(new ValorReal(valInt.valorInt()));
         }
         public String toString(){
-            return "transforma-int";
+            return "transforma-int()";
         }
     }
 
@@ -435,7 +435,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString(){
-            return "my";
+            return "my()";
         }
     }
 
@@ -467,7 +467,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString(){
-            return "mn";
+            return "mn()";
         }
     }
 
@@ -499,7 +499,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString(){
-            return "my_ig";
+            return "my_ig()";
         }
     }
 
@@ -531,7 +531,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString(){
-            return "mn_ig";
+            return "mn_ig()";
         }
     }
 
@@ -555,7 +555,7 @@ public class MaquinaP {
             pc++;
         }
         public String toString(){
-            return "ig";
+            return "ig()";
         }
     }
 
