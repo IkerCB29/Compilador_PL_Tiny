@@ -53,7 +53,7 @@ public class TesterProcesamiento {
         return list;
     };
 
-    public static void main(String[] args) {
+   public static void main(String[] args) {
         Controller c = new Controller();
         boolean append = false;
 
@@ -86,9 +86,9 @@ public class TesterProcesamiento {
                 e.printStackTrace();
             }
         }
-    }
+   }
 
-    private static void checkDifferences(String outputFileRoute, String testFileRoute, boolean append) throws IOException {
+   private static void checkDifferences(String outputFileRoute, String testFileRoute, boolean append) throws IOException {
         int lineNumber = 1;
         boolean equalFile = true;
         Scanner output = new Scanner(new File(outputFileRoute));
@@ -125,5 +125,5 @@ public class TesterProcesamiento {
         output.close();
         test.close();
         differences.close();
-    }
+   }
 }
