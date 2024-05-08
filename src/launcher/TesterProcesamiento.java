@@ -17,17 +17,17 @@ import utils.Pair;
 import view.FilePrinter;
 import view.Printer;
 
-public class TesterProcesamiento {
+public class TesterProcesamiento extends Tester{
     private final static String DIFFERENCES_FILE = "files/Procesamiento/differences.log";
     private final static List<Pair<String, String>> FILES_INPUT = fileList();
 
-   private static List<Pair<String, String>> fileList(){
+    private static List<Pair<String, String>> fileList(){
         List<Pair<String, String>> list = new ArrayList<>();
         list.add(new Pair<>("files/Procesamiento/01hw_a.in", "files/Procesamiento/01hw.out"));
         list.add(new Pair<>("files/Procesamiento/01hw_d.in", "files/Procesamiento/01hw.out"));
         list.add(new Pair<>("files/Procesamiento/02basico_a.in", "files/Procesamiento/02basico.out"));
         list.add(new Pair<>("files/Procesamiento/02basico_d.in", "files/Procesamiento/02basico.out"));
-        list.add(new Pair<>("files/Procesamiento/03basico_io_a.in", "files/Procesamiento/03basico_io.out"));
+        list.add(new Pair<>("files/Procesamiento/03basics_io_a.in", "files/Procesamiento/03basico_io.out"));
         list.add(new Pair<>("files/Procesamiento/03basico_io_d.in", "files/Procesamiento/03basico_io.out"));
         list.add(new Pair<>("files/Procesamiento/04control_a.in", "files/Procesamiento/04control.out"));
         list.add(new Pair<>("files/Procesamiento/04control_d.in", "files/Procesamiento/04control.out"));
@@ -53,7 +53,7 @@ public class TesterProcesamiento {
         return list;
     };
 
-   public static void main(String[] args) {
+    public static void main(String[] args) {
         Controller c = new Controller();
         boolean append = false;
 
@@ -79,51 +79,12 @@ public class TesterProcesamiento {
                 }
                 else throw new RuntimeException("Tipo invalido");
                 input.close();
-                checkDifferences(files.getSecond() ,files.getSecond() + "_test", append);
+                checkDifferences(DIFFERENCES_FILE, files.getSecond() ,files.getSecond() + "_test", append);
                 append = true;
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         }
-   }
-
-   private static void checkDifferences(String outputFileRoute, String testFileRoute, boolean append) throws IOException {
-        int lineNumber = 1;
-        boolean equalFile = true;
-        Scanner output = new Scanner(new File(outputFileRoute));
-        Scanner test = new Scanner(new File(testFileRoute));
-        FileWriter differences = new FileWriter(DIFFERENCES_FILE, append);
-        differences.write(outputFileRoute + " --- " + testFileRoute + "\n");
-        while(test.hasNextLine() && output.hasNextLine()){
-            String outputLine = output.nextLine();
-            String testLine = test.nextLine();
-            if(!outputLine.equals(testLine)){
-                differences.write("Line " + lineNumber + "\n");
-                differences.write("\tOutput: " + outputLine +"\n");
-                differences.write("\tFile to compare: " + testLine +"\n");
-                equalFile = false;
-            }
-            lineNumber++;
-        }
-        while(test.hasNextLine()){
-            differences.write("Line " + lineNumber + "\n");
-            differences.write("\tFile to compare: " + test.nextLine() +"\n");
-            equalFile = false;
-            lineNumber++;
-        }
-        while(output.hasNextLine()){
-            differences.write("Line " + lineNumber + "\n");
-            differences.write("\tOutput: " + output.nextLine() +"\n");
-            equalFile = false;
-            lineNumber++;
-        }
-        if(equalFile){
-            differences.write("No differences were found\n");
-        }
-        differences.write("--------------------------------------\n");
-        output.close();
-        test.close();
-        differences.close();
-   }
+    }
 }

@@ -32,9 +32,9 @@ public class Errores{
             else return Integer.compare(this.fila, o.fila);
         }
     }
-    protected List<Error> erroresVinculacion;
-    protected List<Error> erroresPretipado;
-    protected List<Error> erroresTipado;
+    private final List<Error> erroresVinculacion;
+    private final List<Error> erroresPretipado;
+    private final List<Error> erroresTipado;
 
     public Errores(){
         erroresVinculacion = new ArrayList<>();
