@@ -1,48 +1,38 @@
 package launcher;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.Reader;
-
 import controller.Controller;
-import view.FullPrinter;
+import java.io.FileInputStream;
+import java.io.Reader;
+import model.lexico.BISReader;
+import view.ConsolePrinter;
+import view.Printer;
 
 public class Main {
-	private final static String[] FILES = {
-			"files/codigo1.tiny",
-			"files/codigo2.tiny",
-			"files/codigo3.tiny",
-			"files/codigo4.tiny",
-			"files/codigo5.tiny",
-			"files/codigo6.tiny",
-			"files/codigo7.tiny",
-			"files/codigo8.tiny",
-			"files/codigo9.tiny",
-			"files/codigo10.tiny",
-			"files/codigo11.tiny",
-			"files/codigo12.tiny"
-	};
-
-	public static void main(String[] args) {
-		Controller c = new Controller();
-
-		for(String file : FILES) {
-			try {
-				Reader input = new BufferedReader(new FileReader(file));
-				c.analisisLexico(input, new FullPrinter(file + "outputLexico"));
-				input.close();
-
-				input = new BufferedReader(new FileReader(file));
-				c.analisisSintacticoCC(input, new FullPrinter(file + "outputCC"));
-				input.close();
-
-				input = new BufferedReader(new FileReader(file));
-				c.analisisSintacticoCUP(input, new FullPrinter(file + "outputCUP"));
-				input.close();
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
+    public static void main(String[] args) {
+        try {
+            Controller c = new Controller();
+            Reader input = new BISReader(new FileInputStream(args[0]));
+            if(args[1].equals("d")){
+                Printer filePrinter = new ConsolePrinter();
+                c.procesamiento(
+                    c.analisisSintacticoCC(input, filePrinter, false),
+                    input,
+                    filePrinter
+                );
+            }
+            else if(args[1].equals("a")){
+                Printer filePrinter = new ConsolePrinter();
+                c.procesamiento(
+                    c.analisisSintacticoCUP(input, filePrinter, false),
+                    input,
+                    filePrinter
+                );
+            }
+            else throw new RuntimeException("Tipo invalido");
+            input.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

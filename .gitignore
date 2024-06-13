@@ -1,10 +1,13 @@
-# Compiled class file
+# Compiled class files
 *.class
 
-# Log file
+# Log files
 *.log
 
-# BlueJ files
+# Test output files
+*.out_test
+
+# BlueJ filess
 *.ctxt
 
 # Mobile Tools for Java (J2ME)
@@ -36,5 +39,3 @@ replay_pid*
 .idea
 *.iml
 /out/
-
-javacc*/

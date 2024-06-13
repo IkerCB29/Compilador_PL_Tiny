@@ -3,13 +3,33 @@ options {
 	DEBUG_PARSER=true;
 }
 
-PARSER_BEGIN(AsinCC)
+PARSER_BEGIN(ConstructorASTsCC)
 package model.sintaxis;
 
-public class AsinCC {
-  protected void newToken(Token t) {}
+import model.sintaxis.SintaxisAbstracta.Prog;
+import model.sintaxis.SintaxisAbstracta.Bloque;
+import model.sintaxis.SintaxisAbstracta.Decs_opt;
+import model.sintaxis.SintaxisAbstracta.Decs;
+import model.sintaxis.SintaxisAbstracta.Dec;
+import model.sintaxis.SintaxisAbstracta.Tipo;
+import model.sintaxis.SintaxisAbstracta.Campos;
+import model.sintaxis.SintaxisAbstracta.Campo;
+import model.sintaxis.SintaxisAbstracta.LParam_opt;
+import model.sintaxis.SintaxisAbstracta.LParam;
+import model.sintaxis.SintaxisAbstracta.Param;
+import model.sintaxis.SintaxisAbstracta.Instrs_opt;
+import model.sintaxis.SintaxisAbstracta.Instrs;
+import model.sintaxis.SintaxisAbstracta.Instr;
+import model.sintaxis.SintaxisAbstracta.Exps_opt;
+import model.sintaxis.SintaxisAbstracta.Exps;
+import model.sintaxis.SintaxisAbstracta.Exp;
+import model.lexico.UnidadLexica.StringLocalizado;
+
+public class ConstructorASTsCC {
+  private ClaseSemantica sem = new ClaseSemantica();
 }
-PARSER_END(AsinCC)
+PARSER_END(ConstructorASTsCC)
+
 	TOKEN:{<#Letra:["a"-"z","A"-"Z", "_"]>}
 	TOKEN:{<#DigitoPositivo:["1"-"9"]>}
 	TOKEN:{<#Digito:<DigitoPositivo>|"0">}
@@ -46,20 +66,9 @@ PARSER_END(AsinCC)
 	TOKEN:{<LiteralReal: <LiteralEntero> (<ParteDecimal> | <ParteExponencial> | <ComboPartes> )>}
 	TOKEN:{<LiteralString: "\"" (~["\""])* "\"">}
 
-	TOKEN:{<Suma:"+">}
-	TOKEN:{<Resta:"-">}
-	TOKEN:{<Mul:"*">}
-	TOKEN:{<Div:"/">}
-	TOKEN:{<Modulo:"%">}
+  TOKEN:{<Acceso: ".">}
 	TOKEN:{<Puntero: "^">}
 	TOKEN:{<Referencia: "&">}
-	TOKEN:{<MenorQue:"<">}
-	TOKEN:{<MayorQue:">">}
-	TOKEN:{<MenorOIgualQue:"<=">}
-	TOKEN:{<MayorOIgualQue:">=">}
-	TOKEN:{<Igual:"==">}
-	TOKEN:{<Diferente:"!=">}
-	TOKEN:{<Asignacion:"=">}
 	TOKEN:{<PyC:";">}
 	TOKEN:{<ParAp:"(">}
 	TOKEN:{<ParCierre:")">}
@@ -67,7 +76,6 @@ PARSER_END(AsinCC)
 	TOKEN:{<CorcheteCierro:"]">}
 	TOKEN:{<LlaveApertura:"{">}
 	TOKEN:{<LlaveCierre:"}">}
-	TOKEN:{<Acceso:".">}
 	TOKEN:{<Coma:",">}
 	TOKEN:{<FinDeclaracion:"&&">}
 	TOKEN:{<Evalua:"@">}
@@ -75,68 +83,514 @@ PARSER_END(AsinCC)
 	SKIP:{<["\t"," ","\r","\b","\n"]>}
 	SKIP:{<"##"((~["\n"]))*>}
 
-void analiza() : {} {programa() <EOF>}
-void programa(): {} { bloque() }
-void bloque(): {} { "{" declaraciones_opt() instrucciones_opt() "}" }
-void declaraciones_opt(): {} { declaraciones() <FinDeclaracion> | {} }
-void declaraciones(): {} { declaración() r_declaraciones() }
-void r_declaraciones(): {} { ";" declaración() r_declaraciones() | {} }
-void declaración(): {} { dec_variable() | dec_tipo() | dec_procedimiento() }
-void dec_tipo(): {} { <Type> tipo0() <Identificador> }
-void dec_variable(): {} { tipo0() <Identificador> }
-void tipo0(): {} { tipo1() r_tipo0()}
-void r_tipo0(): {} { ("["<LiteralEntero>"]") r_tipo0() | {} }
-void tipo1(): {} { <Puntero> tipo1() | tipo2() }
-void tipo2(): {} { <Entero> | <Real> | <Boolean> | <String> | <Identificador> | registro() }
-void registro(): {} { <Struct> "{" campos() "}" }
-void campos(): {} { campo() r_campos() }
-void r_campos(): {} { "," campo() r_campos() | {} }
-void campo(): {} { dec_variable() }
+Prog analiza() :
+    {Prog prog;}
+    {
+      prog = programa() fin()
+        {return prog;}
+    }
+void fin() :
+    {}
+    {
+      <EOF> | "$$"
+    }
+Prog programa():
+    {Bloque bq;}
+    {
+      bq = bloque()
+        {return sem.prog(bq);}
+    }
+Bloque bloque():
+    {Decs_opt decs; Instrs_opt instrs;}
+    {
+      <LlaveApertura> decs = declaraciones_opt() instrs = instrucciones_opt() <LlaveCierre>
+        {return sem.bloque(decs, instrs);}
+    }
+Decs_opt declaraciones_opt():
+    {Decs decs;}
+    {
+      decs = declaraciones() <FinDeclaracion>
+        {return sem.si_decs(decs);}
+      |
+        {return sem.no_decs();}
+    }
+Decs declaraciones():
+    {Decs decs; Dec dec;}
+    {
+      dec = declaracion() decs = r_declaraciones(sem.una_dec(dec))
+        {return decs;}
+    }
+Decs r_declaraciones(Decs decsh):
+    {Decs decs; Dec dec;}
+    {
+      <PyC> dec = declaracion() decs = r_declaraciones(sem.l_decs(decsh, dec))
+        {return decs;}
+      |
+        {return decsh;}
+    }
+Dec declaracion():
+    {Dec dec;}
+    {
+      dec = dec_variable()
+        {return dec;}
+      |
+      dec = dec_tipo()
+        {return dec;}
+      |
+      dec = dec_procedimiento()
+        {return dec;}
+    }
 
-void dec_procedimiento(): {} { <Proc> <Identificador> parametros_formales() bloque() }
-void parametros_formales(): {} { "(" lista_parametros_opt() ")" }
-void lista_parametros_opt(): {} { lista_parametros() | {} }
-void lista_parametros(): {} { parametro() r_lista_parametros() }
-void r_lista_parametros(): {} { "," parametro() r_lista_parametros() | {} }
-void parametro(): {} { tipo0() r_parametro() }
-void r_parametro(): {} { <Identificador> | "&" <Identificador> }
-void instrucciones_opt(): {} { instrucciones() | {} }
-void instrucciones(): {} { instruccion() r_instrucciones() }
-void r_instrucciones(): {} { ";" instruccion() r_instrucciones() | {} }
-void instruccion(): {} { instruccion_eval() | instruccion_if() | instruccion_while() | instruccion_read() | instruccion_write() | instruccion_nl() | instruccion_new() | instruccion_delete() | instruccion_call() | instruccion_compuesta() }
-void instruccion_eval(): {} { "@" E0() }
-void instruccion_if(): {} { <If> E0() bloque() r_instruccion_if() }
-void r_instruccion_if(): {} { <Else> bloque() | {} }
-void instruccion_while(): {} { <While> E0() bloque() }
-void instruccion_read(): {} { <Read> E0() }
-void instruccion_write(): {} { <Write> E0() }
-void instruccion_nl(): {} { <Nl> }
-void instruccion_new(): {} { <New> E0() }
-void instruccion_delete(): {} { <Delete> E0() }
-void instruccion_call(): {} { <Call> <Identificador> "(" lista_expresiones_opt() ")" }
-void instruccion_compuesta(): {} { bloque() }
-void lista_expresiones_opt(): {} { lista_expresiones() | {} }
-void lista_expresiones(): {} { E0() r_lista_expresiones() }
-void r_lista_expresiones(): {} { "," E0() r_lista_expresiones() | {}}
+Dec dec_tipo():
+    {Tipo tipo; Token id;}
+    {
+      <Type> tipo = tipo0() id = <Identificador>
+        {return (Dec)sem.t_dec(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
 
-void E0(): {} { E1() RE0() }
-void RE0(): {} { "=" E0() | {} }
-void E1(): {} { E2() RE1() }
-void RE1(): {} { OP1() E2() RE1() | {} }
-void E2(): {} { E3() R2E2() R1E2() }
-void R1E2(): {} { "+" E3() R1E2() | {} }
-void R2E2(): {} { "-" E3() | {} }
-void E3(): {} { E4() RE3() }
-void RE3(): {} { <And> E3() | <Or> E4() | {} }
-void E4(): {} { E5() RE4() }
-void RE4(): {} { OP4() E5() RE4() | {} }
-void E5(): {} { OP5() E5() | E6() }
-void E6(): {} { E7() RE6() }
-void RE6(): {} { OP6() RE6() | {} }
-void E7(): {} { "("E0()")" | operando() }
-void OP1(): {} { ">" | "<" | <MenorOIgualQue> | <MayorOIgualQue> | <Igual> | <Diferente> }
-void OP4(): {} { "*" | "/" | "%" }
-void OP5(): {} { "-" | <Not> }
-void OP6(): {} { "["E0()"]" | acceso_registro() | <Puntero> }
-void acceso_registro(): {} { <Acceso> <Identificador> }
-void operando(): {} { <LiteralReal> | <LiteralEntero> | <LiteralTrue> | <LiteralFalse> | <LiteralString> | <Identificador> | <Null> }
+Dec dec_variable():
+    {Tipo tipo; Token id;}
+    {
+      tipo = tipo0() id = <Identificador>
+        {return (Dec)sem.v_dec(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+Tipo tipo0():
+    {Tipo tipo, rtipo;}
+    {
+      tipo=tipo1() rtipo = r_tipo0(tipo)
+        { return rtipo; }
+    }
+Tipo r_tipo0(Tipo tipoh):
+    {Token cap; Tipo rtipo;}
+    {
+      <CorcheteApertura> cap = <LiteralEntero> <CorcheteCierro> rtipo = r_tipo0((Tipo)sem.a_tipo(tipoh, cap.image).ponFila(cap.beginLine).ponCol(cap.beginColumn))
+        {return rtipo;}
+      |
+        {return tipoh;}
+    }
+Tipo tipo1():
+    {Tipo tipo;}
+    {
+      <Puntero> tipo = tipo1()
+        {return sem.p_tipo(tipo);}
+      |
+      tipo = tipo2()
+        {return tipo;}
+    }
+Tipo tipo2():
+    {Tipo tipo; Token id;}
+    {
+      <Entero>
+        {return sem.in_tipo();}
+      |
+      <Real>
+        {return sem.r_tipo();}
+      |
+      <Boolean>
+        {return sem.b_tipo();}
+      |
+      <String>
+        {return sem.string_tipo();}
+      |
+      id = <Identificador>
+        {return (Tipo)sem.id_tipo(id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+      |
+      tipo = registro()
+        {return tipo;}
+    }
+Tipo registro():
+    {Campos campos;}
+    {
+      <Struct> <LlaveApertura> campos = campos() <LlaveCierre>
+        {return sem.struct_tipo(campos);}
+    }
+Campos campos():
+    {Campos campos; Campo campo;}
+    {
+      campo = campo() campos = r_campos(sem.un_campo(campo))
+        {return campos;}
+    }
+Campos r_campos(Campos camposh):
+    {Campos campos; Campo campo;}
+    {
+      <Coma> campo = campo() campos = r_campos(sem.l_campos(camposh, campo))
+        {return campos;}
+      |
+        {return camposh;}
+    }
+Campo campo():
+    {Tipo tipo; Token id;}
+    {
+      tipo = tipo0() id = <Identificador>
+        {return (Campo)sem.camp(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+
+Dec dec_procedimiento():
+    {Token id; LParam_opt lParam; Bloque bq;}
+    {
+      <Proc> id = <Identificador> <ParAp> lParam = lista_parametros_opt() <ParCierre> bq = bloque()
+        {return (Dec)sem.p_dec(id.image, lParam, bq).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+LParam_opt lista_parametros_opt():
+    {LParam lParam;}
+    {
+      lParam = lista_parametros()
+        {return sem.si_param(lParam);}
+      |
+        {return sem.no_param();}
+    }
+LParam lista_parametros():
+    {LParam lParam; Param param;}
+    {
+      param = parametro() lParam = r_lista_parametros(sem.un_param(param))
+        {return lParam;}
+    }
+LParam r_lista_parametros(LParam lParamh):
+    {LParam lParam; Param param;}
+    {
+      <Coma> param = parametro() lParam = r_lista_parametros(sem.l_param(lParamh, param))
+        {return lParam;}
+      |
+        {return lParamh;}
+    }
+Param parametro():
+    {Tipo tipo; Param param;}
+    {
+      tipo = tipo0() param = r_parametro(tipo)
+        {return param;}
+    }
+Param r_parametro(Tipo tipo):
+    {Token id;}
+    {
+      id = <Identificador>
+        {return (Param)sem.param_simple(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+      |
+      <Referencia> id = <Identificador>
+        {return (Param)sem.param_ref(tipo, id.image).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+
+Instrs_opt instrucciones_opt():
+    {Instrs instrs;}
+    {
+      instrs = instrucciones()
+        {return sem.si_instrs(instrs);}
+      |
+        {return sem.no_instrs();}
+    }
+Instrs instrucciones():
+    {Instrs instrs; Instr instr;}
+    {
+      instr = instruccion() instrs = r_instrucciones(sem.una_instr(instr))
+        {return instrs;}
+    }
+Instrs r_instrucciones(Instrs instrsh):
+    {Instrs instrs; Instr instr;}
+    {
+      <PyC> instr = instruccion() instrs = r_instrucciones(sem.l_instrs(instrsh, instr))
+        {return instrs;}
+      |
+        {return instrsh;}
+    }
+Instr instruccion():
+    {Instr instr;}
+    {
+      instr = instruccion_eval()
+        {return instr;}
+      |
+      instr = instruccion_if()
+        {return instr;}
+      |
+      instr = instruccion_while()
+        {return instr;}
+      |
+      instr = instruccion_read()
+        {return instr;}
+      |
+      instr = instruccion_write()
+        {return instr;}
+      |
+      instr = instruccion_nl()
+        {return instr;}
+      |
+      instr = instruccion_new()
+        {return instr;}
+      |
+      instr = instruccion_delete()
+        {return instr;}
+      |
+      instr = instruccion_call()
+        {return instr;}
+      |
+      instr = instruccion_compuesta()
+        {return instr;}
+    }
+Instr instruccion_eval():
+    {Exp exp;}
+    {
+      <Evalua> exp = E0()
+        {return sem.eva(exp);}
+    }
+Instr instruccion_if():
+    {Exp exp; Bloque bq; Instr instr;}
+    {
+      <If> exp = E0() bq = bloque() instr = r_instruccion_if(exp, bq)
+        {return instr;}
+    }
+Instr r_instruccion_if(Exp exp, Bloque bq1):
+    {Bloque bq2;}
+    {
+      <Else> bq2 = bloque()
+        {return sem.if_el(exp, bq1, bq2);}
+      |
+        {return sem.if_instr(exp, bq1);}
+    }
+Instr instruccion_while():
+    {Exp exp; Bloque bq;}
+    {
+      <While> exp = E0() bq = bloque()
+        {return sem.wh(exp, bq);}
+    }
+Instr instruccion_read():
+    {Exp exp;}
+    {
+      <Read> exp = E0()
+        {return sem.rd(exp);}
+    }
+Instr instruccion_write():
+    {Exp exp;}
+    {
+      <Write> exp = E0()
+        {return sem.wr(exp);}
+    }
+Instr instruccion_nl():
+    {}
+    {
+      <Nl>
+        {return sem.nl();}
+    }
+Instr instruccion_new():
+    {Exp exp;}
+    {
+      <New> exp = E0()
+        {return sem.nw(exp);}
+    }
+Instr instruccion_delete():
+    {Exp exp;}
+    {
+      <Delete> exp = E0()
+        {return sem.dl(exp);}
+    }
+Instr instruccion_call():
+    {Token id; Exps_opt exps;}
+    {
+      <Call> id = <Identificador> <ParAp> exps = lista_expresiones_opt() <ParCierre>
+        {return (Instr)sem.cl(id.image, exps).ponFila(id.beginLine).ponCol(id.beginColumn);}
+    }
+Instr instruccion_compuesta():
+    {Bloque bq;}
+    {
+      bq = bloque()
+        {return sem.bq_instr(bq);}
+    }
+Exps_opt lista_expresiones_opt():
+    {Exps exps;}
+    {
+      exps = lista_expresiones()
+        {return sem.si_exps(exps);}
+      |
+        {return sem.no_exps();}
+    }
+Exps lista_expresiones():
+    {Exps exps; Exp exp;}
+    {
+      exp = E0() exps = r_lista_expresiones(sem.una_exp(exp))
+        {return exps;}
+    }
+Exps r_lista_expresiones(Exps expsh):
+    {Exps exps; Exp exp;}
+    {
+      <Coma> exp = E0() exps = r_lista_expresiones(sem.l_exps(expsh, exp))
+        {return exps;}
+      |
+        {return expsh;}
+    }
+
+Exp E0():
+    {Exp exp; Exp rexp;}
+    {
+      exp = E1() rexp = RE0(exp)
+        {return rexp;}
+    }
+Exp RE0(Exp exph):
+    {Token op; Exp exp;}
+    {
+      op = "=" exp = E0()
+        {return (Exp)sem.mkop("=", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
+      |
+        {return exph;}
+    }
+Exp E1():
+    {Exp exp, rexp;}
+    {
+      exp = E2() rexp = RE1(exp)
+        {return rexp;}
+    }
+Exp RE1(Exp exph):
+    {Token op; Exp exp, rexp;}
+    {
+      op = OP1() exp = E2() rexp = RE1((Exp)sem.mkop(op.image, exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn))
+        {return rexp;}
+      |
+        {return exph;}
+    }
+Exp E2():
+    {Exp exp, rexp1, rexp2;}
+    {
+      exp = E3() rexp2 = R2E2(exp) rexp1 = R1E2(rexp2)
+        {return rexp1;}
+    }
+Exp R1E2(Exp exph):
+    {Token op; Exp exp, rexp;}
+    {
+      op = "+" exp = E3() rexp = R1E2((Exp)sem.mkop("+", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn))
+        {return rexp;}
+      |
+        {return exph;}
+    }
+Exp R2E2(Exp exph):
+    {Token op; Exp exp;}
+    {
+      op = "-" exp = E3()
+        {return (Exp)sem.mkop("-", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
+      |
+        {return exph;}
+    }
+Exp E3():
+    {Exp exp, rexp;}
+    {
+      exp = E4() rexp = RE3(exp)
+        {return rexp;}
+    }
+Exp RE3(Exp exph):
+    {Token op; Exp exp;}
+    {
+      op = <And> exp = E3()
+        {return (Exp)sem.mkop("and", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
+      |
+      op = <Or> exp = E4()
+        {return (Exp)sem.mkop("or", exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
+      |
+        {return exph;}
+    }
+Exp E4():
+    {Exp exp, rexp;}
+    {
+      exp = E5() rexp = RE4(exp)
+        {return rexp;}
+    }
+Exp RE4(Exp exph):
+    {Token op; Exp exp, rexp;}
+    {
+      op = OP4() exp = E5() rexp = RE4((Exp)sem.mkop(op.image, exph, exp).ponFila(op.beginLine).ponCol(op.beginColumn))
+        {return rexp;}
+      |
+        {return exph;}
+    }
+Exp E5():
+    {Token op; Exp exp;}
+    {
+      op = "-" exp = E5()
+        {return (Exp)sem.mkop_pre("-", exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
+      |
+      op = <Not> exp = E5()
+        {return (Exp)sem.mkop_pre("not", exp).ponFila(op.beginLine).ponCol(op.beginColumn);}
+      |
+      exp = E6()
+        {return exp;}
+    }
+Exp E6():
+    {Exp exp, rexp;}
+    {
+      exp = E7() rexp = RE6(exp)
+        {return rexp;}
+    }
+Exp RE6(Exp exph):
+    {Token aper, acc, puntero; Exp exp, rexp;}
+    {
+      aper = <CorcheteApertura> exp = E0() <CorcheteCierro> rexp = RE6((Exp)sem.indexacion(exph, exp).ponFila(aper.beginLine).ponCol(aper.beginColumn))
+        {return rexp;}
+      |
+      <Acceso> acc = <Identificador> rexp = RE6((Exp)sem.acceso(exph, acc.image).ponFila(acc.beginLine).ponCol(acc.beginColumn))
+        {return rexp;}
+      |
+      puntero = <Puntero> rexp = RE6((Exp)sem.indireccion(exph).ponFila(puntero.beginLine).ponCol(puntero.beginColumn))
+        {return rexp;}
+      |
+        {return exph;}
+    }
+Exp E7():
+    {Exp exp;}
+    {
+      <ParAp> exp = E0() <ParCierre>
+        {return exp;}
+      |
+      exp = operando()
+        {return exp;}
+    }
+Token OP1():
+    {Token op;}
+    {
+      op = ">"
+        {return op;}
+      |
+      op = "<"
+        {return op;}
+      |
+      op = ">="
+        {return op;}
+      |
+      op = "<="
+        {return op;}
+      |
+      op = "=="
+        {return op;}
+      |
+      op = "!="
+        {return op;}
+    }
+Token OP4():
+    {Token op;}
+    {
+      op = "*"
+        {return op;}
+      |
+      op = "/"
+        {return op;}
+      |
+      op = "%"
+        {return op;}
+    }
+Exp operando():
+    {Token opnd;}
+    {
+      opnd = <LiteralReal>
+        {return (Exp)sem.real(opnd.image).ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <LiteralEntero>
+        {return (Exp)sem.entero(opnd.image).ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <LiteralTrue>
+        {return (Exp)sem.true_exp().ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <LiteralFalse>
+          {return (Exp)sem.false_exp().ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <LiteralString>
+        {return (Exp)sem.string(opnd.image).ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <Identificador>
+        {return (Exp)sem.iden(opnd.image).ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+      |
+      opnd = <Null>
+        {return (Exp)sem.nulo().ponFila(opnd.beginLine).ponCol(opnd.beginColumn);}
+    }

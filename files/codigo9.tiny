@@ -1,5 +1,0 @@
-{
-  @ x = y = z = 4 ;
-  @ t = ((tRue oR False) OR True) AND TrUe or False ;
-  @ w = tRue oR False OR True
-}
